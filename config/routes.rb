@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
-  devise_for :users
-
-  resources :tours, only: %i[index show]
+  devise_for :users do
+    resources :tours, only: %i[index show]
+  end
 
   namespace :api do
     namespace :v1 do

@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   has_many :tours
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: {case_sensitive: false},
+            format: { with: /\A[a-zA-Z0-9]+\Z/ }
 
   has_secure_token :api_token
 
