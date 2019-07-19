@@ -10,10 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_19_110412) do
+ActiveRecord::Schema.define(version: 2019_07_19_115442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.bigint "tour_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["tour_id"], name: "index_taggings_on_tour_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tours", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.bigint "country_id"
+    t.bigint "user_id"
+    t.string "google_link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_tours_on_country_id"
+    t.index ["user_id"], name: "index_tours_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -37,4 +70,8 @@ ActiveRecord::Schema.define(version: 2019_07_19_110412) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "taggings", "tags"
+  add_foreign_key "taggings", "tours"
+  add_foreign_key "tours", "countries"
+  add_foreign_key "tours", "users"
 end
