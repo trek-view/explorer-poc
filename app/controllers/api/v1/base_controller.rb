@@ -4,6 +4,8 @@ module API::V1
 
     before_action :authorize_request
 
+    attr_reader :api_user
+
     private
 
       def authorize_request

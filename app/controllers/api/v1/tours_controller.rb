@@ -17,7 +17,7 @@ module Api::V1
     # POST /tours
     # POST /tours.json
     def create
-      @tour = @api_user.build_tour(tour_params)
+      @tour = api_user.build_tour(tour_params)
       # @tour = Tour.new(tour_params)
 
       if @tour.save
