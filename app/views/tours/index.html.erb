@@ -1,0 +1,21 @@
+<ul>
+  <% @tours.each do |tour| %>
+
+    <h3>
+      <%= link_to tour.name, tour_path(tour) %>
+    </h3>
+
+    <p><%= tour.country.try(:name) %></p>
+    <% if tour.tags.any? %>
+
+      <% tour.tags.each_with_index do |tag, index| %>
+
+        <li> <%= tag.name %> </li> <% (index == tour.tags.size - 1) ? '' : ',' %>
+
+      <% end %>
+
+    <% end %>
+
+  <% end %>
+</ul>
+
