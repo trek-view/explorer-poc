@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   end
 
   resources :users, only:[] do
+    get 'token_info', to: 'users#token_info'
+    post 'generate_new_token', to: 'users#generate_new_token'
+
     resources :tours, only: %i[index show]
   end
 
