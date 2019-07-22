@@ -1,8 +1,7 @@
 <ul>
   <% @tours.each do |tour| %>
-
     <h3>
-      <%= link_to tour.name, tour_path(tour) %>
+      <%= link_to tour.name, user_tour_path(tour.user, tour) %>
     </h3>
 
     <p><%= tour.country.try(:name) %></p>

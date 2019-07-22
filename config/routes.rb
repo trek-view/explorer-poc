@@ -8,7 +8,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :tours, only: %i[index show]
+  resources :users, only:[] do
+    resources :tours, only: %i[index show]
+  end
 
   root to: 'tours#index'
 
