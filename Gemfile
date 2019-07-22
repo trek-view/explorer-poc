@@ -57,5 +57,11 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'devise'
+
 gem 'simple_command'
 gem 'friendly_id', '~> 5.2.4'
+
+gem 'bootstrap', '~> 4.3.1'
+gem 'jquery-rails'
+gem 'kaminari'
+gem 'devise-bootstrap-views', '~> 1.0'

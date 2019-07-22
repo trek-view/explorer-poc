@@ -3,7 +3,7 @@ class ToursController < ApplicationController
   before_action :set_tour, only: %i[show]
 
   def index
-    @tours = Tour.all
+    @tours = Tour.all.page(params[:page])
   end
 
   def show; end

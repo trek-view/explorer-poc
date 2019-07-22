@@ -4,13 +4,15 @@ class Tour < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
 
-  belongs_to :country, required: false
+  belongs_to :country
   belongs_to :user
 
   has_many :taggings
   has_many :tags, through: :taggings
 
   validates :name, presence: true, uniqueness: true
+
+  paginates_per Constants::ITEMS_PER_PAGE[:tours]
 
   def country_name=(name)
     self.country = Country.where(name: name.strip.downcase).first_or_create!

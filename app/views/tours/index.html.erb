@@ -1,20 +1,45 @@
-<ul>
-  <% @tours.each do |tour| %>
-    <h3>
-      <%= link_to tour.name, user_tour_path(tour.user, tour) %>
-    </h3>
+<div class="col-lg-3">
+  <h2 class="my-4">filters here</h2>
+</div>
+<div class="col-lg-9">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="my-4">List of Tours</h1>
+    </div>
 
-    <p><%= tour.country.try(:name) %></p>
-    <% if tour.tags.any? %>
+    <% @tours.each do |tour| %>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
 
-      <% tour.tags.each_with_index do |tag, index| %>
+            <h4 class="card-title">
+              <%= link_to tour.name, user_tour_path(tour.user, tour) %>
+            </h4>
 
-        <li> <%= tag.name %> </li> <% (index == tour.tags.size - 1) ? '' : ',' %>
+            <p class="card-text"><%= truncate(tour.description, length: 77, separator: ' ') %></p>
 
-      <% end %>
+            <% if tour.tags.any? %>
+              <% tour.tags.each_with_index do |tag, index| %>
+                <span>#<%= tag.name %><%=(index == tour.tags.size - 1) ? '' : ',' %></span>
+              <% end %>
+            <% end %>
+          </div>
+
+
+          <div class="card-footer">
+            <small class="text-muted"><%= tour.country.try(:name) %></small>
+          </div>
+        </div>
+
+
+      </div>
 
     <% end %>
+  </div>
 
-  <% end %>
-</ul>
+  <%= paginate @tours %>
+
+</div>
+
+
 

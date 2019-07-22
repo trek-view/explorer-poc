@@ -10,7 +10,13 @@
   </head>
 
   <body>
-    <%= render 'shared/flash_messages' %>
-    <%= yield %>
+    <%= render 'layouts/header' %>
+    <div class="container">
+      <div class="row">
+        <%= render 'shared/flash_messages' %>
+        <%= yield %>
+      </div>
+    </div>
+    <%= render 'layouts/footer' %>
   </body>
 </html>

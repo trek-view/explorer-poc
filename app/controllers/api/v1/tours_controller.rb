@@ -43,7 +43,7 @@ module Api::V1
       end
 
       def tour_params
-        params.require(:tour).permit(:name, :description, :local_id, :google_link, :country_name, :tag_names)
+        params.require(:tour).permit(:name, :description, :local_id, :google_link, :country_name, :tag_names, :tour_type)
       end
   end
 end
