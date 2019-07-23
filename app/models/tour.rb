@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Tour < ApplicationRecord
 
+  enum tour_type: { land: 0, water: 1, air: 2 }
+
   extend FriendlyId
   friendly_id :name, use: :slugged
 
@@ -11,6 +13,18 @@ class Tour < ApplicationRecord
   has_many :tags, through: :taggings
 
   validates :name, presence: true, uniqueness: true
+
+  include PgSearch::Model
+
+  pg_search_scope :search,
+                  against: [
+                      :name,
+                      :description
+                  ],
+                  associated_against: {
+                      tags: [:name],
+                      country: [:name]
+                  }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tours]
 

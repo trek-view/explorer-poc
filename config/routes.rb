@@ -15,6 +15,10 @@ Rails.application.routes.draw do
     resources :tours, only: %i[index show]
   end
 
+  resources :tours, only: %i[index]
+
+  get '/search_tours', to: 'tours#search_tours'
+
   root to: 'tours#index'
 
 end

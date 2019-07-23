@@ -1,0 +1,26 @@
+<% @tours.each do |tour| %>
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+
+        <h4 class="card-title">
+          <%= link_to tour.name, user_tour_path(tour.user, tour) %>
+        </h4>
+
+        <p class="card-text"><%= truncate(tour.description, length: 77, separator: ' ') %></p>
+
+        <% if tour.tags.any? %>
+          <% tour.tags.each_with_index do |tag, index| %>
+            <span>#<%= tag.name %><%=(index == tour.tags.size - 1) ? '' : ',' %></span>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="card-footer">
+        <small class="text-muted"><%= tour.country.try(:name) %></small>
+      </div>
+    </div>
+
+  </div>
+
+<% end %>
