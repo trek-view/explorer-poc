@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 class Tour < ApplicationRecord
 
-  enum tour_type: { land: 0, water: 1, air: 2 }
-
+  include PgSearch::Model
   extend FriendlyId
-  friendly_id :name, use: :slugged
 
   belongs_to :country
   belongs_to :user
@@ -14,7 +12,9 @@ class Tour < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
 
-  include PgSearch::Model
+  enum tour_type: { land: 0, water: 1, air: 2 }
+
+  friendly_id :name, use: :slugged
 
   pg_search_scope :search,
                   against: [
