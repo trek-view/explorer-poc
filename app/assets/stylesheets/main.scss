@@ -1,7 +1,20 @@
 body {
-  padding-top: 56px;
+  min-height:100vh;
 }
 
 select {
   text-transform:capitalize
+}
+
+.sticky-footer-wrapper {
+  min-height:100vh;
+  padding-top: 56px;
+
+  &:after {
+    display: block;
+    height: 120px;
+    clear: both;
+    content: '';
+    visibility: hidden;
+  }
 }
