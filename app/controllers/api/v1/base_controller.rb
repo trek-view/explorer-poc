@@ -9,11 +9,10 @@ module Api::V1
     private
 
       def authorize_request
-        @api_user = AuthorizeApiRequest.call(request.headers).result
-        p '----------------------API USER--------------------------'
-        p @api_user
-        p
-        render json: {authorize: 'Not Authorized'}, status: 401 unless @api_user
+        result = AuthorizeApiRequest.call(request.headers).result
+        @api_user = result[:user]
+
+        render json: {errors: result[:messages]}, status: 401 unless @api_user
       end
 
   end

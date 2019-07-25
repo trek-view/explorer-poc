@@ -3,12 +3,15 @@ class AuthorizeApiRequest
 
   prepend SimpleCommand
 
+  attr_reader :messages
+
   def initialize(headers={})
     @headers = headers
+    @messages = {}
   end
 
   def call
-    user
+    {user: user, messages: @messages}
   end
 
   private
@@ -16,10 +19,8 @@ class AuthorizeApiRequest
     def user
       if get_headers_token
         user = User.find_by(api_token: get_headers_token)
-        errors.add(authorization: 'Invalid token') unless user
+        @messages.store(:authorization, 'Invalid token') unless user
         user
-      else
-        errors.add(authorization: 'No token found') && nil
       end
     end
 
@@ -27,7 +28,7 @@ class AuthorizeApiRequest
       if @headers['Tour-Api-Token'].present?
         @headers['Tour-Api-Token']
       else
-        errors.add(:authorization, 'Missing token')
+        @messages.store(:authorization, 'Missing token')
         nil
       end
     end

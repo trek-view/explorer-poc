@@ -19,7 +19,7 @@ class ToursController < ApplicationController
   def find_tours
     set_tours_search_params
 
-    @tours = Tour.includes(:country, :tags, :user).all
+    @tours = Tour.includes(:country, :tags, :user).order(created_at: 'DESC')
 
     if @query.present?
       @query.each do |key, val|
