@@ -8,23 +8,36 @@
       <ul class="navbar-nav ml-auto">
         <% if user_signed_in? %>
           <li class="nav-item">
-            <%= link_to 'Check token', user_token_info_path(current_user), class: 'nav-link' %>
+            <%= link_to 'Check token',
+                        user_token_info_path(current_user),
+                        class: "nav-link #{current_class? user_token_info_path(current_user) }" %>
           </li>
           <li class="nav-item">
-            <%= link_to 'My Tours', user_tours_path(current_user), class: 'nav-link' %>
+            <%= link_to 'My Tours',
+                        user_tours_path(current_user),
+                        class: "nav-link #{current_class? user_tours_path(current_user) }" %>
           </li>
           <li class="nav-item">
-            <%= link_to 'Edit my profile', edit_user_registration_path, class: 'nav-link' %>
+            <%= link_to 'Edit my profile',
+                        edit_user_registration_path,
+                        class: "nav-link #{current_class? edit_user_registration_path }" %>
           </li>
           <li class="nav-item">
-            <%= link_to 'Log out',  destroy_user_session_path, class: 'nav-link', method: :delete %>
+            <%= link_to 'Log out',
+                        destroy_user_session_path,
+                        class: "nav-link #{current_class? destroy_user_session_path }",
+                        method: :delete %>
           </li>
         <% else %>
           <li class="nav-item">
-            <%= link_to 'Sign up',  new_user_registration_path, class: 'nav-link' %>
+            <%= link_to 'Sign up',
+                        new_user_registration_path,
+                        class: "nav-link #{current_class? new_user_registration_path }" %>
           </li>
           <li class="nav-item">
-            <%= link_to 'Log in',  new_user_session_path, class: 'nav-link' %>
+            <%= link_to 'Log in',
+                        new_user_session_path,
+                        class: "nav-link #{current_class? new_user_session_path }" %>
           </li>
         <% end %>
       </ul>

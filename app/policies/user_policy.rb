@@ -9,4 +9,8 @@ class UserPolicy < ApplicationPolicy
     token_info?
   end
 
+  def tours?
+    user && record.id == user.id
+  end
+
 end

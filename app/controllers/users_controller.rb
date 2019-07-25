@@ -18,6 +18,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def tours
+    authorize @user
+
+    @tours = current_user.tours
+    @tours = @tours.page(params[:page])
+  end
+
   private
 
     def set_user
