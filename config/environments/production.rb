@@ -91,4 +91,21 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default charset: "utf-8"
+  config.action_mailer.asset_host = 'https://dev-explorer.herokuapp.com'
+  config.action_mailer.default_url_options = { host: 'dev-explorer.herokuapp.com', protocol: 'https' }
+
+  config.action_mailer.smtp_settings = {
+      user_name: Explorer.credentials[:smtp_user_name],
+      password:  Explorer.credentials[:smtp_password],
+      domain:    Explorer.credentials[:smtp_domain],
+      address:   Explorer.credentials[:smtp_address],
+      port:      Explorer.credentials[:smtp_port],
+      authentication: :plain,
+      enable_starttls_auto: true
+  }
 end

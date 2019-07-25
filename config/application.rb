@@ -29,5 +29,16 @@ module Explorer
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # App-specific configuration
+    # config.x = config_for(:app).with_indifferent_access
+  end
+
+  # def self.config
+  #   @config ||= Rails.configuration.x
+  # end
+
+  def self.credentials
+    @credentials ||= Rails.application.credentials[Rails.env.to_sym]
   end
 end
