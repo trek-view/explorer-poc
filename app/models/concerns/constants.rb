@@ -5,4 +5,10 @@ module Constants
       tours: 27
   }
 
+  TOUR_TYPES = {
+      land: 0,
+      water: 1,
+      air: 2
+  }
+
 end

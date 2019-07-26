@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :tours, only: %i[create]
+      patch 'tours/:local_id', to: 'tours#update'
+      delete 'tours/:local_id', to: 'tours#destroy'
     end
   end
 

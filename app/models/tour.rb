@@ -4,15 +4,19 @@ class Tour < ApplicationRecord
   include PgSearch::Model
   extend FriendlyId
 
+  enum tour_type: Constants::TOUR_TYPES
+
   belongs_to :country
   belongs_to :user
 
-  has_many :taggings
+  has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
 
-  validates :name, presence: true, uniqueness: true
-
-  enum tour_type: { land: 0, water: 1, air: 2 }
+  validates :name, presence: true
+  validates :local_id, presence: true, uniqueness: true
+  validates_inclusion_of :tour_type,
+                         in: Constants::TOUR_TYPES.stringify_keys.keys,
+                         message: "Tour type %s is not included in the list"
 
   friendly_id :name, use: :slugged
 
