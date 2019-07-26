@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class UserPolicy < ApplicationPolicy
 
-  def token_info?
+  def info?
     record && user && scope.where(id: record.id).exists? && record.id == user.id
   end
 

@@ -8,9 +8,9 @@
       <ul class="navbar-nav ml-auto">
         <% if user_signed_in? %>
           <li class="nav-item">
-            <%= link_to 'Check token',
-                        user_token_info_path(current_user),
-                        class: "nav-link #{current_class? user_token_info_path(current_user) }" %>
+            <%= link_to 'Info',
+                        user_info_path(current_user),
+                        class: "nav-link #{current_class? user_info_path(current_user) }" %>
           </li>
           <li class="nav-item">
             <%= link_to 'My Tours',

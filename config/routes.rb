@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   end
 
   resources :users, only:[] do
-    get 'token_info', to: 'users#token_info'
+    get 'info', to: 'users#info'
     post 'generate_new_token', to: 'users#generate_new_token'
     get 'tours'
 
