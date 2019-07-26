@@ -67,7 +67,3 @@ gem 'kaminari', '~> 1.1', '>= 1.1.1'
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'pundit', '~> 2.0', '>= 2.0.1'
 gem 'pg_search'
-
-group :production do
-  gem 'secure_headers'
-end
