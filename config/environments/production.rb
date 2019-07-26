@@ -49,14 +49,17 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  config.content_security_policy do |policy|
+    policy.default_src :self, :https
+    policy.font_src    :self, :https, :data
+    policy.img_src     :self, :https, :data
+    policy.object_src  :none
+    policy.script_src  :self, :https
+    policy.style_src   :self, :https, :unsafe_inline
+    policy.report_uri  ""
+  end
+
   config.action_dispatch.default_headers = {
-      'Content-Security-Policy' =>
-          "default-src 'self' https://accounts.google.com; " \
-          "img-src 'self' https://accounts.google.com https://travis-ci.org https://api.travis-ci.org; " \
-          "media-src 'none'; " \
-          "object-src 'none'; " \
-          "script-src 'self' https://accounts.google.com; " \
-          "style-src 'self' https://accounts.google.com https://travis-ci.org; ",
       'Referrer-Policy' => 'strict-origin-when-cross-origin',
       'X-Content-Type-Options' => 'nosniff',
       'X-Frame-Options' => 'SAMEORIGIN',
