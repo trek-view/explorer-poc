@@ -6,7 +6,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def generate_new_token?
-    token_info?
+    info?
   end
 
   def tours?

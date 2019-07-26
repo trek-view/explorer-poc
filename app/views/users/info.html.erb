@@ -1,13 +1,12 @@
 <div class="row">
   <div class="py-5 col-lg-12">
-    <h1>User Information</h1>
     <div class="card">
 
-      <h3 class="card-header">How to upload tour?</h3>
+      <h1 class="card-header">User Information</h1>
 
       <div class="card-body">
 
-        <h5 class="card-title">Your API-KEY - <span class="text-success user-api-token"><%= @user.api_token %></span> </h5>
+        <h5 class="card-title">How to upload a tour?</h5>
 
         <ol>
           <li>Download the Tourer app</li>
@@ -19,12 +18,19 @@
           </li>
         </ol>
 
-        <%= link_to user_generate_new_token_path(current_user), method: :post, confirm: 'Generate new token?',
-                    class: 'btn btn-primary regenerate-token', 'data-message' => 'Are you sure?',
-                    'data-severity' => 'warning', remote: true do %>
-          Generate new API-KEY
-        <% end %>
+        <div class="row">
+          <div class="col-lg-6">
+            <p class="my-4">Your API-KEY - <span class="text-success user-api-token"><%= @user.api_token %></span></p>
+          </div>
 
+          <div class="col-lg-6">
+            <%= link_to user_generate_new_token_path(current_user), method: :post, confirm: 'Generate new token?',
+                        class: 'btn btn-primary regenerate-token my-3', 'data-message' => 'Are you sure?',
+                        'data-severity' => 'warning', remote: true do %>
+              Generate new API-KEY
+            <% end %>
+          </div>
+        </div>
       </div>
 
     </div>

@@ -1,4 +1,67 @@
-<h1>
-  <%= @tour.name %>
-  <%= user_tour_path(@tour.user, @tour) %>
-</h1>
+<div class="row">
+  <div class="py-5 col-lg-12">
+    <div class="card">
+
+      <h1 class="card-header">Tour Information</h1>
+
+      <div class="card-body">
+
+        <h3 class="card-title"><%= @tour.name %></h3>
+
+        <% if @tour.description.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Desciption</label>
+            <div class="col-sm-10">
+              <p><%= @tour.description %></p>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @tour.country.present? && @tour.country.name.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Tour location</label>
+            <div class="col-sm-10">
+              <%= link_to @tour.country.name, "/tours?query[country]=#{@tour.country.name}", class: 'btn btn-warning' %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @tour.tags.any? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Tags</label>
+            <div class="col-sm-10">
+              <% @tour.tags.each do |tag| %>
+                <%= link_to tag.name, "/tours?search_text=#{tag.name}", class: 'btn btn-info' %>
+              <% end %>
+
+            </div>
+          </div>
+        <% end %>
+
+        <% if @tour.tour_type.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Tour type</label>
+            <div class="col-sm-10">
+              <%= link_to @tour.tour_type, "/tours?query[tour_type]=#{@tour.tour_type}", class: 'btn btn-primary' %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @tour.google_link.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Google link</label>
+            <div class="col-sm-10">
+              <%= link_to @tour.google_link, @tour.google_link, class: 'text-success', target: '_blank' %>
+            </div>
+          </div>
+        <% end %>
+
+
+
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
