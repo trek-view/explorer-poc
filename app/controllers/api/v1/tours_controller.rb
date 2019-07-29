@@ -27,9 +27,14 @@ module Api::V1
     # PATCH/PUT /tours/:local_id
     def update
       if api_user.tours.include?(@tour)
-        if @tour.update(set_update_params)
-          render json: @tour, status: :ok
-        else
+        begin
+          if @tour.update(set_update_params)
+            render json: @tour, status: :ok
+          else
+            render json: {errors: @tour.errors}, status: :unprocessable_entity
+          end
+        rescue ArgumentError => e
+          @tour.errors.add(:tour_type, e)
           render json: {errors: @tour.errors}, status: :unprocessable_entity
         end
       else

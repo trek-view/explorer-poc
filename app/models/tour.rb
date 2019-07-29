@@ -12,11 +12,11 @@ class Tour < ApplicationRecord
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
 
-  validates :name, presence: true
+  validates :name, presence: true, length: {maximum: 255}
   validates :local_id, presence: true, uniqueness: true
   validates_inclusion_of :tour_type,
                          in: Constants::TOUR_TYPES.stringify_keys.keys,
-                         message: "Tour type %s is not included in the list"
+                         message: "%s is not included in the list"
 
   friendly_id :name, use: :slugged
 
