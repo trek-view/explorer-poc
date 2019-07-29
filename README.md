@@ -9,6 +9,7 @@
 6. Seed DB ```rails db:seed```
 7. Start your application ```rails server```
 8. Visit page in your browser ```http://localhost:3000```
+9. Click 'login' and use ```exp-admin@example.com``` with password ```password``` to sign in(or you can register your own user)
 
 Register a user. After registration you will be able to get you API-KEY. With an API-KEY you`ll 
 be able to post ypu tours from Tourer app from your local computer.
