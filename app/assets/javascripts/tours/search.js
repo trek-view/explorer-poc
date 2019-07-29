@@ -1,8 +1,14 @@
-'use strict';
+// 'use strict';
 
 $(function(){
 
-    $(document).on('change', '.search-text-input, .select-country, .select-tour-type', function(){
+    $('.search-text-input').keyup(function (e) {
+        setTimeout(function () {
+            submitTourSearch();
+        }, 1000);
+    });
+
+    $(document).on('change', '.select-country, .select-tour-type', function(){
         submitTourSearch();
     });
 
