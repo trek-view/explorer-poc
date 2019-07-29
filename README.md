@@ -14,7 +14,7 @@
 Register a user. After registration you will be able to get you API-KEY. With an API-KEY you`ll 
 be able to post ypu tours from Tourer app from your local computer.
 
-##API endpoints
+### `API endpoints`
 
 POST /api/v1/tours
 
