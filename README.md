@@ -101,10 +101,6 @@ with this request you wil not be able to update ```local_id```
 OR
 
 {
-    "errors": "'waterr' is not a valid tour_type"
-}
-
-{
     "errors": {
         "authorization": "Invalid token"
     }
