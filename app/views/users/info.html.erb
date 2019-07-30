@@ -9,18 +9,18 @@
         <h5 class="card-title">How to upload a tour?</h5>
 
         <ol>
-          <li>Download the Tourer app</li>
-          <li>Add your <strong>API-KEY</strong> to the app settings</li>
-          <li>Publish your tour in Tourer as described in the documentation</li>
+          <li><a href="https://www.trekview.org/tourer/" target="_blank">Download the Tourer app here</a>.</li>
+          <li>Add your <strong>API KEY</strong> in the Tourer settings page.</li>
+          <li>Upload your panorama files to Tourer making sure to select "publish to Explorer". <a href="https://github.com/trekview/tourer/wiki" target="_blank">Read more in the Tourer documentation</a>.</li>
           <li>
-            When your tour is published you will see it
-            <%= link_to 'here', user_tours_path(current_user), class: 'text-success' %>
+            When your tour is published you will see on the
+            <%= link_to 'My Tours', user_tours_path(current_user), class: 'text-success' %> page.
           </li>
         </ol>
 
         <div class="row">
           <div class="col-lg-6">
-            <p class="my-4">Your API-KEY - <span class="text-success user-api-token"><%= @user.api_token %></span></p>
+            <p class="my-4">Your API KEY: <span class="text-success user-api-token"><%= @user.api_token %></span></p>
           </div>
 
           <div class="col-lg-6">
@@ -29,6 +29,7 @@
                         'data-severity' => 'warning', remote: true do %>
               Generate new API-KEY
             <% end %>
+            <p class="small"><em>Regenerating your API KEY will invalidate your existing key immediately.</em></p>
           </div>
         </div>
       </div>
