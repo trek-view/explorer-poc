@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :tours
 
   validates :name, presence: true, uniqueness: {case_sensitive: false}
+  validates_acceptance_of :terms
 
   has_secure_token :api_token
 
