@@ -11,4 +11,8 @@ module Constants
       air: 2
   }
 
+  SUBSCRIPTION_TYPES = {
+      global: 0
+  }
+
 end

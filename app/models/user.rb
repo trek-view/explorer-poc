@@ -8,10 +8,19 @@ class User < ApplicationRecord
          :validatable
 
   has_many :tours
+  has_many :subscriptions
+
+  attr_accessor :global_subscribe
 
   validates :name, presence: true, uniqueness: {case_sensitive: false}
   validates_acceptance_of :terms
 
   has_secure_token :api_token
+
+  after_create :subscribe_to_global
+
+  def subscribe_to_global
+    self.subscriptions.create!(kind: Constants::SUBSCRIPTION_TYPES[:global]) if global_subscribe
+  end
 
 end
