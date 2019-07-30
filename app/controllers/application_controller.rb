@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def default_url_options
+    { host: request.host, protocol: 'https' }
+  end
+
   protected
 
     def configure_permitted_parameters
