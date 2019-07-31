@@ -7,9 +7,9 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|
-      format.json { head :forbidden, content_type: 'text/html' }
+      format.json { head :unauthorized, content_type: 'text/html' }
       format.html { user_not_authorized }
-      format.js   { head :forbidden, content_type: 'text/html' }
+      format.js   { head :unauthorized, content_type: 'text/html' }
     end
   end
 

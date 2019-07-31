@@ -21,9 +21,9 @@ class UsersController < ApplicationController
   end
 
   def tours
-    authorize @user
+    # authorize @user
 
-    @tours = current_user.tours
+    @tours = @user.tours
     @tours = @tours.page(params[:page])
   end
 
