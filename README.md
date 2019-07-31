@@ -14,6 +14,6 @@
 
 ## User Documentation
 
-Developer documentation for this project is hosted on the Github wiki page for this project at: https://github.com/trekview/explorer
+Developer documentation for this project is hosted on the Github wiki page for this project at: https://github.com/trekview/explorer/wiki
 
 It can be cloned separately using `git clone git@github.com:trekview/explorer.wiki.git` or `git clone https://github.com/trekview/explorer.wiki.git`
