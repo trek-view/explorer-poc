@@ -56,6 +56,22 @@
           </div>
         <% end %>
 
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Explorer ID</label>
+          <div class="col-sm-10">
+            <%= @tour.id %>
+          </div>
+        </div>
+
+        <% if @tour.local_id.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Tourer ID</label>
+            <div class="col-sm-10">
+              <%= @tour.local_id %>
+            </div>
+          </div>
+        <% end %>
+
       </div>
 
     </div>
