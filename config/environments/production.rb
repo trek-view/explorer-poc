@@ -114,7 +114,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
   # config.action_mailer.default charset: "utf-8"
   # config.action_mailer.asset_host = 'https://dev-explorer.herokuapp.com'
-  config.action_mailer.default_url_options = { host: 'dev-explorer.herokuapp.com', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: 'trekview-explorer.herokuapp.com', protocol: 'https' }
 
   config.action_mailer.smtp_settings = {
       user_name: Explorer.credentials[:smtp_user_name],
