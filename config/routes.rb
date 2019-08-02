@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :tours, only: %i[create]
       patch 'tours/:local_id', to: 'tours#update'
       delete 'tours/:local_id', to: 'tours#destroy'
+      get '*unmatched_route', to:   'base#user_not_authorized', code: 401
     end
   end
 

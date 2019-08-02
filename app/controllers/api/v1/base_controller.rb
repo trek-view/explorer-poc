@@ -2,9 +2,13 @@
 module Api::V1
   class BaseController < ActionController::API
 
-    before_action :authorize_request
+    before_action :authorize_request, except: [:user_not_authorized]
 
     attr_reader :api_user
+
+    def user_not_authorized
+      render json: {errors: {authorization: 'Unauthorized'}}, status: :unauthorized
+    end
 
     private
 
