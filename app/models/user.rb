@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+
   extend FriendlyId
   friendly_id :name, use: :slugged
 
@@ -12,9 +13,12 @@ class User < ApplicationRecord
 
   attr_accessor :global_subscribe
 
-  validates :name, presence: true,
-            uniqueness: {case_sensitive: false},
-            format: { with: /\A[a-zA-Z0-9]*\z/, message: 'should not contain whitespaces or special characters'}
+  validates_presence_of   :name
+  validates_uniqueness_of :name,
+                          case_sensitive: false
+  validates_format_of :name,
+                      with: /\A[a-zA-Z0-9]*\z/,
+                      message: 'should not contain whitespaces or special characters'
   validates_acceptance_of :terms
 
   has_secure_token :api_token

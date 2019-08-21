@@ -15,4 +15,8 @@ module Constants
       global: 0
   }
 
+  TAGS_AMOUNT = {
+      tour: 10
+  }
+
 end

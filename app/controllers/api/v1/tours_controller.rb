@@ -67,7 +67,24 @@ module Api::V1
       end
 
       def tour_params
-        params.require(:tour).permit(:name, :description, :local_id, :google_link, :country_name, :tag_names, :tour_type)
+        params.require(:tour).permit(:name,
+                                     :description,
+                                     :local_id,
+                                     :google_link,
+                                     :country_name,
+                                     :tour_type,
+                                     tags_attributes: [:name])
+                                     # photos: [:file_name,
+                                     #          :taken_date_time,
+                                     #          :latitude,
+                                     #          :longitude,
+                                     #          :elevation_meters,
+                                     #          :heading,
+                                     #          :country_code,
+                                     #          :street_view_url,
+                                     #          :connection,
+                                     #          :connection_distance_km,
+                                     #          :tourer_photo_id])
       end
 
       def set_update_params

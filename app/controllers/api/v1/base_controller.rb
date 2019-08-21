@@ -10,6 +10,18 @@ module Api::V1
       render json: {errors: {authorization: 'Unauthorized'}}, status: :unauthorized
     end
 
+    # for update methods
+    def render_with_details(relation, item_field)
+      if relation.all? { |item| item.persisted? }
+        render json: relation, status: :created
+      else
+        errors = relation.map do |item|
+          item.errors.full_messages.empty? ? {file_name:  item.send(item_field), status: :created} : {file_name: item.send(item_field), errors: item.errors.full_messages}
+        end
+        render json: errors, status: :unprocessable_entity
+      end
+    end
+
     private
 
       def authorize_request

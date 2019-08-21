@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :tours, only: %i[create]
+      resources :tours, only: %i[create] do
+        resources :photos, only: [:create, :update, :destroy]
+      end
       patch 'tours/:local_id', to: 'tours#update'
       delete 'tours/:local_id', to: 'tours#destroy'
       get '*unmatched_route', to:   'base#user_not_authorized', code: 401
