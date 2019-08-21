@@ -11,7 +11,7 @@ class Tour < ApplicationRecord
 
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
-  has_many :photos
+  has_many :photos, dependent: :destroy
 
   accepts_nested_attributes_for :photos
   accepts_nested_attributes_for :tags
@@ -45,6 +45,11 @@ class Tour < ApplicationRecord
   def country_name=(name)
     self.country = Country.where(name: name.strip.downcase).first_or_create!
   end
+
+  # def country_name=(name)
+  #   country = Country[name]
+  #   self.country ||= country.name
+  # end
 
   # for case if we will need to pass tags as a string and validate its length (add :tag_names to strong_params)
   def tag_names=(names_string)

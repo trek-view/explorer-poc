@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 module Api::V1
   class ToursController < BaseController
-    before_action :set_tour, only: %w(show)
-    before_action :set_by_local_id, only: %w(update destroy)
+
+    before_action :set_tour, only: %i[show update destroy]
 
     # GET /tours
     def index
@@ -28,7 +28,7 @@ module Api::V1
     def update
       if api_user.tours.include?(@tour)
         begin
-          if @tour.update(set_update_params)
+          if @tour.update(tour_params)
             render json: @tour, status: :ok
           else
             render json: {errors: @tour.errors}, status: :unprocessable_entity
@@ -58,11 +58,11 @@ module Api::V1
 
     private
 
-      def set_tour
-        @tour = Tour.friendly.find(params[:id])
-      end
+      # def set_tour
+      #   @tour = Tour.friendly.find(params[:id])
+      # end
 
-      def set_by_local_id
+      def set_tour
         @tour = Tour.find_by(local_id: params[:local_id])
       end
 
@@ -73,22 +73,21 @@ module Api::V1
                                      :google_link,
                                      :country_name,
                                      :tour_type,
-                                     tags_attributes: [:name])
-                                     # photos: [:file_name,
-                                     #          :taken_date_time,
-                                     #          :latitude,
-                                     #          :longitude,
-                                     #          :elevation_meters,
-                                     #          :heading,
-                                     #          :country_code,
-                                     #          :street_view_url,
-                                     #          :connection,
-                                     #          :connection_distance_km,
-                                     #          :tourer_photo_id])
+                                     tags_attributes: [:name],
+                                     photos: [:file_name,
+                                              :taken_date_time,
+                                              :latitude,
+                                              :longitude,
+                                              :elevation_meters,
+                                              :heading,
+                                              :country_code,
+                                              :street_view_thumbnail_url,
+                                              :street_view_url,
+                                              :connection,
+                                              :connection_distance_km,
+                                              :tourer_photo_id])
       end
 
-      def set_update_params
-        tour_params.except(:local_id)
-      end
   end
+
 end

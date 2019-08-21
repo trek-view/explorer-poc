@@ -1,43 +1,62 @@
 # frozen_string_literal: true
 module Api::V1
   class PhotosController < BaseController
-    before_action :set_by_tourer_photo_id, only: [:update, :destroy]
+
+    before_action :set_by_tourer_photo_id, only: %i[show update destroy]
     before_action :check_tour
 
-    # GET /tours/:tour_id/photos
+    # GET /api/v1/tours/:tour_local_id/photos
     def index
-      render json: @tour.photos
+      render json: {photos: @tour.photos}, status: :ok
     end
 
-    # POST /tours/:tour_id/photos
+    # GET /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
+    def show
+      photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
+      render json: { photo: photo }, status: :ok
+    end
+
+    # POST /api/v1/tours/:tour_local_id/photos
     def create
-      photos = @tour.photos.create(photo_params)
+      photo = @tour.photos.build(photo_params)
 
-      if photos.all? { |photo| photo.persisted? }
-        render json: photos, status: :created
+      if photo.save
+        render json: photo, status: :created
       else
-        errors = photos.map do |photo|
-          photo.errors.empty? ? {file_name:  photo.file_name, status: :created} : {file_name: photo.file_name, errors: photo.errors.full_messages}
-        end
-        render json: errors, status: :unprocessable_entity
+        render json: { errors: photo.errors }, status: :unprocessable_entity
       end
+      # if photos.all? { |photo| photo.persisted? }
+      #   render json: photos, status: :created
+      # else
+      #   errors = photos.map do |photo|
+      #     photo.errors.empty? ? {file_name:  photo.file_name, status: :created} : {file_name: photo.file_name, errors: photo.errors.full_messages}
+      #   end
+      #   render json: errors, status: :unprocessable_entity
+      # end
     end
 
-    # PATCH/PUT /tours/:tour_id/photos/:tourer_photo_id
+    # PATCH/PUT /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
     def update
-      photos = @tour.update(photo_update_params)
-      ##TODO check if record updated
-      if photos.all? { |photo| photo.changed? }
-        render json: photos, status: :ok
+      photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
+
+      if photo.update(photo_params)
+        render json: { photo: photo } , status: :ok
       else
-        errors = photos.map do |photo|
-          photo.errors.empty? ? {file_name:  photo.file_name, status: :created} : {file_name: photo.file_name, errors: photo.errors.full_messages}
-        end
-        render json: errors, status: :unprocessable_entity
+        render json: { errors: photo.errors }, status: :unprocessable_entity
       end
+      # photos = @tour.update(photo_params)
+      # ##TODO check if record updated
+      # if photos.all? { |photo| photo.changed? }
+      #   render json: photos, status: :ok
+      # else
+      #   errors = photos.map do |photo|
+      #     photo.errors.empty? ? {file_name:  photo.file_name, status: :created} : {file_name: photo.file_name, errors: photo.errors.full_messages}
+      #   end
+      #   render json: errors, status: :unprocessable_entity
+      # end
     end
 
-    # DELETE /tours/:tour_id/photos/:tourer_photo_id
+    # DELETE /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
     def destroy
       @photo.destroy
       render json: {message: 'Photo was deleted.'},  head: :no_content, status: :ok
@@ -50,15 +69,11 @@ module Api::V1
       end
 
       def photo_params
-        params.permit(photos: permitted_photo_params).require(:photos)
-      end
-
-      def photo_update_params
         params.require(:photo).permit(permitted_photo_params)
       end
 
       def set_tour
-        @tour = Tour.find_by(local_id: params[:tour_id])
+        @tour = Tour.find_by(local_id: params[:tour_local_id])
       end
 
       def permitted_photo_params
@@ -66,13 +81,15 @@ module Api::V1
          :taken_date_time,
          :latitude,
          :longitude,
+         :country_code,
          :elevation_meters,
          :heading,
-         :country_code,
+         :street_view_thumbnail_url,
          :street_view_url,
          :connection,
          :connection_distance_km,
-         :tourer_photo_id]
+         :tourer_photo_id,
+         :tourer_version]
       end
 
       def check_tour
@@ -83,4 +100,5 @@ module Api::V1
         end
       end
   end
+
 end
