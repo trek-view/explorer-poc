@@ -19,7 +19,6 @@ class Tour < ApplicationRecord
   validates :description, length: { maximum: 140 }
   validates :local_id, presence: true, uniqueness: true, length: { maximum: 10 }
 
-  validates_associated :photos
   validates_associated :tags
 
   validate :tags_amount
@@ -39,6 +38,37 @@ class Tour < ApplicationRecord
                   }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tours]
+
+  def self.validates_uniqueness(*attribute_names)
+    configuration = attribute_names.extract_options!
+    validates_each(attribute_names) do |record, association_name, value|
+      track_values = {}
+      attribute_name = configuration[:attribute]
+      value.map.with_index do |object, index|
+        attribute_value = object.try(attribute_name)
+        attribute_value = attribute_value.try(:downcase) if configuration[:case_sensitive] == false
+
+        if track_values[attribute_value].present?
+          track_values[attribute_value].push({index: index, record: record})
+        else
+          track_values[attribute_value] = [{index: index, record: record}]
+        end
+        track_values.each do |key, track_value|
+          if track_value.count > 1
+            track_value.each do |value|
+              error_key = "#{association_name}[#{value[:index]}].#{attribute_name}"
+              message = configuration[:message]
+              value[:record].errors.add(error_key, message)
+            end
+          end
+        end
+      end
+    end
+  end
+
+  validates_uniqueness :photos, { attribute: :tourer_photo_id,
+                                  case_sensitive: false,
+                                  message: "Photo's tourer_photo_id should be unique per tour" }
 
   def country_name=(name)
     self.country = Country.where(name: name.strip.downcase).first_or_create!
