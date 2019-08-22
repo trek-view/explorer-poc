@@ -15,4 +15,12 @@ module Constants
       global: 0
   }
 
+  TAGS_AMOUNT = {
+      tour: 10
+  }
+
+  TAGS_LENGTH = {
+      tour: 240
+  }
+
 end

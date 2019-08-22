@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_30_141523) do
+ActiveRecord::Schema.define(version: 2019_08_21_113520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,27 @@ ActiveRecord::Schema.define(version: 2019_07_30_141523) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "photos", force: :cascade do |t|
+    t.bigint "tour_id"
+    t.string "file_name"
+    t.datetime "taken_date_time"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.integer "elevation_meters"
+    t.float "heading"
+    t.string "country_code"
+    t.text "street_view_url"
+    t.text "street_view_thumbnail_url"
+    t.string "connection"
+    t.float "connection_distance_km"
+    t.string "tourer_photo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "tourer_version"
+    t.index ["tour_id"], name: "index_photos_on_tour_id"
+    t.index ["tourer_photo_id"], name: "index_photos_on_tourer_photo_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -67,6 +88,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_141523) do
     t.integer "tour_type"
     t.index ["country_id"], name: "index_tours_on_country_id"
     t.index ["slug"], name: "index_tours_on_slug", unique: true
+    t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_tours_on_user_id"
   end
 
@@ -97,6 +119,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_141523) do
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
+  add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
