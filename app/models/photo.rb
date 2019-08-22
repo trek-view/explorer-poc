@@ -11,7 +11,7 @@ class Photo < ApplicationRecord
   validates :heading, numericality: true
   validates :street_view_thumbnail_url, presence: true
   validates :street_view_url, presence: true
-  validates :tourer_photo_id, presence: true, length: { maximum: 5 }
+  validates :tourer_photo_id, presence: true, uniqueness: true, length: { maximum: 5 }
   validates :tourer_version, length: { maximum: 5 }
 
 end

@@ -4,14 +4,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :tours, param: :local_id, only: %i[create update destoy] do
+      resources :tours, param: :local_id, only: %i[index show create update destroy] do
         resources :photos, param: :tourer_photo_id, only: %i[index show create update destroy]
       end
 
-      # patch 'tours/:local_id', to: 'tours#update'
-      # delete 'tours/:local_id', to: 'tours#destroy'
-      # patch 'tours/:local_id/photos/:tourer_photo_id', to: 'photos#update'
-      # delete 'tours/:local_id/photos/:tourer_photo_id', to: 'photos#destroy'
       get '*unmatched_route', to:   'base#user_not_authorized', code: 401
     end
   end

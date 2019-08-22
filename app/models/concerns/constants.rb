@@ -19,4 +19,8 @@ module Constants
       tour: 10
   }
 
+  TAGS_LENGTH = {
+      tour: 240
+  }
+
 end

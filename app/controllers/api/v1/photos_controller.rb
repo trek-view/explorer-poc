@@ -25,14 +25,6 @@ module Api::V1
       else
         render json: { errors: photo.errors }, status: :unprocessable_entity
       end
-      # if photos.all? { |photo| photo.persisted? }
-      #   render json: photos, status: :created
-      # else
-      #   errors = photos.map do |photo|
-      #     photo.errors.empty? ? {file_name:  photo.file_name, status: :created} : {file_name: photo.file_name, errors: photo.errors.full_messages}
-      #   end
-      #   render json: errors, status: :unprocessable_entity
-      # end
     end
 
     # PATCH/PUT /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
@@ -44,16 +36,6 @@ module Api::V1
       else
         render json: { errors: photo.errors }, status: :unprocessable_entity
       end
-      # photos = @tour.update(photo_params)
-      # ##TODO check if record updated
-      # if photos.all? { |photo| photo.changed? }
-      #   render json: photos, status: :ok
-      # else
-      #   errors = photos.map do |photo|
-      #     photo.errors.empty? ? {file_name:  photo.file_name, status: :created} : {file_name: photo.file_name, errors: photo.errors.full_messages}
-      #   end
-      #   render json: errors, status: :unprocessable_entity
-      # end
     end
 
     # DELETE /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
@@ -69,7 +51,7 @@ module Api::V1
       end
 
       def photo_params
-        params.require(:photo).permit(permitted_photo_params)
+        params.require(:photo).permit(*permitted_photo_params)
       end
 
       def set_tour

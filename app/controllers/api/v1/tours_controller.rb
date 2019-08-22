@@ -4,16 +4,18 @@ module Api::V1
 
     before_action :set_tour, only: %i[show update destroy]
 
-    # GET /tours
+    # GET /api/v1/tours
     def index
-      @tours = Tour.all
+      @tours = Tour.includes(:tags, :country, :photos)
+      render json: @tours, status: :ok
     end
 
-    # GET /tours/1
+    # GET /api/v1/tours/:local_id
     def show
+      render json: @tour, status: :ok
     end
 
-    # POST /tours
+    # POST /api/v1/tours
     def create
       @tour = api_user.tours.build(tour_params)
 
@@ -24,11 +26,11 @@ module Api::V1
       end
     end
 
-    # PATCH/PUT /tours/:local_id
+    # PATCH/PUT /api/v1/tours/:local_id
     def update
       if api_user.tours.include?(@tour)
         begin
-          if @tour.update(tour_params)
+          if @tour.update(set_update_params)
             render json: @tour, status: :ok
           else
             render json: {errors: @tour.errors}, status: :unprocessable_entity
@@ -42,7 +44,7 @@ module Api::V1
       end
     end
 
-    # DELETE /tours/:local_id
+    # DELETE /api/v1/tours/:local_id
     def destroy
       if api_user.tours.include?(@tour)
         @tour.destroy
@@ -58,34 +60,54 @@ module Api::V1
 
     private
 
-      # def set_tour
-      #   @tour = Tour.friendly.find(params[:id])
-      # end
-
       def set_tour
         @tour = Tour.find_by(local_id: params[:local_id])
       end
 
       def tour_params
-        params.require(:tour).permit(:name,
-                                     :description,
-                                     :local_id,
-                                     :google_link,
-                                     :country_name,
-                                     :tour_type,
-                                     tags_attributes: [:name],
-                                     photos: [:file_name,
-                                              :taken_date_time,
-                                              :latitude,
-                                              :longitude,
-                                              :elevation_meters,
-                                              :heading,
-                                              :country_code,
-                                              :street_view_thumbnail_url,
-                                              :street_view_url,
-                                              :connection,
-                                              :connection_distance_km,
-                                              :tourer_photo_id])
+        params.require(:tour).permit(*permitted_params)
+      end
+
+      def set_update_params
+        params_hash = params.require(:tour).permit(*permitted_params)
+        if params_hash[:photos_attributes].present?
+          params_hash[:photos_attributes].each do |photo_params|
+            photo = @tour.photos.find_by(tourer_photo_id: photo_params[:tourer_photo_id])
+            if photo.present?
+              photo_params.merge!(id: photo.id)
+            else
+              params_hash[:photos_attributes].delete(photo_params)
+            end
+          end
+        end
+
+        params_hash
+      end
+
+      def permitted_params
+        [
+            :name,
+            :description,
+            :local_id,
+            :google_link,
+            :country_name,
+            :tour_type,
+            :tag_names,
+            photos_attributes: [:id,
+                                :file_name,
+                                :taken_date_time,
+                                :latitude,
+                                :longitude,
+                                :country_code,
+                                :elevation_meters,
+                                :heading,
+                                :street_view_thumbnail_url,
+                                :street_view_url,
+                                :connection,
+                                :connection_distance_km,
+                                :tourer_photo_id,
+                                :tourer_version]
+        ]
       end
 
   end

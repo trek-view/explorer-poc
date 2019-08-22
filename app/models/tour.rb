@@ -14,9 +14,6 @@ class Tour < ApplicationRecord
   has_many :photos, dependent: :destroy
 
   accepts_nested_attributes_for :photos
-  accepts_nested_attributes_for :tags
-
-  before_validation :find_or_init_tags
 
   validates :name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
   validates :description, length: { maximum: 140 }
@@ -26,6 +23,7 @@ class Tour < ApplicationRecord
   validates_associated :tags
 
   validate :tags_amount
+  validate :tags_length
   validate :tour_type_should_be_valid
 
   friendly_id :name, use: :slugged
@@ -46,31 +44,33 @@ class Tour < ApplicationRecord
     self.country = Country.where(name: name.strip.downcase).first_or_create!
   end
 
-  # def country_name=(name)
-  #   country = Country[name]
-  #   self.country ||= country.name
-  # end
-
-  # for case if we will need to pass tags as a string and validate its length (add :tag_names to strong_params)
+  # for case if we will need to pass tags as a string and validate its length
   def tag_names=(names_string)
-    self.tags = names_string.split(',').map do |name|
-      Tag.where(name: name.strip.downcase).first_or_create!
+    self.tags = prepare_tags_string(names_string).split(', ').map do |name|
+      Tag.find_or_initialize_by(name: name.strip.downcase)
     end
+  end
+
+  def prepare_tags_string(tags_string)
+    tags_string.strip.chomp(',')
   end
 
   def tag_names
     self.tags.map(&:name).join(', ')
   end
-  #--------------------------------------------------------------------------
 
-  def find_or_init_tags
-    self.tags = self.tags.map do |tag|
-      Tag.where(name: tag.name).first_or_initialize
+  def tags_check name
+    unless name.match(/\A[a-zA-Z0-9]*\z/)
+      self.errors.add(:tags, "#{name} should not contain whitespaces or special characters") and return
     end
   end
 
   def tags_amount
     errors.add(:tags, "too much tags (maximum is #{Constants::TAGS_AMOUNT[:tour]} tags)") if tags.length > Constants::TAGS_AMOUNT[:tour]
+  end
+
+  def tags_length
+    errors.add(:tags, "too much characters (maximum is #{Constants::TAGS_LENGTH[:tour]} tags)") if tag_names.length > Constants::TAGS_LENGTH[:tour]
   end
 
   # custom validation with message for enum :tour_type (as it raises ArgumentError in the case of wrong value)
