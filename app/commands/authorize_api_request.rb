@@ -19,16 +19,16 @@ class AuthorizeApiRequest
     def user
       if get_headers_token
         user = User.find_by(api_token: get_headers_token)
-        @messages.store(:authorization, 'Invalid token') unless user
+        @messages.store(:authorization, 'Invalid API key') unless user
         user
       end
     end
 
     def get_headers_token
-      if @headers['Tour-Api-Token'].present?
-        @headers['Tour-Api-Token']
+      if @headers['api-key'].present?
+        @headers['api-key']
       else
-        @messages.store(:authorization, 'Missing token')
+        @messages.store(:authorization, 'Missing API key')
         nil
       end
     end
