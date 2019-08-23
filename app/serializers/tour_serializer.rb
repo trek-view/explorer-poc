@@ -8,6 +8,7 @@ class TourSerializer < ActiveModel::Serializer
                 country
                 google_link
                 tour_type
+                transport_type
                 tags
               ]
 

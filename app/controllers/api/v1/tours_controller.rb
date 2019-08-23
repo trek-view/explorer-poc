@@ -93,6 +93,7 @@ module Api::V1
             :google_link,
             :country_name,
             :tour_type,
+            :transport_type,
             :tag_names,
             photos_attributes: [:id,
                                 :file_name,
