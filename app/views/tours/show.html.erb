@@ -1,3 +1,15 @@
+<% if @tour.photos.any? %>
+  <% provide :head_tags do %>
+    <meta name='turbolinks-visit-control' content='reload'>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            var photos = <%= raw @tour.photos.try(:to_json) %>;
+            initMap(photos);
+        });
+    </script>
+  <% end %>
+<% end %>
+
 <div class="row">
   <div class="py-5 col-lg-12">
     <div class="card">
@@ -47,6 +59,15 @@
           </div>
         <% end %>
 
+        <% if @tour.transport_type.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Transport type</label>
+            <div class="col-sm-10">
+              <%= @tour.transport_type %>
+            </div>
+          </div>
+        <% end %>
+
         <% if @tour.google_link.present? %>
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">Google link</label>
@@ -72,6 +93,38 @@
           </div>
         <% end %>
 
+        <% if @tour.photos.any? %>
+          <div id="map" class="mb-3"></div>
+
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Photo ID</th>
+                <th scope="col">Photo capture date</th>
+                <th scope="col">Photo filename</th>
+                <th scope="col">Photo latitude</th>
+                <th scope="col">Photo longitude</th>
+                <th scope="col">Photo elevation</th>
+                <th scope="col">Link to Street View</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @tour.photos.each_with_index do |photo, index| %>
+                <tr>
+                  <th scope="row"><%= index + 1 %></th>
+                  <td><%= photo.id %></td>
+                  <td><%= photo.taken_date_time %></td>
+                  <td><%= photo.file_name %></td>
+                  <td><%= photo.latitude %></td>
+                  <td><%= photo.longitude %></td>
+                  <td><%= photo.elevation_meters %></td>
+                  <td><%= photo.street_view_url ? link_to('See street view', photo.street_view_url, target: '_blank') : '' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
       </div>
 
     </div>
