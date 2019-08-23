@@ -28,6 +28,7 @@
 /config/*.yml
 .idea/
 .ssl
+.env
 
 # OS or Editor folders
 .DS_Store
