@@ -5,6 +5,7 @@ class Tour < ApplicationRecord
   extend FriendlyId
 
   enum tour_type: Constants::TOUR_TYPES
+  enum transport_type: Constants::TRANSPORT_TYPES
 
   belongs_to :country
   belongs_to :user
@@ -24,6 +25,7 @@ class Tour < ApplicationRecord
   validate :tags_amount
   validate :tags_length
   validate :tour_type_should_be_valid
+  validate :transport_type_should_be_valid
 
   friendly_id :name, use: :slugged
 
@@ -122,6 +124,26 @@ class Tour < ApplicationRecord
     if @tour_type_backup
       error_message = "#{@tour_type_backup} is not a valid tour_type"
       errors.add(:tour_type, error_message)
+    end
+  end
+
+  def transport_type=(value)
+    super value
+    @transport_type_backup = nil
+  rescue ArgumentError => exception
+    error_message = 'is not a valid transport_type'
+    if exception.message.include? error_message
+      @transport_type_backup = value
+      self[:tour_type] = nil
+    else
+      raise
+    end
+  end
+
+  def transport_type_should_be_valid
+    if @transport_type_backup
+      error_message = "#{@transport_type_backup} is not a valid transport_type"
+      errors.add(:transport_type, error_message)
     end
   end
   #---------------------------------------------------------------------------------------------------------
