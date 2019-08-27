@@ -54,8 +54,9 @@ Rails.application.configure do
     policy.font_src    :self, :https, :data
     policy.img_src     :self, :https, :data
     policy.object_src  :none
-    policy.script_src  :self, :https, :unsafe_inline
+    policy.script_src  :self, :https, 'https://maps.googleapis.com'
     policy.style_src   :self, :https, :unsafe_inline
+    policy.connect_src :self
     policy.report_uri  ""
   end
 
@@ -63,7 +64,8 @@ Rails.application.configure do
       'Referrer-Policy' => 'strict-origin-when-cross-origin',
       'X-Content-Type-Options' => 'nosniff',
       'X-Frame-Options' => 'SAMEORIGIN',
-      'X-XSS-Protection' => '1; mode=block'
+      'X-XSS-Protection' => '1; mode=block',
+      'Content-Security-Policy' => "default-src 'self'; script-src 'self' 'https://maps.googleapis.com';"
   }
 
   # Use the lowest log level to ensure availability of diagnostic information
