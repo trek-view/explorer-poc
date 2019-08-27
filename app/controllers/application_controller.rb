@@ -3,6 +3,12 @@ class ApplicationController < ActionController::Base
 
   include Pundit
 
+  ensure_security_headers(
+      hsts: {include_subdomains: true, max_age: 20.years.to_i},
+      x_frame_options: 'DENY',
+      csp: false
+  )
+
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
