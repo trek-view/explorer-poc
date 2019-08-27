@@ -19,6 +19,20 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  before_action :see_vars
+
+  def see_vars
+    p "------------------------------ENV['Settings.google_maps_api_key']---------------------------"
+    p ENV['Settings.google_maps_api_key']
+    p "==================================ENV['Settings']==========================================="
+    p ENV['Settings']
+    p "==============================ENV['google_maps_api_key']===================================="
+    p ENV['google_maps_api_key']
+    p "=====================================Settings==============================================="
+    p Settings
+    p '============================================================================================'
+  end
+
   rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|
       format.json { head :unauthorized, content_type: 'text/html' }
