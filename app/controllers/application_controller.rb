@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
     p ENV['google_maps_api_key']
     p "=====================================Settings==============================================="
     p Settings
+    p '========================Settings.google_maps_api_key========================================'
+    p Settings.google_maps_api_key
     p '============================================================================================'
   end
 
