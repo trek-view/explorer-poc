@@ -49,24 +49,24 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
-  config.content_security_policy do |policy|
-    policy.default_src :self, :https
-    policy.font_src    :self, :https, :data
-    policy.img_src     :self, :https, :data
-    policy.object_src  :none
-    policy.script_src  :self, :https, 'https://maps.googleapis.com'
-    policy.style_src   :self, :https, :unsafe_inline
-    policy.connect_src :self
-    policy.report_uri  ""
-  end
-
-  config.action_dispatch.default_headers = {
-      'Referrer-Policy' => 'strict-origin-when-cross-origin',
-      'X-Content-Type-Options' => 'nosniff',
-      'X-Frame-Options' => 'SAMEORIGIN',
-      'X-XSS-Protection' => '1; mode=block',
-      'Content-Security-Policy' => "default-src 'self'; script-src 'self' 'https://maps.googleapis.com';"
-  }
+  # config.content_security_policy do |policy|
+  #   policy.default_src :self, :https
+  #   policy.font_src    :self, :https, :data
+  #   policy.img_src     :self, :https, :data
+  #   policy.object_src  :none
+  #   policy.script_src  :self, :https, 'https://maps.googleapis.com'
+  #   policy.style_src   :self, :https, :unsafe_inline
+  #   policy.connect_src :self
+  #   policy.report_uri  ""
+  # end
+  #
+  # config.action_dispatch.default_headers = {
+  #     'Referrer-Policy' => 'strict-origin-when-cross-origin',
+  #     'X-Content-Type-Options' => 'nosniff',
+  #     'X-Frame-Options' => 'SAMEORIGIN',
+  #     'X-XSS-Protection' => '1; mode=block',
+  #     'Content-Security-Policy' => "default-src 'self'; script-src 'self' https://maps.googleapis.com;"
+  # }
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.

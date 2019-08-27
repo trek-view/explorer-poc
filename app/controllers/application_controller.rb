@@ -3,6 +3,20 @@ class ApplicationController < ActionController::Base
 
   include Pundit
 
+  ensure_security_headers(
+      hsts: {include_subdomains: true,
+             max_age: 1.week.to_i},
+      x_frame_options: 'DENY',
+      csp: {default_src: %w('self' https:),
+            font_src:  %w('self' https: data:),
+            img_src:  %w('self' https: data:),
+            object_src: %w('none'),
+            script_src:  %w('self' https: 'unsafe-inline' https://maps.googleapis.com),
+            style_src:  %w('self' https: 'unsafe-inline'),
+            connect_src: %w('self'),
+            report_uri: %w(https://report-uri.io/example-csp)}
+  )
+
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
