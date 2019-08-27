@@ -7,6 +7,7 @@
       default_src: 'https://* self',
       frame_src: 'https://* http://*.twimg.com http://itunes.apple.com',
       img_src: 'https://*',
+      script_src: 'self https://maps.googleapis.com https://maps.gstatic.com'
       # report_uri: '//example.com/uri-directive'
   }
 end
