@@ -7,8 +7,8 @@ SitemapGenerator::Sitemap.adapter = SitemapGenerator::S3Adapter.new(fog_provider
                                                                     fog_region: ENV['AWS_BUCKET_REGION'])
 
 SitemapGenerator::Sitemap.public_path = 'tmp/'
-SitemapGenerator::Sitemap.sitemaps_host = "https://example.s3.amazonaws.com/"
-SitemapGenerator::Sitemap.sitemaps_path = '/'
+SitemapGenerator::Sitemap.sitemaps_host = "https://#{ENV['AWS_BUCKET_NAME']}.s3.amazonaws.com/"
+# SitemapGenerator::Sitemap.sitemaps_path = "#{ENV['AWS_BUCKET_NAME']}/"
 SitemapGenerator::Sitemap.ping_search_engines('https://explorer.trekview.org/sitemap')
 
 SitemapGenerator::Sitemap.create do
