@@ -72,3 +72,4 @@ gem 'countries'
 gem 'active_model_serializers', '~> 0.10.2'
 
 gem 'secure_headers', '~> 2.1'
+gem 'meta-tags'
