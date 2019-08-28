@@ -4,7 +4,7 @@ class Mailchimp::ListUpdater
   # MailchimpFailed = Class.new(ServiceActionError)
 
   def initialize(user, subscribe = true)
-    @list_id = Explorer.credentials[:mailchimp_audience_id]
+    @list_id = ENV['mailchimp_audience_id']
     @mailchimp = Gibbon::Request
     @user = user
     @status = subscribe ? 'subscribed' : 'unsubscribed'

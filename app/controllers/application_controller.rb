@@ -11,29 +11,13 @@ class ApplicationController < ActionController::Base
             font_src:  %w('self' https: data:),
             img_src:  %w('self' https: data:),
             object_src: %w('none'),
-            script_src:  %w('self' https: 'unsafe-inline' https://maps.googleapis.com),
+            script_src:  %w('self' https: 'unsafe-inline' https://maps.googleapis.com https://www.google-analytics.com),
             style_src:  %w('self' https: 'unsafe-inline'),
             connect_src: %w('self'),
             report_uri: %w(https://report-uri.io/example-csp)}
   )
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-
-  before_action :see_vars
-
-  def see_vars
-    p "------------------------------ENV['Settings.google_maps_api_key']---------------------------"
-    p ENV['Settings.google_maps_api_key']
-    p "==================================ENV['Settings']==========================================="
-    p ENV['Settings']
-    p "==============================ENV['google_maps_api_key']===================================="
-    p ENV['google_maps_api_key']
-    p "=====================================Settings==============================================="
-    p Settings
-    p '========================Settings.google_maps_api_key========================================'
-    p Settings.google_maps_api_key
-    p '============================================================================================'
-  end
 
   rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|

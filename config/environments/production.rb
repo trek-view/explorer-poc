@@ -119,11 +119,11 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'explorer.trekview.org', protocol: 'https' }
 
   config.action_mailer.smtp_settings = {
-      user_name: Explorer.credentials[:smtp_user_name],
-      password:  Explorer.credentials[:smtp_password],
-      domain:    Explorer.credentials[:smtp_domain],
-      address:   Explorer.credentials[:smtp_address],
-      port:      Explorer.credentials[:smtp_port],
+      user_name: ENV['smtp_user_name'],
+      password:  ENV['smtp_password'],
+      domain:    ENV['smtp_domain'],
+      address:   ENV['smtp_address'],
+      port:      ENV['smtp_port'],
       authentication: :plain,
       enable_starttls_auto: true
   }
