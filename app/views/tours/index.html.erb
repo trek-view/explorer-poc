@@ -20,7 +20,7 @@
 
         <div class="search_tour_type mt-3">
           <%= select_tag 'query[tour_type]',
-                         options_for_select(Tour.tour_types, @query.try(:[], :tour_type) ),
+                         options_for_select(Tour.tour_types, Tour.tour_types[@query.try(:[], :tour_type)] ),
                          class: 'select-tour-type form-control',
                          include_blank: 'Tour type' %>
         </div>
