@@ -18,18 +18,6 @@ class ApplicationController < ActionController::Base
   )
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :check_env
-
-  def check_env
-     hash = {
-        user_name: ENV['smtp_user_name'],
-        password:  ENV['smtp_password'],
-        domain:    ENV['smtp_domain'],
-        address:   ENV['smtp_address'],
-        port:      ENV['smtp_port']
-      }
-      p hash
-  end
 
   rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|
@@ -37,6 +25,10 @@ class ApplicationController < ActionController::Base
       format.html { user_not_authorized }
       format.js   { head :unauthorized, content_type: 'text/html' }
     end
+  end
+
+  def sitemap
+    redirect_to 'https://example.s3.amazonaws.com/sitemaps/sitemap.xml.gz'
   end
 
   protected
