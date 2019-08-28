@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
             font_src:  %w('self' https: data:),
             img_src:  %w('self' https: data:),
             object_src: %w('none'),
-            script_src:  %w('self' https: 'unsafe-inline' https://maps.googleapis.com https://www.google-analytics.com),
+            script_src:  %w('self' https: 'unsafe-inline' https://maps.googleapis.com https://www.google-analytics.com https://www.googletagmanager.com),
             style_src:  %w('self' https: 'unsafe-inline'),
             connect_src: %w('self'),
             report_uri: %w(https://report-uri.io/example-csp)}
