@@ -18,6 +18,18 @@ class ApplicationController < ActionController::Base
   )
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :check_env
+
+  def check_env
+     hash = {
+        user_name: ENV['smtp_user_name'],
+        password:  ENV['smtp_password'],
+        domain:    ENV['smtp_domain'],
+        address:   ENV['smtp_address'],
+        port:      ENV['smtp_port']
+      }
+      p hash
+  end
 
   rescue_from Pundit::NotAuthorizedError do |exception|
     respond_to do |format|
