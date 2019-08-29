@@ -1,3 +1,15 @@
+<% content_for :meta_title do %>
+  <% @tour.name %>
+<% end %>
+
+<% content_for :meta_description do %>
+  <% @tour.description %>
+<% end %>
+
+<% content_for :meta_image do %>
+  <% @tour.photos.first.try(:street_view_thumbnail_url) if @tour.photos.any? %>
+<% end %>
+
 <% if @tour.photos.any? %>
   <% provide :head_tags do %>
     <meta name='turbolinks-visit-control' content='reload'>
@@ -14,7 +26,8 @@
   <div class="py-5 col-lg-12">
     <div class="card">
 
-      <h1 class="card-header"><%= title 'Tour Information' %></h1>
+      <h1 class="card-header"><%= title "#{@tour.name} tour" %></h1>
+      <% description @tour.description %>
 
       <div class="card-body">
 
