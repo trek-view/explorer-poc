@@ -1,14 +1,14 @@
 # Set the host name for URL creation
 SitemapGenerator::Sitemap.default_host = 'https://explorer.trekview.org'
-SitemapGenerator::Sitemap.adapter = SitemapGenerator::S3Adapter.new(fog_provider: 'AWS',
+SitemapGenerator::Sitemap.adapter = SitemapGenerator::S3Adapter.new(fog_provider: ENV['AWS_FOG_PROVIDER'],
                                                                     aws_access_key_id: ENV['AWS_ACCESS_KEY'],
                                                                     aws_secret_access_key: ENV['AWS_SECRET_KEY'],
                                                                     fog_directory: ENV['AWS_BUCKET_NAME'],
-                                                                    fog_region: ENV['AWS_BUCKET_REGION'])
+                                                                    fog_region: ENV['AWS_FOG_REGION'])
 
 SitemapGenerator::Sitemap.public_path = 'tmp/'
 SitemapGenerator::Sitemap.sitemaps_host = "https://#{ENV['AWS_BUCKET_NAME']}.s3.amazonaws.com/"
-# SitemapGenerator::Sitemap.sitemaps_path = "#{ENV['AWS_BUCKET_NAME']}/"
+SitemapGenerator::Sitemap.sitemaps_path = '/'
 SitemapGenerator::Sitemap.ping_search_engines('https://explorer.trekview.org/sitemap')
 
 SitemapGenerator::Sitemap.create do
