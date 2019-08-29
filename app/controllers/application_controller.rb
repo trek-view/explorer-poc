@@ -28,7 +28,8 @@ class ApplicationController < ActionController::Base
   end
 
   def sitemap
-    redirect_to "https://#{ENV['AWS_BUCKET_NAME']}.s3.amazonaws.com/sitemap.xml.gz"
+    aws_s3_url = "http://s3.#{ENV['FOG_REGION']}.amazonaws.com/#{ENV['FOG_DIRECTORY']}/sitemaps/sitemap.xml.gz"
+    redirect_to(aws_s3_url, status: 301)
   end
 
   protected

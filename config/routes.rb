@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   resources :tours, only: %i[index]
 
   get '/search_tours', to: 'tours#search_tours'
-  get '/sitemap', to: 'application#sitemap'
+  get '/sitemap.xml', to: 'application#sitemap'
 
   root to: 'tours#index'
 
