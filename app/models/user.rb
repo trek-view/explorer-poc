@@ -26,7 +26,7 @@ class User < ApplicationRecord
   after_create :subscribe_to_global
 
   def subscribe_to_global
-    if global_subscribe
+    if global_subscribe == '1'
       # self.subscriptions.create!(kind: Constants::SUBSCRIPTION_TYPES[:global])
       Mailchimp::ListUpdater.new(self).call
     end
