@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def app_image
-    image_url('apple-touch-icon-180x180.png')
+    image_url('explorer-logo-rectangle.png')
   end
 
   def app_url
