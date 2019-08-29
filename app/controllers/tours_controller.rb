@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class ToursController < ApplicationController
 
+  include MetaTagsHelper
+
   before_action :set_tour, only: %i[show]
 
   def index
