@@ -8,8 +8,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :confirmable, :recoverable, :registerable, :rememberable, :trackable, :timeoutable,
          :validatable
 
-  has_many :tours
-  has_many :subscriptions
+  has_many :tours, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   attr_accessor :global_subscribe
 
