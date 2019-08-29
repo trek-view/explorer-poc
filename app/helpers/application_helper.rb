@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def app_image
-    image_url('explorer-logo-rectangle.png')
+    image_url('google-street-view-tours')
   end
 
   def app_url
