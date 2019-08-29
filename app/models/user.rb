@@ -8,8 +8,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :confirmable, :recoverable, :registerable, :rememberable, :trackable, :timeoutable,
          :validatable
 
-  has_many :tours
-  has_many :subscriptions
+  has_many :tours, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   attr_accessor :global_subscribe
 
@@ -26,7 +26,7 @@ class User < ApplicationRecord
   after_create :subscribe_to_global
 
   def subscribe_to_global
-    if global_subscribe
+    if global_subscribe == '1'
       # self.subscriptions.create!(kind: Constants::SUBSCRIPTION_TYPES[:global])
       Mailchimp::ListUpdater.new(self).call
     end

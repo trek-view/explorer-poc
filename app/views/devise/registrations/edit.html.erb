@@ -37,11 +37,40 @@
         <small class="form-text text-muted"><%= t('.we_need_your_current_password_to_confirm_your_changes') %></small>
       </div>
 
+      <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#deleteUserModal">
+        Cancel my account
+      </button>
+
       <div class="form-group">
         <%= f.submit t('.update'), class: 'btn btn-primary' %>
       </div>
     <% end %>
 
     <%= link_to t('.back'), :back %>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalCenter" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <%= form_tag('/users', method: :delete) do %>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete you account?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Current password</label>
+            <input type="password" class="form-control" id="delete_user_current_password" name="user[current_password]">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
