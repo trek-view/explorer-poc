@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
-  namespace :api do
+  namespace :api, constraints: { format: 'json' } do
     namespace :v1 do
       resources :tours, only: %i[index show create update destroy] do
         resources :photos, param: :tourer_photo_id, only: %i[index show create update destroy]

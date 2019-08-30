@@ -2,6 +2,8 @@
 module Api::V1
   class BaseController < ActionController::API
 
+    before_action :only_respond_to_json
+
     before_action :authorize_request, except: [:user_not_authorized]
 
     attr_reader :api_user
@@ -29,6 +31,10 @@ module Api::V1
         @api_user = result[:user]
 
         render json: {errors: result[:messages]}, status: 401 unless @api_user
+      end
+
+      def only_respond_to_json
+        render json: { error: 'requests only in JSON format' }, status: 406 unless params[:format] == 'json' && request.xhr?
       end
 
   end
