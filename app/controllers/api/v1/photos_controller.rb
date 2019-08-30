@@ -2,21 +2,22 @@
 module Api::V1
   class PhotosController < BaseController
 
+    before_action :set_tour
     before_action :set_by_tourer_photo_id, only: %i[show update destroy]
-    before_action :check_tour
+    before_action :check_tour, only: %i[create update destroy]
 
-    # GET /api/v1/tours/:tour_local_id/photos
+    # GET /api/v1/tours/:tourer_tour_id/photos
     def index
       render json: {photos: @tour.photos}, status: :ok
     end
 
-    # GET /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
+    # GET /api/v1/tours/:tourer_tour_id/photos/:tourer_photo_id
     def show
       photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
       render json: { photo: photo }, status: :ok
     end
 
-    # POST /api/v1/tours/:tour_local_id/photos
+    # POST /api/v1/tours/:tourer_tour_id/photos
     def create
       photo = @tour.photos.build(photo_params)
 
@@ -27,7 +28,7 @@ module Api::V1
       end
     end
 
-    # PATCH/PUT /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
+    # PATCH/PUT /api/v1/tours/:tourer_tour_id/photos/:tourer_photo_id
     def update
       photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
 
@@ -38,10 +39,15 @@ module Api::V1
       end
     end
 
-    # DELETE /api/v1/tours/:tour_local_id/photos/:tourer_photo_id
+    # DELETE /api/v1/tours/:tourer_tour_id/photos/:tourer_photo_id
     def destroy
       @photo.destroy
-      render json: {message: 'Photo was deleted.'},  head: :no_content, status: :ok
+      render json: {
+          "photo": {
+              "id": @photo.id,
+              "deleted_at": DateTime.now.rfc3339
+          }
+      }, head: :no_content, status: :ok
     end
 
     private
@@ -54,8 +60,9 @@ module Api::V1
         params.require(:photo).permit(*permitted_photo_params)
       end
 
+      # :tour_id is ID of a tour in a TOURER DB
       def set_tour
-        @tour = Tour.find_by(local_id: params[:tour_local_id])
+        @tour = Tour.find_by(tourer_tour_id: params[:tour_id])
       end
 
       def permitted_photo_params
@@ -70,13 +77,10 @@ module Api::V1
          :street_view_url,
          :connection,
          :connection_distance_km,
-         :tourer_photo_id,
-         :tourer_version]
+         :tourer_photo_id]
       end
 
       def check_tour
-        set_tour
-
         unless api_user.tours.include?(@tour)
           render json: {errors: {authorization: 'You cannot perform this action.'}}
         end

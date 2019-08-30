@@ -18,7 +18,8 @@ class Tour < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
   validates :description, length: { maximum: 140 }
-  validates :local_id, presence: true, uniqueness: true, length: { maximum: 10 }
+  validates :tourer_tour_id, presence: true, uniqueness: true, length: { maximum: 10 }
+  validates :tourer_version, length: { maximum: 5 }
 
   validates_associated :tags
 
@@ -26,6 +27,7 @@ class Tour < ApplicationRecord
   validate :tags_length
   validate :tour_type_should_be_valid
   validate :transport_type_should_be_valid
+  validate :types_dependency
 
   friendly_id :name, use: :slugged
 
@@ -134,7 +136,7 @@ class Tour < ApplicationRecord
     error_message = 'is not a valid transport_type'
     if exception.message.include? error_message
       @transport_type_backup = value
-      self[:tour_type] = nil
+      self[:transport_type] = nil
     else
       raise
     end
@@ -144,6 +146,13 @@ class Tour < ApplicationRecord
     if @transport_type_backup
       error_message = "#{@transport_type_backup} is not a valid transport_type"
       errors.add(:transport_type, error_message)
+    end
+  end
+
+  def types_dependency
+    if self[:tour_type].present? && self[:transport_type].present?
+      error_message = "#{self[:tour_type]} and #{self[:transport_type]} mismatch"
+      errors.add(:types_mismatch, error_message) unless Constants::DEPENDENCY_OF_TYPES[self[:tour_type]].include? self[:transport_type]
     end
   end
   #---------------------------------------------------------------------------------------------------------

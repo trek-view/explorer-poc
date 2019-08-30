@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :tours, param: :local_id, only: %i[index show create update destroy] do
+      resources :tours, only: %i[index show create update destroy] do
         resources :photos, param: :tourer_photo_id, only: %i[index show create update destroy]
       end
 
