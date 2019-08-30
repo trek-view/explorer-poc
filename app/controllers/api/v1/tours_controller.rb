@@ -52,11 +52,21 @@ module Api::V1
         if @tour.errors.any?
           render json: {errors: @tour.errors}, status: :unprocessable_entity
         else
-          render json: @tour, status: :ok
+          render json: {
+                        "tour": {
+                                  "id": @tour.id,
+                                  "deleted_at": DateTime.now.rfc3339
+                                }
+                        }, status: :ok
         end
       else
         render json: {errors: 'You cannot delete this tour'}, status: :unauthorized
       end
+    end
+
+    # GET /api/v1/users/:user-friendly-id/tours
+    def user_tours
+      ##TODO
     end
 
     private
@@ -90,6 +100,7 @@ module Api::V1
             :name,
             :description,
             :tourer_tour_id,
+            :tourer_version,
             :country_name,
             :tour_type,
             :transport_type,

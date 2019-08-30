@@ -19,6 +19,7 @@ class Tour < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
   validates :description, length: { maximum: 140 }
   validates :tourer_tour_id, presence: true, uniqueness: true, length: { maximum: 10 }
+  validates :tourer_version, length: { maximum: 5 }
 
   validates_associated :tags
 

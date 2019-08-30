@@ -13,7 +13,6 @@ class PhotoSerializer < ActiveModel::Serializer
                  connection
                  connection_distance_km
                  tourer_photo_id
-                 tourer_version
                ]
 
 end
