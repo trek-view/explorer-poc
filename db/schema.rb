@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_23_072724) do
+ActiveRecord::Schema.define(version: 2019_08_30_083653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 2019_08_23_072724) do
     t.string "tourer_photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "tourer_version"
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer_photo_id", "tour_id"], name: "index_photos_on_tourer_photo_id_and_tour_id", unique: true
     t.index ["tourer_photo_id"], name: "index_photos_on_tourer_photo_id"
@@ -81,13 +80,13 @@ ActiveRecord::Schema.define(version: 2019_08_23_072724) do
     t.text "description"
     t.bigint "country_id"
     t.bigint "user_id"
-    t.string "google_link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
-    t.string "local_id"
     t.integer "tour_type"
     t.integer "transport_type"
+    t.string "tourer_version"
+    t.string "tourer_tour_id"
     t.index ["country_id"], name: "index_tours_on_country_id"
     t.index ["slug"], name: "index_tours_on_slug", unique: true
     t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true

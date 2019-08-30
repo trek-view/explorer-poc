@@ -10,7 +10,7 @@ module Api::V1
       render json: @tours, status: :ok
     end
 
-    # GET /api/v1/tours/:local_id
+    # GET /api/v1/tours/:tourer_tour_id
     def show
       render json: @tour, status: :ok
     end
@@ -27,7 +27,7 @@ module Api::V1
       end
     end
 
-    # PATCH/PUT /api/v1/tours/:local_id
+    # PATCH/PUT /api/v1/tours/:tourer_tour_id
     def update
       if api_user.tours.include?(@tour)
         begin
@@ -45,7 +45,7 @@ module Api::V1
       end
     end
 
-    # DELETE /api/v1/tours/:local_id
+    # DELETE /api/v1/tours/:tourer_tour_id
     def destroy
       if api_user.tours.include?(@tour)
         @tour.destroy
@@ -62,7 +62,7 @@ module Api::V1
     private
 
       def set_tour
-        @tour = Tour.find_by(local_id: params[:local_id])
+        @tour = Tour.find_by(tourer_tour_id: params[:tourer_tour_id])
       end
 
       def tour_params
@@ -89,8 +89,7 @@ module Api::V1
         [
             :name,
             :description,
-            :local_id,
-            :google_link,
+            :tourer_tour_id,
             :country_name,
             :tour_type,
             :transport_type,
@@ -107,8 +106,7 @@ module Api::V1
                                 :street_view_url,
                                 :connection,
                                 :connection_distance_km,
-                                :tourer_photo_id,
-                                :tourer_version]
+                                :tourer_photo_id]
         ]
       end
 
