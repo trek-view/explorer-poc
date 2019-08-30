@@ -11,6 +11,35 @@ module Constants
       air: 2
   }
 
+  DEPENDENCY_OF_TYPES = {
+      land: %w(
+          drive
+          hike
+          bike
+          climb
+          ski
+          snowboard
+          skateboard
+          rollerblade
+          otherland
+      ),
+      water: %w(
+          sail
+          kayak
+          raft
+          standup_paddle_board
+          other_water
+      ),
+      air: %w(
+          drone
+          hang_glide
+          parachute
+          windsuit
+          plane
+          other_air
+      )
+  }.with_indifferent_access
+
   TRANSPORT_TYPES = {
       drive: 1,
       hike: 2,
