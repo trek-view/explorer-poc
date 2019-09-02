@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         resources :photos, param: :tourer_photo_id, only: %i[index show create update destroy]
       end
 
+      get 'user_tours', to: 'tours#user_tours'
       get '*unmatched_route', to:   'base#user_not_authorized', code: 401
     end
   end

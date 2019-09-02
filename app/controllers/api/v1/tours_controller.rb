@@ -64,9 +64,9 @@ module Api::V1
       end
     end
 
-    # GET /api/v1/users/:user-friendly-id/tours
+    # GET /api/v1/user_tours
     def user_tours
-      ##TODO
+      render json: api_user.tours, status: :ok
     end
 
     private
