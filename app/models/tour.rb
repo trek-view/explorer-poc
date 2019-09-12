@@ -23,6 +23,7 @@ class Tour < ApplicationRecord
   validates :tourer_version, length: { maximum: 5 }
 
   validates_associated :tags
+  validates_associated :countries
 
   validate :tags_amount
   validate :tags_length
@@ -74,10 +75,10 @@ class Tour < ApplicationRecord
                                   case_sensitive: false,
                                   message: "Photo's tourer_photo_id should be unique per tour" }
 
-  def countries=(names_string)
+  def countries=(codes_string)
     countries = []
-    names_string.split(', ').each do |name|
-      countries << Country.find_or_initialize_by(name: name.strip.downcase)
+    codes_string.split(', ').each do |code|
+      countries << Country.find_or_initialize_by(code: code)
     end
     super countries
   end
@@ -97,7 +98,7 @@ class Tour < ApplicationRecord
     self.tags.map(&:name).join(', ')
   end
 
-  def tags_check name
+  def tags_check(name)
     unless name.match(/\A[a-zA-Z0-9]*\z/)
       self.errors.add(:tags, "#{name} should not contain whitespaces or special characters") and return
     end
