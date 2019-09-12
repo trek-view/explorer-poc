@@ -22,7 +22,6 @@ module Api::V1
       if @tour.save
         render json: @tour, status: :created
       else
-        p @tour.errors
         render json: {errors: @tour.errors}, status: :unprocessable_entity
       end
     end
@@ -101,7 +100,7 @@ module Api::V1
             :description,
             :tourer_tour_id,
             :tourer_version,
-            :country_name,
+            :countries,
             :tour_type,
             :transport_type,
             :tag_names,

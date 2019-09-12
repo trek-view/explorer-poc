@@ -16,8 +16,13 @@
         <% end %>
 
         <div>
-          <%= link_to tour.country.name, "/tours?query[country_id]=#{tour.country.id}", class: 'btn btn-warning' %>
-          - <%= link_to tour.tour_type, "/tours?query[tour_type]=#{Tour.tour_types[tour.tour_type]}", class: 'btn btn-primary' %>
+          <% if tour.countries.any? %>
+            <% tour.countries.each do |country| %>
+              <%= link_to country.name, "/tours?query[country_id]=#{country.id}", class: 'btn btn-warning' %>
+            <% end %>
+          <% end %>
+
+          <%= link_to tour.tour_type, "/tours?query[tour_type]=#{Tour.tour_types[tour.tour_type]}", class: 'btn btn-primary' %>
         </div>
 
       </div>

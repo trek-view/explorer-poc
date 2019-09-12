@@ -42,11 +42,13 @@
           </div>
         <% end %>
 
-        <% if @tour.country.present? && @tour.country.name.present? %>
+        <% if @tour.countries.any? %>
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">Tour location</label>
             <div class="col-sm-10">
-              <%= link_to @tour.country.name, "/tours?query[country_id]=#{@tour.country.id}", class: 'btn btn-warning' %>
+              <% @tour.countries.each do |country| %>
+                <%= link_to country.name, "/tours?query[country_id]=#{country.id}", class: 'btn btn-warning' %>
+              <% end %>
             </div>
           </div>
         <% end %>
