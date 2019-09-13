@@ -6,7 +6,7 @@ module Api::V1
 
     # GET /api/v1/tours
     def index
-      @tours = Tour.includes(:tags, :country, :photos)
+      @tours = Tour.includes(:tags, :countries, :photos)
       render json: @tours, status: :ok
     end
 
@@ -71,7 +71,7 @@ module Api::V1
     private
 
       def set_tour
-        @tour = Tour.find_by(tourer_tour_id: params[:tourer_tour_id])
+        @tour = Tour.find_by(tourer_tour_id: params[:id])
       end
 
       def tour_params
@@ -109,7 +109,7 @@ module Api::V1
                                 :taken_date_time,
                                 :latitude,
                                 :longitude,
-                                :country_code,
+                                :country,
                                 :elevation_meters,
                                 :heading,
                                 :street_view_thumbnail_url,

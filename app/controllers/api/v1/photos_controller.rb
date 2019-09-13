@@ -8,13 +8,13 @@ module Api::V1
 
     # GET /api/v1/tours/:tourer_tour_id/photos
     def index
-      render json: {photos: @tour.photos}, status: :ok
+      render json: @tour.photos, status: :ok
     end
 
     # GET /api/v1/tours/:tourer_tour_id/photos/:tourer_photo_id
     def show
       photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
-      render json: { photo: photo }, status: :ok
+      render json: photo, status: :ok
     end
 
     # POST /api/v1/tours/:tourer_tour_id/photos
@@ -70,7 +70,7 @@ module Api::V1
          :taken_date_time,
          :latitude,
          :longitude,
-         :country_code,
+         :country,
          :elevation_meters,
          :heading,
          :street_view_thumbnail_url,

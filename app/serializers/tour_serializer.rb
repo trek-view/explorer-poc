@@ -2,6 +2,7 @@ class TourSerializer < ActiveModel::Serializer
 
   attributes %i[
                 id
+                tourer_tour_id
                 name
                 description
                 countries

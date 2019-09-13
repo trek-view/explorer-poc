@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_12_144254) do
+ActiveRecord::Schema.define(version: 2019_09_12_163819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(version: 2019_09_12_144254) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+  create_table "photo_countries", force: :cascade do |t|
+    t.bigint "photo_id"
+    t.bigint "country_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_photo_countries_on_country_id"
+    t.index ["photo_id"], name: "index_photo_countries_on_photo_id"
+  end
+
   create_table "photos", force: :cascade do |t|
     t.bigint "tour_id"
     t.string "file_name"
@@ -41,7 +50,6 @@ ActiveRecord::Schema.define(version: 2019_09_12_144254) do
     t.decimal "longitude", precision: 10, scale: 6
     t.integer "elevation_meters"
     t.float "heading"
-    t.string "country_code"
     t.text "street_view_url"
     t.text "street_view_thumbnail_url"
     t.string "connection"
@@ -49,6 +57,7 @@ ActiveRecord::Schema.define(version: 2019_09_12_144254) do
     t.string "tourer_photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "country_id"
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer_photo_id", "tour_id"], name: "index_photos_on_tourer_photo_id_and_tour_id", unique: true
     t.index ["tourer_photo_id"], name: "index_photos_on_tourer_photo_id"
@@ -130,6 +139,8 @@ ActiveRecord::Schema.define(version: 2019_09_12_144254) do
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
+  add_foreign_key "photo_countries", "countries"
+  add_foreign_key "photo_countries", "photos"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"

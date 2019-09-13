@@ -1,6 +1,7 @@
 class Country < ApplicationRecord
 
   has_many :tours
+  has_many :photos
 
   validates :code, presence: true, uniqueness: true, inclusion: { in: ISO3166::Country.all.map(&:alpha2) }
 

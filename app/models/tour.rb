@@ -77,7 +77,7 @@ class Tour < ApplicationRecord
 
   def countries=(codes_string)
     countries = []
-    codes_string.split(', ').each do |code|
+    codes_string.split(', ').uniq.each do |code|
       countries << Country.find_or_initialize_by(code: code)
     end
     super countries
