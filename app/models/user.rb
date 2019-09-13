@@ -27,9 +27,12 @@ class User < ApplicationRecord
 
   def subscribe_to_global
     if global_subscribe == '1'
-      # self.subscriptions.create!(kind: Constants::SUBSCRIPTION_TYPES[:global])
       Mailchimp::ListUpdater.new(self).call
     end
+  end
+
+  def should_generate_new_friendly_id?
+    name_changed?
   end
 
 end

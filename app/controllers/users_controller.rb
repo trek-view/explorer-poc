@@ -4,10 +4,6 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:tours]
   before_action :set_user
 
-  def info
-    authorize @user
-  end
-
   def generate_new_token
     authorize @user
 
