@@ -7,6 +7,7 @@ class PhotoSerializer < ActiveModel::Serializer
                  latitude
                  longitude
                  elevation_meters
+                 country
                  heading
                  street_view_url
                  street_view_thumbnail_url
@@ -14,5 +15,9 @@ class PhotoSerializer < ActiveModel::Serializer
                  connection_distance_km
                  tourer_photo_id
                ]
+
+  def country
+    object.country.present? ? object.country.name : ''
+  end
 
 end

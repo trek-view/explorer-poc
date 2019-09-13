@@ -21,12 +21,12 @@ class ToursController < ApplicationController
   def find_tours
     set_tours_search_params
 
-    @tours = Tour.includes(:country, :tags, :user).order(created_at: 'DESC')
+    @tours = Tour.includes(:countries, :tags, :user).order(created_at: 'DESC')
 
     if @query.present?
-      @query.each do |key, val|
-        @tours = @tours.where(key => val) if val.present?
-      end
+      @tours = @tours.joins(:countries).where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
+
+      @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
     end
     @tours = @tours.search(@search_text) if @search_text.present?
   end

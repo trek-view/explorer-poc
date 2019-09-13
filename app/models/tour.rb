@@ -7,9 +7,10 @@ class Tour < ApplicationRecord
   enum tour_type: Constants::TOUR_TYPES
   enum transport_type: Constants::TRANSPORT_TYPES
 
-  belongs_to :country
   belongs_to :user
 
+  has_many :tour_countries, dependent: :destroy
+  has_many :countries, through: :tour_countries
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :photos, dependent: :destroy
@@ -22,6 +23,7 @@ class Tour < ApplicationRecord
   validates :tourer_version, length: { maximum: 5 }
 
   validates_associated :tags
+  validates_associated :countries
 
   validate :tags_amount
   validate :tags_length
@@ -37,8 +39,7 @@ class Tour < ApplicationRecord
                       :description
                   ],
                   associated_against: {
-                      tags: [:name],
-                      country: [:name]
+                      tags: [:name]
                   }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tours]
@@ -74,26 +75,30 @@ class Tour < ApplicationRecord
                                   case_sensitive: false,
                                   message: "Photo's tourer_photo_id should be unique per tour" }
 
-  def country_name=(name)
-    self.country = Country.where(name: name.strip.downcase).first_or_create!
+  def countries=(codes_string)
+    countries = []
+    codes_string.split(', ').uniq.each do |code|
+      countries << Country.find_or_initialize_by(code: code)
+    end
+    super countries
   end
 
   # for case if we will need to pass tags as a string and validate its length
   def tag_names=(names_string)
-    self.tags = prepare_tags_string(names_string).split(', ').map do |name|
+    self.tags = prepare_string(names_string).split(', ').map do |name|
       Tag.find_or_initialize_by(name: name.strip.downcase)
     end
   end
 
-  def prepare_tags_string(tags_string)
-    tags_string.strip.chomp(',')
+  def prepare_string(string)
+    string.strip.chomp(',')
   end
 
   def tag_names
     self.tags.map(&:name).join(', ')
   end
 
-  def tags_check name
+  def tags_check(name)
     unless name.match(/\A[a-zA-Z0-9]*\z/)
       self.errors.add(:tags, "#{name} should not contain whitespaces or special characters") and return
     end

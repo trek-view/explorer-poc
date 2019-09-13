@@ -1,18 +1,18 @@
-# frozen_string_literal: true
 class TourSerializer < ActiveModel::Serializer
 
   attributes %i[
                 id
+                tourer_tour_id
                 name
                 description
-                country
+                countries
                 tour_type
                 transport_type
                 tags
               ]
 
-  def country
-    object.country.try(:name)
+  def countries
+    object.countries.any? ? object.countries.pluck(:name) : []
   end
 
   def tags
@@ -20,5 +20,7 @@ class TourSerializer < ActiveModel::Serializer
   end
 
   has_many :photos
+
+  has_many :countries
 
 end
