@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     get 'tours'
 
     resources :tours, only: %i[show]
+    resources :tour_books
   end
 
   resources :tours, only: %i[index]

@@ -2,6 +2,7 @@
 class ApplicationController < ActionController::Base
 
   include Pundit
+  include ApplicationHelper
 
   ensure_security_headers(
       hsts: {include_subdomains: true,

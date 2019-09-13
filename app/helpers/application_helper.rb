@@ -17,4 +17,14 @@ module ApplicationHelper
     root_url
   end
 
+  def set_user
+    @user = if params[:user_id]
+              User.friendly.find(params[:user_id])
+            elsif params[:user]
+              User.friendly.find(params[:id])
+            else
+              current_user
+            end
+  end
+
 end
