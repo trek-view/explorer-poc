@@ -18,4 +18,8 @@ SitemapGenerator::Sitemap.create do
     add user_tour_path(tour.user, tour), changefreq: 'weekly', lastmod: tour.updated_at
   end
 
+  User.find_each do |user|
+    add user_tours_path(user), changefreq: 'weekly'
+  end
+
 end

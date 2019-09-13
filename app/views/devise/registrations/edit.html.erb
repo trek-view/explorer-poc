@@ -9,7 +9,7 @@
       <%= bootstrap_devise_error_messages! %>
 
       <div class="form-group">
-        <%= f.label :name %>
+        <%= f.label :name, 'Username' %>
         <%= f.text_field :name, autofocus: true, autocomplete: 'name', class: 'form-control' %>
       </div>
 
@@ -28,6 +28,21 @@
       <div class="form-group">
         <%= f.label :password_confirmation %>
         <%= f.password_field :password_confirmation, autocomplete: 'new-password', class: 'form-control'  %>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <p class="my-4">Your API key: <span class="text-success user-api-token"><%= current_user.api_token %></span></p>
+        </div>
+
+        <div class="col-lg-6">
+          <%= link_to user_generate_new_token_path(current_user), method: :post, confirm: 'Generate new token?',
+                      class: 'btn btn-primary regenerate-token my-3', 'data-message' => 'Are you sure?',
+                      'data-severity' => 'warning', remote: true do %>
+            Generate new API key
+          <% end %>
+          <p class="small"><em>Regenerating your API key will invalidate your existing key immediately.</em></p>
+        </div>
       </div>
 
       <div class="form-group">

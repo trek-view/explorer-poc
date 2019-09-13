@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 class UsersController < ApplicationController
 
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:tours]
   before_action :set_user
-
-  def info
-    authorize @user
-  end
 
   def generate_new_token
     authorize @user
@@ -21,8 +17,6 @@ class UsersController < ApplicationController
   end
 
   def tours
-    # authorize @user
-
     @tours = @user.tours
     @tours = @tours.page(params[:page])
   end
