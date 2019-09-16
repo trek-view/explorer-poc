@@ -14,8 +14,8 @@ class Tour < ApplicationRecord
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :photos, dependent: :destroy
-  has_many :booked_tours
-  has_many :tour_books, through: :booked_tours
+  has_many :booked_tours, dependent: :destroy
+  has_many :tour_books, -> { distinct }, through: :booked_tours
 
   accepts_nested_attributes_for :photos
 

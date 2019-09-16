@@ -18,7 +18,10 @@ Rails.application.routes.draw do
     get 'tours'
 
     resources :tours, only: %i[show]
-    resources :tour_books
+
+    resources :tour_books do
+      post 'add_item', to: 'tour_books#add_item'
+    end
   end
 
   resources :tours, only: %i[index]

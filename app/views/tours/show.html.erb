@@ -25,9 +25,42 @@
 <div class="row">
   <div class="py-5 col-lg-12">
     <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <h1 class="col-lg-10 col-sm-12">
+            <%= title "#{@tour.name} tour" %>
+          </h1>
 
-      <h1 class="card-header"><%= title "#{@tour.name} tour" %></h1>
-      <% description @tour.description %>
+          <% description @tour.description %>
+
+          <div class="col-lg-2 col-sm-12">
+            <div class="float-right">
+
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add to TourBook
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#">Create new TourBook</a>
+
+                  <% if @tour.user.present? && @tour.user.tour_books.any? %>
+                    <div class="dropdown-divider"></div>
+                    <% @tour.user.tour_books.each do |book| %>
+                      <%= link_to book.name,
+                                  user_tour_book_add_item_path(book.user, book, item_id: @tour.id),
+                                  class: 'dropdown-item',
+                                  remote: true,
+                                  method: :post %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       <div class="card-body">
 

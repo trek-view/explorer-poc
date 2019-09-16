@@ -10,8 +10,6 @@ class TourBookPolicy < ApplicationPolicy
   end
 
   def create?
-    p 'pundit check user ============================'
-    p user
     user.present?
   end
 
@@ -23,8 +21,8 @@ class TourBookPolicy < ApplicationPolicy
     update?
   end
 
-  # def info?
-  #   record && user && scope.where(id: record.id).exists? && record.id == user.id
-  # end
+  def add_item?
+    record && user && record.user_id == user.id
+  end
 
 end

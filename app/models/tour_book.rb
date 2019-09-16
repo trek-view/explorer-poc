@@ -4,8 +4,8 @@ class TourBook < ApplicationRecord
 
   belongs_to :user
 
-  has_many :booked_tours
-  has_many :tours, through: :booked_tours
+  has_many :booked_tours, dependent: :destroy
+  has_many :tours, -> { distinct }, through: :booked_tours
 
   validates :name, presence: true, uniqueness: {scope: :user}, length: { maximum: 70 }
   validates :description, presence: true, length: { maximum: 240 }
