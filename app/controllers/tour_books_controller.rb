@@ -48,6 +48,10 @@ class TourBooksController < ApplicationController
 
   def destroy
     authorize @tour_book
+
+    @tour_book.destroy
+    flash[:success] = "TourBook #{@tour_book.name} was destroyed"
+    redirect_to user_tour_books_path(current_user)
   end
 
   def add_item

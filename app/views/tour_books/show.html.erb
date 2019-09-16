@@ -2,8 +2,32 @@
   <div class="py-5 col-lg-12">
     <div class="card">
 
-      <h1 class="card-header"><%= title "#{@tour_book.name} tour book" %></h1>
-      <% description @tour_book.description %>
+      <div class="card-header">
+        <div class="row">
+
+          <h1 class="col-lg-10 col-sm-12"><%= title "#{@tour_book.name} tour book" %></h1>
+          <% description @tour_book.description %>
+
+          <div class="col-lg-1 col-sm-6">
+            <div class="float-right">
+              <%= link_to 'Edit',
+                          edit_user_tour_book_path(@tour_book.user, @tour_book),
+                          class: 'btn btn-warning mt-2' %>
+            </div>
+          </div>
+
+          <div class="col-lg-1 col-sm-6">
+            <div class="float-right">
+              <%= link_to 'Delete',
+                          url_for(action: :destroy, id: @tour_book.id),
+                          method: :delete,
+                          data: {confirm: 'Are you sure?'},
+                          class: 'btn btn-danger mt-2'%>
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       <div class="card-body">
 
@@ -18,16 +42,13 @@
           </div>
         <% end %>
 
-        <%# if @tour_book.tours.any? %>
-          <%#= render partial: 'tours_display', locals: {tours: @tour_book.tours} %>
-        <%# end %>
+        <% if @tour_book.tours.any? %>
+          <h4>Added Tours</h4>
+          <div class="row">
+            <%= render partial: 'tours/tours_display', locals: {tours: @tour_book.tours} %>
+          </div>
+        <% end %>
 
-      </div>
-
-      <div class="row">
-        <div class="col-lg-2 float-right">
-          <%= link_to 'Edit', edit_user_tour_book_path(@tour_book.user, @tour_book), class: 'btn btn-warning' %>
-        </div>
       </div>
 
     </div>
