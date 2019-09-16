@@ -6,6 +6,7 @@ class TourBooksController < ApplicationController
 
   def index
     @tour_books = @user.tour_books
+    @tour_books = @tour_books.page(params[:page])
   end
 
   def show
@@ -44,7 +45,7 @@ class TourBooksController < ApplicationController
   private
 
     def set_tour_book
-      @tour_book = TourBook.find(params[:id])
+      @tour_book = TourBook.friendly.find(params[:id])
     end
 
     def tour_book_params

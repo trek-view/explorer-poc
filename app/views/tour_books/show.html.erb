@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="py-5 col-lg-12">
+    <div class="card">
+
+      <h1 class="card-header"><%= title "#{@tour_book.name} tour book" %></h1>
+      <% description @tour_book.description %>
+
+      <div class="card-body">
+
+        <h3 class="card-title"><%= @tour_book.name %></h3>
+
+        <% if @tour_book.description.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Desciption</label>
+            <div class="col-sm-10 mt-2">
+              <p><%= @tour_book.description %></p>
+            </div>
+          </div>
+        <% end %>
+
+        <%# if @tour_book.tours.any? %>
+          <%#= render partial: 'tours_display', locals: {tours: @tour_book.tours} %>
+        <%# end %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
