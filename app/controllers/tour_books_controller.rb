@@ -36,6 +36,14 @@ class TourBooksController < ApplicationController
 
   def update
     authorize @tour_book
+
+    if @tour_book.update(tour_book_params)
+      flash[:success] = 'You TourBook was updated!'
+      redirect_to user_tour_book_path(@tour_book.user, @tour_book)
+    else
+      flash[:error] = @tour_book.errors.full_messages.to_sentence
+      render :edit
+    end
   end
 
   def destroy

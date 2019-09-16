@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_16_100612) do
+ActiveRecord::Schema.define(version: 2019_09_16_113401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "booked_tours", force: :cascade do |t|
+    t.bigint "tour_id"
+    t.bigint "tour_book_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_book_id"], name: "index_booked_tours_on_tour_book_id"
+    t.index ["tour_id"], name: "index_booked_tours_on_tour_id"
+  end
 
   create_table "countries", force: :cascade do |t|
     t.string "name"
@@ -150,6 +159,8 @@ ActiveRecord::Schema.define(version: 2019_09_16_100612) do
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
+  add_foreign_key "booked_tours", "tour_books"
+  add_foreign_key "booked_tours", "tours"
   add_foreign_key "photo_countries", "countries"
   add_foreign_key "photo_countries", "photos"
   add_foreign_key "photos", "tours"

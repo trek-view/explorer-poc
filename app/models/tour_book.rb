@@ -4,11 +4,11 @@ class TourBook < ApplicationRecord
 
   belongs_to :user
 
-  # has_many :added_tours
-  # has_many :tours, through: :added_tours
+  has_many :booked_tours
+  has_many :tours, through: :booked_tours
 
-  validates :name, presence: true
-  validates :description, presence: true
+  validates :name, presence: true, uniqueness: {scope: :user}, length: { maximum: 70 }
+  validates :description, presence: true, length: { maximum: 240 }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tour_books]
   friendly_id :name, use: :slugged
