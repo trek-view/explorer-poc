@@ -37,18 +37,18 @@
             <div class="col-lg-2 col-sm-12">
               <div class="float-right">
 
-                <div class="btn-group">
+                <div class="btn-group mt-2">
                   <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Add to TourBook
                   </button>
                   <div id="tourBooksList" class="dropdown-menu">
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createTourBookModal">Create new TourBook</a>
 
-                    <% if @tour.user.present? && @tour.user.tour_books.any? %>
+                    <% if current_user.tour_books.any? %>
                       <div class="dropdown-divider"></div>
-                      <% @tour.user.tour_books.each do |book| %>
+                      <% current_user.tour_books.each do |book| %>
                         <%= link_to book.name,
-                                    user_tour_book_add_item_path(book.user, book, item_id: @tour.id),
+                                    user_tour_book_add_item_path(current_user, book, item_id: @tour.id),
                                     class: 'dropdown-item',
                                     remote: true,
                                     method: :post %>

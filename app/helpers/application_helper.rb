@@ -18,12 +18,12 @@ module ApplicationHelper
   end
 
   def set_user
-    @user = if params[:user_id]
-              User.friendly.find(params[:user_id])
+    @user = if current_user
+              current_user
             elsif params[:user]
               User.friendly.find(params[:id])
-            else
-              current_user
+            elsif params[:user_id]
+              User.friendly.find(params[:user_id])
             end
   end
 

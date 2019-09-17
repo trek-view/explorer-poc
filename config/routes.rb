@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
     resources :tour_books do
       post 'add_item', to: 'tour_books#add_item'
+      delete 'remove_item', to: 'tour_books#remove_item'
     end
   end
 

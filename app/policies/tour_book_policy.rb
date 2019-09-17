@@ -25,4 +25,8 @@ class TourBookPolicy < ApplicationPolicy
     record && user && record.user_id == user.id
   end
 
+  def remove_item?
+    add_item?
+  end
+
 end

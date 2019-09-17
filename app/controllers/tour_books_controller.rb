@@ -1,7 +1,7 @@
 class TourBooksController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_tour_book, except: [:index, :new, :create, :add_item]
+  before_action :set_tour_book, except: [:index, :new, :create, :add_item, :remove_item]
   before_action :set_user
 
   def index
@@ -71,6 +71,21 @@ class TourBooksController < ApplicationController
         flash.now[:notice] = "Tour was added to your TourBook #{@tour_book.name}"
       rescue ActiveRecord::RecordInvalid => e
         flash.now[:error] = e.message
+      end
+    end
+  end
+
+  def remove_item
+    @tour_book ||= TourBook.friendly.find(params[:tour_book_id])
+    authorize @tour_book
+
+    if params[:item_id].present?
+      @tour = Tour.find(params[:item_id])
+      begin
+        @tour_book.tours.delete(@tour)
+        flash[:success] = "Tour \"#{@tour.name}\" was removed from this TourBook"
+      rescue => e
+        flash[:error] = e.message
       end
     end
   end
