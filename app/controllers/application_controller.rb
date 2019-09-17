@@ -2,6 +2,7 @@
 class ApplicationController < ActionController::Base
 
   include Pundit
+  include ApplicationHelper
 
   ensure_security_headers(
       hsts: {include_subdomains: true,
@@ -23,7 +24,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.json { head :unauthorized, content_type: 'text/html' }
       format.html { user_not_authorized }
-      format.js   { head :unauthorized, content_type: 'text/html' }
+      format.js   { flash.now[:error] = 'Not authorized. Please Log in to proceed.' }
     end
   end
 

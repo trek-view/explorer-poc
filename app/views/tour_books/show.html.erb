@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="py-5 col-lg-12">
+    <div class="card">
+
+      <div class="card-header">
+        <div class="row">
+
+          <h1 class="col-lg-10 col-sm-12"><%= title "#{@tour_book.name} tour book" %></h1>
+          <% description @tour_book.description %>
+
+          <% if policy(@tour_book).update? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Edit',
+                            edit_user_tour_book_path(@tour_book.user, @tour_book),
+                            class: 'btn btn-warning mt-2' %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if policy(@tour_book).destroy? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Delete',
+                            url_for(action: :destroy, id: @tour_book.slug),
+                            method: :delete,
+                            data: {confirm: 'Are you sure?'},
+                            class: 'btn btn-danger mt-2'%>
+              </div>
+            </div>
+          <% end %>
+
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <h3 class="card-title"><%= @tour_book.name %></h3>
+
+        <% if @tour_book.description.present? %>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Desciption</label>
+            <div class="col-sm-10 mt-2">
+              <p><%= @tour_book.description %></p>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @tour_book.tours.any? %>
+          <h4>Added Tours</h4>
+          <div class="row">
+            <%= render partial: 'tours/tours_display', locals: {tours: @tour_book.tours} %>
+          </div>
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
+</div>

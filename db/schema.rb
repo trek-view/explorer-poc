@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_12_163819) do
+ActiveRecord::Schema.define(version: 2019_09_17_123131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "booked_tours", force: :cascade do |t|
+    t.bigint "tour_id"
+    t.bigint "tour_book_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_book_id"], name: "index_booked_tours_on_tour_book_id"
+    t.index ["tour_id"], name: "index_booked_tours_on_tour_id"
+  end
 
   create_table "countries", force: :cascade do |t|
     t.string "name"
@@ -85,6 +94,17 @@ ActiveRecord::Schema.define(version: 2019_09_12_163819) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tour_books", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.index ["slug"], name: "index_tour_books_on_slug", unique: true
+    t.index ["user_id"], name: "index_tour_books_on_user_id"
+  end
+
   create_table "tour_countries", force: :cascade do |t|
     t.bigint "tour_id"
     t.bigint "country_id"
@@ -106,6 +126,7 @@ ActiveRecord::Schema.define(version: 2019_09_12_163819) do
     t.integer "transport_type"
     t.string "tourer_version"
     t.string "tourer_tour_id"
+    t.integer "booked_tours_count", default: 0, null: false
     t.index ["country_id"], name: "index_tours_on_country_id"
     t.index ["slug"], name: "index_tours_on_slug", unique: true
     t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
@@ -139,12 +160,15 @@ ActiveRecord::Schema.define(version: 2019_09_12_163819) do
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
+  add_foreign_key "booked_tours", "tour_books"
+  add_foreign_key "booked_tours", "tours"
   add_foreign_key "photo_countries", "countries"
   add_foreign_key "photo_countries", "photos"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
+  add_foreign_key "tour_books", "users"
   add_foreign_key "tour_countries", "countries"
   add_foreign_key "tour_countries", "tours"
   add_foreign_key "tours", "countries"

@@ -1,7 +1,6 @@
 class User < ApplicationRecord
 
   extend FriendlyId
-  friendly_id :name, use: :slugged
 
   # Include default devise modules. Others available are:
   # :lockable,  and :omniauthable
@@ -10,6 +9,7 @@ class User < ApplicationRecord
 
   has_many :tours, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
+  has_many :tour_books, dependent: :destroy
 
   attr_accessor :global_subscribe
 
@@ -22,6 +22,7 @@ class User < ApplicationRecord
   validates_acceptance_of :terms
 
   has_secure_token :api_token
+  friendly_id :name, use: :slugged
 
   after_create :subscribe_to_global
 

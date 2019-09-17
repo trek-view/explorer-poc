@@ -17,4 +17,18 @@ module ApplicationHelper
     root_url
   end
 
+  def set_user
+    @user = if current_user
+              current_user
+            elsif params[:user]
+              User.friendly.find(params[:id])
+            elsif params[:user_id]
+              User.friendly.find(params[:user_id])
+            end
+  end
+
+  def form_errors_for(object=nil)
+    render('shared/form_errors', object: object) unless object.blank?
+  end
+
 end

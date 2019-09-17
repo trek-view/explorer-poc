@@ -1,0 +1,16 @@
+<% if @tour_book.errors.any? %>
+  var container = $('#createTourBookModal .form-errors');
+  container.html('<%= j form_errors_for @tour_book %>');
+<% else %>
+  $('#createTourBookModal').modal('hide');
+  var messages = $('.flash-messages');
+  messages.html('<%= j render partial: "shared/flash_messages" %>');
+  //add link to tour_books list
+  var tourBooksList = $('#tourBooksList');
+  var link = '<%=  link_to @tour_book.name,
+                          user_tour_book_add_item_path(@tour_book.user, @tour_book, item_id: @tour.id),
+                          class: 'dropdown-item',
+                          remote: true,
+                          method: :post %>'
+  tourBooksList.append(link);
+<% end %>tourBooksList

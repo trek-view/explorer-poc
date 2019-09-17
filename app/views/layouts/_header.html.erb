@@ -15,6 +15,11 @@
                         class: "nav-link #{current_class? user_tours_path(current_user) }" %>
           </li>
           <li class="nav-item">
+            <%= link_to 'My TourBooks',
+                        user_tour_books_path(current_user),
+                        class: "nav-link #{current_class? user_tour_books_path(current_user) }" %>
+          </li>
+          <li class="nav-item">
             <%= link_to 'Edit my profile',
                         edit_user_registration_path,
                         class: "nav-link #{current_class? edit_user_registration_path }" %>

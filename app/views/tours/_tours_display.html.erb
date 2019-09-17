@@ -1,7 +1,20 @@
-<% @tours.each do |tour| %>
-  <div class="col-lg-4 col-md-6 mb-4">
+<% tours.each do |tour| %>
+  <div id="tour-<%= tour.id %>" class="col-lg-4 col-md-6 mb-4 tour-item">
     <div class="card h-100">
       <div class="card-body">
+        <% if @tour_book.present? && policy(@tour_book).remove_item? %>
+          <%= link_to user_tour_book_remove_item_path(tour.user, @tour_book, item_id: tour.id),
+                      class: 'close delete_from_book',
+                      title: 'delete tour from book',
+                      method: :delete,
+                      remote: true do %>
+              <span aria-hidden="true">&times;</span>
+          <% end %>
+        <% end %>
+
+        <div class="float-right">
+          <span class="badge badge-pill badge-success" title="Added to TourBooks"><%= tour.booked_tours_count %></span>
+        </div>
 
         <h4 class="card-title">
           <%= link_to tour.name, user_tour_path(tour.user, tour) %>
@@ -10,26 +23,30 @@
         <p class="card-text"><%= truncate(tour.description, length: 77, separator: ' ') %></p>
 
         <% if tour.tags.any? %>
-          <% tour.tags.each_with_index do |tag, index| %>
-            <%= link_to "##{tag.name}", "/tours?search_text=#{tag.name}", class: 'btn btn-info mb-1' %>
-          <% end %>
+          <div class="tags">
+            <% tour.tags.each_with_index do |tag, index| %>
+              <%= link_to "##{tag.name}", "/tours?search_text=#{tag.name}", class: 'btn btn-info mb-1' %>
+            <% end %>
+          </div>
         <% end %>
 
-        <div>
-          <% if tour.countries.any? %>
-            <% tour.countries.each do |country| %>
-              <%= link_to country.name, "/tours?query[country_id]=#{country.id}", class: 'btn btn-warning' %>
-            <% end %>
-          <% end %>
 
-          <%= link_to tour.tour_type, "/tours?query[tour_type]=#{Tour.tour_types[tour.tour_type]}", class: 'btn btn-primary' %>
+        <% if tour.countries.any? %>
+          <div class="tour_countries">
+            <% tour.countries.each do |country| %>
+              <%= link_to country.name, "/tours?query[country_id]=#{country.id}", class: 'btn btn-warning mb-1' %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="tour_type">
+          <%= link_to tour.tour_type, "/tours?query[tour_type]=#{Tour.tour_types[tour.tour_type]}", class: 'btn btn-primary mb-1' %>
         </div>
 
       </div>
 
       <div class="card-footer">
         <small class="text-muted">uploaded by: <%= link_to tour.user.try(:name), user_tours_path(tour.user) %></small>
-
       </div>
     </div>
 
