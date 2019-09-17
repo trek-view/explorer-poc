@@ -2,6 +2,8 @@
 
 <%= form_with(model: @tour_book, url: form_url, local: true) do |f| %>
 
+  <%= form_errors_for @tour_book %>
+
   <div class="form-group">
     <%= f.label :name %>
     <%= f.text_field :name, autofocus: true, autocomplete: 'name', class: 'form-control' %>

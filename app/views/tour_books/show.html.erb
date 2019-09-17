@@ -8,23 +8,27 @@
           <h1 class="col-lg-10 col-sm-12"><%= title "#{@tour_book.name} tour book" %></h1>
           <% description @tour_book.description %>
 
-          <div class="col-lg-1 col-sm-6">
-            <div class="float-right">
-              <%= link_to 'Edit',
-                          edit_user_tour_book_path(@tour_book.user, @tour_book),
-                          class: 'btn btn-warning mt-2' %>
+          <% if policy(@tour_book).update? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Edit',
+                            edit_user_tour_book_path(@tour_book.user, @tour_book),
+                            class: 'btn btn-warning mt-2' %>
+              </div>
             </div>
-          </div>
+          <% end %>
 
-          <div class="col-lg-1 col-sm-6">
-            <div class="float-right">
-              <%= link_to 'Delete',
-                          url_for(action: :destroy, id: @tour_book.slug),
-                          method: :delete,
-                          data: {confirm: 'Are you sure?'},
-                          class: 'btn btn-danger mt-2'%>
+          <% if policy(@tour_book).destroy? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Delete',
+                            url_for(action: :destroy, id: @tour_book.slug),
+                            method: :delete,
+                            data: {confirm: 'Are you sure?'},
+                            class: 'btn btn-danger mt-2'%>
+              </div>
             </div>
-          </div>
+          <% end %>
 
         </div>
       </div>

@@ -19,14 +19,18 @@ class TourBooksController < ApplicationController
 
   def create
     @tour_book = @user.tour_books.build(tour_book_params)
-
     authorize @tour_book
-    if @tour_book.save
-      flash[:success] = 'You TourBook was created!'
-      redirect_to user_tour_books_path
-    else
-      flash[:error] = @tour_book.errors.full_messages.to_sentence
-      render :new
+
+    respond_to do |format|
+      if @tour_book.save
+        add_item
+        flash[:success] = 'You TourBook was created!'
+        format.html { redirect_to user_tour_books_path }
+        format.js
+      else
+        format.html { render :new }
+        format.js
+      end
     end
   end
 
@@ -50,12 +54,13 @@ class TourBooksController < ApplicationController
     authorize @tour_book
 
     @tour_book.destroy
+
     flash[:success] = "TourBook #{@tour_book.name} was destroyed"
     redirect_to user_tour_books_path(current_user)
   end
 
   def add_item
-    @tour_book = TourBook.friendly.find(params[:tour_book_id])
+    @tour_book ||= TourBook.friendly.find(params[:tour_book_id])
     authorize @tour_book
 
     if params[:item_id].present?
