@@ -2,6 +2,9 @@
   <div class="col-lg-4 col-md-6 mb-4">
     <div class="card h-100">
       <div class="card-body">
+        <div class="float-right">
+          <span class="badge badge-pill badge-success" title="Added to TourBooks"><%= tour.booked_tours_count %></span>
+        </div>
 
         <h4 class="card-title">
           <%= link_to tour.name, user_tour_path(tour.user, tour) %>
