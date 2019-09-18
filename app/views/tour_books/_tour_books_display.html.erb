@@ -11,6 +11,10 @@
 
       </div>
 
+      <div class="card-footer">
+        <small class="text-muted">created by: <%= link_to tour_book.user.try(:name), user_tour_books_path(tour_book.user) %></small>
+      </div>
+
     </div>
 
   </div>

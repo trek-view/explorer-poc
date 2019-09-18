@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'
+  get '/tour_books', to: 'tour_books#all_tour_books'
 
   root to: 'tours#index'
 
