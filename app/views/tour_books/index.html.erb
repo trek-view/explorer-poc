@@ -8,7 +8,7 @@
 
       <% if user_signed_in? %>
         <div class="col-lg-3 col-sm-12 mt-4">
-          <%= link_to "New TourBook", new_user_tour_book_path(@user), class: 'btn btn-primary float-right' %>
+          <%= link_to "New TourBook", new_user_tour_book_path(current_user), class: 'btn btn-primary float-right' %>
         </div>
       <% end %>
     </div>

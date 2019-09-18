@@ -1,11 +1,11 @@
 class TourBooksController < ApplicationController
 
-  before_action :authenticate_user!, except: [:index, :show, :all_tour_books]
-  before_action :set_tour_book, except: [:index, :new, :create, :add_item, :remove_item, :all_tour_books]
-  before_action :set_user
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_tour_book, except: [:index, :new, :create, :add_item, :remove_item, :user_tour_books]
+  before_action :set_user, except: [:index]
 
   def index
-    @tour_books = @user.tour_books
+    @tour_books = TourBook.all
     @tour_books = @tour_books.page(params[:page])
   end
 
@@ -16,7 +16,7 @@ class TourBooksController < ApplicationController
   end
 
   def create
-    @tour_book = @user.tour_books.build(tour_book_params)
+    @tour_book = current_user.tour_books.build(tour_book_params)
     authorize @tour_book
 
     respond_to do |format|
@@ -88,8 +88,8 @@ class TourBooksController < ApplicationController
     end
   end
 
-  def all_tour_books
-    @tour_books = TourBook.all
+  def user_tour_books
+    @tour_books = @user.tour_books
     @tour_books = @tour_books.page(params[:page])
     render 'index'
   end
@@ -109,6 +109,17 @@ class TourBooksController < ApplicationController
           :name,
           :description
       ]
+    end
+
+    def set_user
+      @user = if params[:user_id]
+                User.friendly.find(params[:user_id])
+              elsif params[:user]
+                User.friendly.find(params[:id])
+              else
+                current_user
+              end
+
     end
 
 end

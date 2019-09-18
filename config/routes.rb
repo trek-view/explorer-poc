@@ -16,20 +16,22 @@ Rails.application.routes.draw do
   resources :users, only: %i[] do
     post 'generate_new_token', to: 'users#generate_new_token'
     get 'tours'
+    get 'tour_books', to: 'tour_books#user_tour_books'
 
     resources :tours, only: %i[show]
 
-    resources :tour_books do
+    resources :tour_books, except: %i[index] do
       post 'add_item', to: 'tour_books#add_item'
       delete 'remove_item', to: 'tour_books#remove_item'
     end
   end
 
+  resources :tour_books, only: %i[index]
+
   resources :tours, only: %i[index]
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'
-  get '/tour_books', to: 'tour_books#all_tour_books'
 
   root to: 'tours#index'
 
