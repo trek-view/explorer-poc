@@ -1,7 +1,7 @@
 class TourBooksController < ApplicationController
 
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_tour_book, except: [:index, :new, :create, :add_item, :remove_item]
+  before_action :authenticate_user!, except: [:index, :show, :all_tour_books]
+  before_action :set_tour_book, except: [:index, :new, :create, :add_item, :remove_item, :all_tour_books]
   before_action :set_user
 
   def index
@@ -9,9 +9,7 @@ class TourBooksController < ApplicationController
     @tour_books = @tour_books.page(params[:page])
   end
 
-  def show
-
-  end
+  def show; end
 
   def new
     @tour_book = TourBook.new
@@ -88,6 +86,12 @@ class TourBooksController < ApplicationController
         flash[:error] = e.message
       end
     end
+  end
+
+  def all_tour_books
+    @tour_books = TourBook.all
+    @tour_books = @tour_books.page(params[:page])
+    render 'index'
   end
 
   private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_17_123131) do
+ActiveRecord::Schema.define(version: 2019_09_18_131328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,7 +126,7 @@ ActiveRecord::Schema.define(version: 2019_09_17_123131) do
     t.integer "transport_type"
     t.string "tourer_version"
     t.string "tourer_tour_id"
-    t.integer "booked_tours_count", default: 0, null: false
+    t.integer "tour_books_count", default: 0, null: false
     t.index ["country_id"], name: "index_tours_on_country_id"
     t.index ["slug"], name: "index_tours_on_slug", unique: true
     t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
