@@ -14,12 +14,18 @@ SitemapGenerator::Sitemap.create do
 
   add tours_path, changefreq: 'weekly'
 
+  add tour_books_path, changefreq: 'daily'
+
   Tour.includes(:user).find_each do |tour|
     add user_tour_path(tour.user, tour), changefreq: 'weekly', lastmod: tour.updated_at
   end
 
   User.find_each do |user|
     add user_tours_path(user), changefreq: 'weekly'
+
+    user.tour_books.each do |book|
+      add user_tour_book_path(user, book)
+    end
   end
 
 end
