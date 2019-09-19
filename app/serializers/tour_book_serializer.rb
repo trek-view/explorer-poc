@@ -1,8 +1,10 @@
 class TourBookSerializer < ActiveModel::Serializer
   attributes %i[
                 id
-                reference
                 name
                 description
+                tours
               ]
+
+  has_many :tours
 end
