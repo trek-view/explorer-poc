@@ -116,14 +116,14 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
   # config.action_mailer.default charset: "utf-8"
   # config.action_mailer.asset_host = 'https://dev-explorer.herokuapp.com'
-  config.action_mailer.default_url_options = { host: 'explorer.trekview.org', protocol: 'https' }
+  config.action_mailer.default_url_options = { ENV['APP_DOMAIN'], protocol: 'https' }
 
   config.action_mailer.smtp_settings = {
-      user_name: ENV['smtp_user_name'],
-      password:  ENV['smtp_password'],
-      domain:    ENV['smtp_domain'],
-      address:   ENV['smtp_address'],
-      port:      ENV['smtp_port'],
+      user_name: ENV['SMTP_USER_NAME'],
+      password:  ENV['SMTP_PASSWORD'],
+      domain:    ENV['SMTP_DOMAIN'],
+      address:   ENV['SMTP_ADDRESS'],
+      port:      ENV['SMTP_PORT'],
       authentication: :plain,
       enable_starttls_auto: true
   }
