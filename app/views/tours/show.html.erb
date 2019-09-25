@@ -135,11 +135,18 @@
         <% end %>
 
         <% if @tour.photos.any? %>
+
+          <h3 class="card-title">Map</h3>
+
           <div id="map" class="mb-3"></div>
+
+          <h3 class="card-title">Elevation Change</h3>
 
           <div class="mb-3">
             <%= area_chart @tour.photos.group(:taken_date_time).maximum(:elevation_meters) %>
           </div>
+
+          <h3 class="card-title">Photos</h3>
 
           <table class="table">
             <thead class="thead-light">
