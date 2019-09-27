@@ -4,14 +4,15 @@ Rails.application.routes.draw do
 
   namespace :api, constraints: { format: 'json' } do
     namespace :v1 do
-      resources :tours, only: %i[index show create update destroy] do
+      resources :tours, only: %i[show create update destroy] do
         resources :photos, only: %i[index show create update destroy]
       end
 
-      resources :tour_books, only: %i[index show create update destroy]
+      resources :tour_books, only: %i[show create update destroy]
 
-      get 'user_tours', to: 'tours#user_tours'
-      get 'my_tour_books', to: 'tour_books#my_tour_books'
+      get 'users/:user_id/tours', to: 'tours#get_tours'
+      get 'users/:user_id/tour_books', to: 'tour_books#get_tour_books'
+
       get '*unmatched_route', to:   'base#user_not_authorized', code: 401
     end
   end

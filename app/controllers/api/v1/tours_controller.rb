@@ -3,6 +3,7 @@ module Api::V1
   class ToursController < BaseController
 
     before_action :set_tour, only: %i[show update destroy]
+    before_action :set_user, only: %i[get_tours]
 
     # GET /api/v1/tours
     def index
@@ -63,9 +64,13 @@ module Api::V1
       end
     end
 
-    # GET /api/v1/user_tours
-    def user_tours
-      render json: api_user.tours, status: :ok
+    # GET /api/v1/users/:user_id/tours
+    def get_tours
+      if api_user == @user
+        render json: api_user.tours, status: :ok
+      else
+        render json: {errors: 'You can get only your own tours'}, status: :forbidden
+      end
     end
 
     private
@@ -76,6 +81,10 @@ module Api::V1
 
       def tour_params
         params.require(:tour).permit(*permitted_params)
+      end
+
+      def set_user
+        @user = User.find_by(id: params[:user_id])
       end
 
       def permitted_params
