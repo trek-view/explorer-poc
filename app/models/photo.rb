@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Photo < ApplicationRecord
 
   belongs_to :tour
@@ -13,7 +14,7 @@ class Photo < ApplicationRecord
   validates :street_view_url, presence: true, length: { maximum: 500 }, http_url: true
   validates :connection, length: { maximum: 70 }
   validates :connection_distance_km, numericality: true, length: { maximum: 6 }
-  validates :tourer_photo_id, presence: true, uniqueness: true, length: { maximum: 10 }
+  validates :tourer_photo_id, uniqueness: true, length: { maximum: 10 }
 
   validates_associated :country
 

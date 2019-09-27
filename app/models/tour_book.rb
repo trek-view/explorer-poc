@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TourBook < ApplicationRecord
 
   extend FriendlyId

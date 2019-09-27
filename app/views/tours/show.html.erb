@@ -48,7 +48,7 @@
                       <div class="dropdown-divider"></div>
                       <% current_user.tour_books.each do |book| %>
                         <%= link_to book.name,
-                                    user_tour_book_add_item_path(current_user, book, item_id: @tour.id),
+                                    add_item_user_tour_book_path(current_user, book, item_id: @tour.id),
                                     class: 'dropdown-item',
                                     remote: true,
                                     method: :post %>

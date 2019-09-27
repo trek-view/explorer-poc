@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api, constraints: { format: 'json' } do
     namespace :v1 do
       resources :tours, only: %i[index show create update destroy] do
-        resources :photos, param: :tourer_photo_id, only: %i[index show create update destroy]
+        resources :photos, only: %i[index show create update destroy]
       end
 
       resources :tour_books, only: %i[index show create update destroy]
@@ -24,8 +24,10 @@ Rails.application.routes.draw do
     resources :tours, only: %i[show]
 
     resources :tour_books, except: %i[index] do
-      post 'add_item', to: 'tour_books#add_item'
-      delete 'remove_item', to: 'tour_books#remove_item'
+      member do
+        post 'add_item', to: 'tour_books#add_item'
+        delete 'remove_item', to: 'tour_books#remove_item'
+      end
     end
   end
 

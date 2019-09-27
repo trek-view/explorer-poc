@@ -10,7 +10,7 @@ module Api::V1
       render json: @tours, status: :ok
     end
 
-    # GET /api/v1/tours/:tourer_tour_id
+    # GET /api/v1/tours/:id
     def show
       render json: @tour, status: :ok
     end
@@ -26,11 +26,11 @@ module Api::V1
       end
     end
 
-    # PATCH/PUT /api/v1/tours/:tourer_tour_id
+    # PATCH/PUT /api/v1/tours/:id
     def update
       if api_user.tours.include?(@tour)
         begin
-          if @tour.update(set_update_params)
+          if @tour.update(tour_params)
             render json: @tour, status: :ok
           else
             render json: {errors: @tour.errors}, status: :unprocessable_entity
@@ -44,7 +44,7 @@ module Api::V1
       end
     end
 
-    # DELETE /api/v1/tours/:tourer_tour_id
+    # DELETE /api/v1/tours/:id
     def destroy
       if api_user.tours.include?(@tour)
         @tour.destroy
@@ -71,27 +71,11 @@ module Api::V1
     private
 
       def set_tour
-        @tour = Tour.find_by(tourer_tour_id: params[:id])
+        @tour = Tour.find_by(id: params[:id])
       end
 
       def tour_params
         params.require(:tour).permit(*permitted_params)
-      end
-
-      def set_update_params
-        params_hash = params.require(:tour).permit(*permitted_params)
-        if params_hash[:photos_attributes].present?
-          params_hash[:photos_attributes].each do |photo_params|
-            photo = @tour.photos.find_by(tourer_photo_id: photo_params[:tourer_photo_id])
-            if photo.present?
-              photo_params.merge!(id: photo.id)
-            else
-              params_hash[:photos_attributes].delete(photo_params)
-            end
-          end
-        end
-
-        params_hash
       end
 
       def permitted_params

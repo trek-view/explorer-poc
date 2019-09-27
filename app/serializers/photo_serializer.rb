@@ -2,6 +2,7 @@
 class PhotoSerializer < ActiveModel::Serializer
 
   attributes %i[
+                 id
                  file_name
                  taken_date_time
                  latitude

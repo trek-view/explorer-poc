@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 class TourBooksController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_tour_book, except: [:index, :new, :create, :add_item, :remove_item, :user_tour_books]
+  before_action :set_tour_book, except: [:index, :new, :create, :user_tour_books]
   before_action :set_user, except: [:index]
 
   def index
@@ -58,7 +59,6 @@ class TourBooksController < ApplicationController
   end
 
   def add_item
-    @tour_book ||= TourBook.friendly.find(params[:tour_book_id])
     authorize @tour_book
 
     if params[:item_id].present?
@@ -74,7 +74,6 @@ class TourBooksController < ApplicationController
   end
 
   def remove_item
-    @tour_book ||= TourBook.friendly.find(params[:tour_book_id])
     authorize @tour_book
 
     if params[:item_id].present?
