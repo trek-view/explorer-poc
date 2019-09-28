@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BookedTour < ApplicationRecord
 
   belongs_to :tour, counter_cache: :tour_books_count
