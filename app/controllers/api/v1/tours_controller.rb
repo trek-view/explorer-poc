@@ -109,7 +109,10 @@ module Api::V1
                                 :street_view_url,
                                 :connection,
                                 :connection_distance_km,
-                                :tourer_photo_id]
+                                :tourer_photo_id,
+                                :plus_code,
+                                :camera_made,
+                                :camera_model]
         ]
       end
 

@@ -6,7 +6,7 @@ class TourBooksController < ApplicationController
   before_action :set_user, except: [:index]
 
   def index
-    @tour_books = TourBook.order(created_at: 'DESC')
+    @tour_books = TourBook.includes(:user).order(created_at: 'DESC')
     @tour_books = @tour_books.page(params[:page])
   end
 

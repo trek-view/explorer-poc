@@ -13,8 +13,7 @@ module Api::V1
 
     # GET /api/v1/tours/:tour_id/photos/:id
     def show
-      photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
-      render json: photo, status: :ok
+      render json: @photo, status: :ok
     end
 
     # POST /api/v1/tours/:tour_id/photos
@@ -76,7 +75,10 @@ module Api::V1
          :street_view_url,
          :connection,
          :connection_distance_km,
-         :tourer_photo_id]
+         :tourer_photo_id,
+         :plus_code,
+         :camera_made,
+         :camera_model]
       end
 
       def check_tour

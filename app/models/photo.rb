@@ -15,6 +15,9 @@ class Photo < ApplicationRecord
   validates :connection, length: { maximum: 70 }
   validates :connection_distance_km, numericality: true, length: { maximum: 6 }
   validates :tourer_photo_id, uniqueness: true, length: { maximum: 10 }
+  validates :plus_code, length: { maximum: 255 }
+  validates :camera_made, inclusion: { in: [true, false] }
+  validates :camera_model, length: { maximum: 255 }
 
   validates_associated :country
 

@@ -21,7 +21,7 @@ class TourBook < ApplicationRecord
   def build_booked_tours(tour_ids)
     if tour_ids.present?
       tour_ids.each do |tour_id|
-        tour = Tour.find_by(tourer_tour_id: tour_id)
+        tour = Tour.find_by(id: tour_id)
         self.booked_tours.build(tour_id: tour.id) if tour
       end
     end
