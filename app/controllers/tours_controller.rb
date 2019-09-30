@@ -3,7 +3,11 @@ class ToursController < ApplicationController
 
   include MetaTagsHelper
 
-  before_action :set_tour, only: %i[show]
+  before_action :authenticate_user!, only: %i[set_photo_view_point
+                                              unset_photo_view_point]
+  before_action :set_tour, only: %i[show
+                                    set_photo_view_point
+                                    unset_photo_view_point]
 
   def index
     find_tours
@@ -29,6 +33,26 @@ class ToursController < ApplicationController
       @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
     end
     @tours = @tours.search(@search_text) if @search_text.present?
+  end
+
+  def set_photo_view_point
+    @photo = @tour.photos.find_by(id: params[:photo_id])
+    if @photo.present?
+      @photo.set_a_view_point(current_user, @tour)
+    else
+      @photo.errors.add(:base, 'Cannot viewpoint this photo.')
+    end
+    redirect_to user_tour_path(current_user, @tour)
+  end
+
+  def unset_photo_view_point
+    @photo = @tour.photos.find_by(id: params[:photo_id])
+    if @photo.present?
+      @photo.clear_view_points(current_user)
+    else
+      @photo.errors.add(:base, 'Cannot unset viewpoint for this photo.')
+    end
+    redirect_to user_tour_path(current_user, @tour)
   end
 
   private

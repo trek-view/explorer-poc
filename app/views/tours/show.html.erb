@@ -159,10 +159,14 @@
                 <th scope="col">Photo longitude</th>
                 <th scope="col">Photo elevation</th>
                 <th scope="col">Link to Street View</th>
+                <th scope="col">Marked as ViewPoint</th>
+                <% if user_signed_in? %>
+                  <th scope="col">ViewPoint</th>
+                <% end %>
               </tr>
             </thead>
             <tbody>
-              <% @tour.photos.each_with_index do |photo, index| %>
+              <% @tour.photos.order(created_at: 'DESC').each_with_index do |photo, index| %>
                 <tr>
                   <th scope="row"><%= index + 1 %></th>
                   <td><%= photo.id %></td>
@@ -172,6 +176,19 @@
                   <td><%= photo.longitude %></td>
                   <td><%= photo.elevation_meters %></td>
                   <td><%= photo.street_view_url ? link_to('See street view', photo.street_view_url, target: '_blank') : '' %></td>
+                  <td class="text-center"><%= photo.view_point_ids.length %></td>
+                  <% if user_signed_in? %>
+                    <td class="text-center">
+                      <%= link_to set_photo_view_point_url(current_user, @tour, photo),
+                                  id: "view_point_photo_#{photo.id}",
+                                  class: 'view_point_trig',
+                                  title: 'set as a viewpoint',
+                                  remote: true,
+                                  method: set_link_method(photo, current_user) do %>
+                        <i class="fa <%= view_point_class(photo, current_user) %>"></i>
+                      <% end %>
+                    </td>
+                  <% end %>
                 </tr>
               <% end %>
             </tbody>

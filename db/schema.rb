@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_28_140005) do
+ActiveRecord::Schema.define(version: 2019_09_28_145513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2019_09_28_140005) do
     t.string "plus_code"
     t.boolean "camera_made"
     t.string "camera_model"
+    t.integer "view_points_count", default: 0, null: false
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer_photo_id", "tour_id"], name: "index_photos_on_tourer_photo_id_and_tour_id", unique: true
     t.index ["tourer_photo_id"], name: "index_photos_on_tourer_photo_id"
