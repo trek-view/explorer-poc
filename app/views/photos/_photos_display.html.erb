@@ -1,0 +1,47 @@
+<h3 class="card-title">Photos</h3>
+
+<table class="table">
+  <thead class="thead-light">
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Photo ID</th>
+    <th scope="col">Photo capture date</th>
+    <th scope="col">Photo filename</th>
+    <th scope="col">Photo latitude</th>
+    <th scope="col">Photo longitude</th>
+    <th scope="col">Photo elevation</th>
+    <th scope="col">Link to Street View</th>
+    <th scope="col">Voted For</th>
+    <% if user_signed_in? && display_vote_column?(controller_name, action_name) %>
+      <th scope="col">Vote for</th>
+    <% end %>
+  </tr>
+  </thead>
+  <tbody>
+  <% photos.each_with_index do |photo, index| %>
+    <tr>
+      <th scope="row"><%= index + 1 %></th>
+      <td><%= photo.id %></td>
+      <td><%= photo.taken_date_time %></td>
+      <td><%= photo.file_name %></td>
+      <td><%= photo.latitude %></td>
+      <td><%= photo.longitude %></td>
+      <td><%= photo.elevation_meters %></td>
+      <td><%= photo.street_view_url ? link_to('See street view', photo.street_view_url, target: '_blank') : '' %></td>
+      <td class="text-center"><%= photo.view_point_ids.length %></td>
+      <% if user_signed_in? && display_vote_column?(controller_name, action_name) %>
+        <td class="text-center">
+          <%= link_to set_photo_view_point_url(current_user, photo.tour, photo),
+                      id: "view_point_photo_#{photo.id}",
+                      class: 'view_point_trig',
+                      title: 'vote for this photo',
+                      remote: true,
+                      method: set_link_method(photo, current_user) do %>
+            <i class="fa <%= view_point_class(photo, current_user) %>"></i>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

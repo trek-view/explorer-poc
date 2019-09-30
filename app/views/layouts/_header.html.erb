@@ -13,6 +13,11 @@
                       tour_books_path,
                       class: "nav-link #{current_class? tour_books_path }" %>
         </li>
+        <li class="nav-item">
+          <%= link_to 'Top ViewPoints',
+                      photos_path,
+                      class: "nav-link #{current_class? photos_path }" %>
+        </li>
         <% if user_signed_in? %>
           <li class="nav-item">
             <%= link_to 'My Tours',

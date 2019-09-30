@@ -17,4 +17,8 @@ module PhotosHelper
     photo.check_view_points(user) ? :delete : :post
   end
 
+  def display_vote_column?(ctrl, action)
+    ctrl == 'tours' && action == 'show'
+  end
+
 end
