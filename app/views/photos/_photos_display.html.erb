@@ -19,7 +19,7 @@
   </thead>
   <tbody>
   <% photos.each_with_index do |photo, index| %>
-    <tr>
+    <tr class="<%= photo.main_photo ? 'table-success' : '' %>">
       <th scope="row"><%= index + 1 %></th>
       <td><%= photo.id %></td>
       <td><%= photo.taken_date_time %></td>

@@ -16,9 +16,10 @@ class PhotoSerializer < ActiveModel::Serializer
                  connection
                  connection_distance_km
                  plus_code
-                 camera_made
+                 camera_make
                  camera_model
                  tourer_photo_id
+                 main_photo
                  view_points_count
                ]
 

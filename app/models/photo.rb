@@ -16,12 +16,13 @@ class Photo < ApplicationRecord
   validates :street_view_url, presence: true, length: { maximum: 500 }, http_url: true
   validates :connection, length: { maximum: 70 }
   validates :connection_distance_km, numericality: true, length: { maximum: 6 }
-  validates :tourer_photo_id, uniqueness: true, length: { maximum: 10 }
+  validates :tourer_photo_id, uniqueness: true, allow_blank: true, length: { maximum: 10 }
   validates :plus_code, length: { maximum: 255 }
-  validates :camera_made, inclusion: { in: [true, false] }
   validates :camera_model, length: { maximum: 255 }
 
   validates_associated :country
+
+  before_save :one_main_photo
 
   def country=(country_code)
     country = Country.find_or_create_by(code: country_code)
@@ -42,5 +43,13 @@ class Photo < ApplicationRecord
       photo.view_points.where(user_id: user.id).destroy_all
     end
   end
+
+  private
+
+    def one_main_photo
+      if self.main_photo
+        self.tour.photos.update_all(main_photo: false)
+      end
+    end
 
 end

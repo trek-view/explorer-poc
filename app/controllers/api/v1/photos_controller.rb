@@ -77,8 +77,9 @@ module Api::V1
          :connection_distance_km,
          :tourer_photo_id,
          :plus_code,
-         :camera_made,
-         :camera_model]
+         :camera_make,
+         :camera_model,
+         :main_photo]
       end
 
       def check_tour
