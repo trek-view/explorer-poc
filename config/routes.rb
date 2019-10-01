@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   namespace :api, constraints: { format: 'json' } do
     namespace :v1 do
       resources :tours, only: %i[show create update destroy] do
-        resources :photos, only: %i[index show create update destroy]
+        resources :photos, only: %i[index show create update destroy] do
+          member do
+            post 'set_photo_view_point'
+            delete 'unset_photo_view_point'
+          end
+        end
       end
 
       resources :tour_books, only: %i[show create update destroy]

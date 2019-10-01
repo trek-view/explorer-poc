@@ -33,7 +33,7 @@ class Photo < ApplicationRecord
     self.view_points.where(user_id: user.id).any?
   end
 
-  def clear_view_points(user)
+  def clear_view_point(user)
     self.view_points.find_by(user_id: user.id).destroy
   end
 
