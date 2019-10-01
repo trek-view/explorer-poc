@@ -4,14 +4,20 @@ Rails.application.routes.draw do
 
   namespace :api, constraints: { format: 'json' } do
     namespace :v1 do
-      resources :tours, only: %i[index show create update destroy] do
-        resources :photos, param: :tourer_photo_id, only: %i[index show create update destroy]
+      resources :tours, only: %i[show create update destroy] do
+        resources :photos, only: %i[index show create update destroy] do
+          member do
+            post 'set_photo_view_point'
+            delete 'unset_photo_view_point'
+          end
+        end
       end
 
-      resources :tour_books, only: %i[index show create update destroy]
+      resources :tour_books, only: %i[show create update destroy]
 
-      get 'user_tours', to: 'tours#user_tours'
-      get 'my_tour_books', to: 'tour_books#my_tour_books'
+      get 'users/:user_id/tours', to: 'tours#get_tours'
+      get 'users/:user_id/tour_books', to: 'tour_books#get_tour_books'
+
       get '*unmatched_route', to:   'base#user_not_authorized', code: 401
     end
   end
@@ -21,17 +27,26 @@ Rails.application.routes.draw do
     get 'tours'
     get 'tour_books', to: 'tour_books#user_tour_books'
 
-    resources :tours, only: %i[show]
+    resources :tours, only: %i[show] do
+      member do
+        post 'set_photo_view_point', to: 'tours#set_photo_view_point'
+        delete 'unset_photo_view_point', to: 'tours#unset_photo_view_point'
+      end
+    end
 
     resources :tour_books, except: %i[index] do
-      post 'add_item', to: 'tour_books#add_item'
-      delete 'remove_item', to: 'tour_books#remove_item'
+      member do
+        post 'add_item', to: 'tour_books#add_item'
+        delete 'remove_item', to: 'tour_books#remove_item'
+      end
     end
   end
 
   resources :tour_books, only: %i[index]
 
   resources :tours, only: %i[index]
+
+  resources :photos, only: %i[index]
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'

@@ -3,21 +3,28 @@ module Api::V1
   class PhotosController < BaseController
 
     before_action :set_tour
-    before_action :set_by_tourer_photo_id, only: %i[show update destroy]
-    before_action :check_tour, only: %i[create update destroy]
+    before_action :set_photo, only: %i[show
+                                        update
+                                        destroy
+                                        set_photo_view_point
+                                        unset_photo_view_point]
+    before_action :authorize_tour, only: %i[create
+                                        update
+                                        destroy
+                                        set_photo_view_point
+                                        unset_photo_view_point]
 
-    # GET /api/v1/tours/:tourer_tour_id/photos
+    # GET /api/v1/tours/:tour_id/photos
     def index
       render json: @tour.photos, status: :ok
     end
 
-    # GET /api/v1/tours/:tourer_tour_id/photos/:tourer_photo_id
+    # GET /api/v1/tours/:tour_id/photos/:id
     def show
-      photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
-      render json: photo, status: :ok
+      render json: @photo, status: :ok
     end
 
-    # POST /api/v1/tours/:tourer_tour_id/photos
+    # POST /api/v1/tours/:tour_id/photos
     def create
       photo = @tour.photos.build(photo_params)
 
@@ -28,9 +35,9 @@ module Api::V1
       end
     end
 
-    # PATCH/PUT /api/v1/tours/:tourer_tour_id/photos/:tourer_photo_id
+    # PATCH/PUT /api/v1/tours/:tour_id/photos/:id
     def update
-      photo = @tour.photos.find_by(tourer_photo_id: params[:tourer_photo_id])
+      photo = @tour.photos.find_by(id: params[:id])
 
       if photo.update(photo_params)
         render json: { photo: photo } , status: :ok
@@ -39,7 +46,7 @@ module Api::V1
       end
     end
 
-    # DELETE /api/v1/tours/:tourer_tour_id/photos/:tourer_photo_id
+    # DELETE /api/v1/tours/:tour_id/photos/:id
     def destroy
       @photo.destroy
       render json: {
@@ -50,19 +57,38 @@ module Api::V1
       }, head: :no_content, status: :ok
     end
 
+    # POST /api/v1/tours/:tour_id/photos/:id/set_photo_view_point
+    def set_photo_view_point
+      if @photo.present?
+        @photo.set_a_view_point(api_user, @photo.tour)
+        render json: { photo: @photo } , status: :ok
+      else
+        render json: { errors: 'Cannot viewpoint this photo' }, status: :unprocessable_entity
+      end
+    end
+
+    # DELETE /api/v1/tours/:tour_id/photos/:id/unset_photo_view_point
+    def unset_photo_view_point
+      if @photo.present?
+        @photo.clear_view_point(api_user)
+        render json: { photo: @photo } , status: :ok
+      else
+        render json: { errors: 'Cannot unset viewpoint for this photo.' }, status: :unprocessable_entity
+      end
+    end
+
     private
 
-      def set_by_tourer_photo_id
-        @photo = Photo.find_by(tourer_photo_id: params[:tourer_photo_id])
+      def set_photo
+        @photo = Photo.find_by(id: params[:id])
       end
 
       def photo_params
         params.require(:photo).permit(*permitted_photo_params)
       end
 
-      # :tour_id is ID of a tour in a TOURER DB
       def set_tour
-        @tour = Tour.find_by(tourer_tour_id: params[:tour_id])
+        @tour = Tour.find_by(id: params[:tour_id])
       end
 
       def permitted_photo_params
@@ -77,12 +103,16 @@ module Api::V1
          :street_view_url,
          :connection,
          :connection_distance_km,
-         :tourer_photo_id]
+         :tourer_photo_id,
+         :plus_code,
+         :camera_make,
+         :camera_model,
+         :main_photo]
       end
 
-      def check_tour
+      def authorize_tour
         unless api_user.tours.include?(@tour)
-          render json: {errors: {authorization: 'You cannot perform this action.'}}
+          render json: {errors: {authorization: 'You cannot perform this action.'}}, status: :forbidden
         end
       end
   end

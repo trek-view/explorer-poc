@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :tours, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :tour_books, dependent: :destroy
+  has_many :view_points, dependent: :destroy
 
   attr_accessor :global_subscribe
 

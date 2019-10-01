@@ -48,7 +48,7 @@
                       <div class="dropdown-divider"></div>
                       <% current_user.tour_books.each do |book| %>
                         <%= link_to book.name,
-                                    user_tour_book_add_item_path(current_user, book, item_id: @tour.id),
+                                    add_item_user_tour_book_path(current_user, book, item_id: @tour.id),
                                     class: 'dropdown-item',
                                     remote: true,
                                     method: :post %>
@@ -146,36 +146,7 @@
             <%= area_chart @tour.photos.group(:taken_date_time).maximum(:elevation_meters) %>
           </div>
 
-          <h3 class="card-title">Photos</h3>
-
-          <table class="table">
-            <thead class="thead-light">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Photo ID</th>
-                <th scope="col">Photo capture date</th>
-                <th scope="col">Photo filename</th>
-                <th scope="col">Photo latitude</th>
-                <th scope="col">Photo longitude</th>
-                <th scope="col">Photo elevation</th>
-                <th scope="col">Link to Street View</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @tour.photos.each_with_index do |photo, index| %>
-                <tr>
-                  <th scope="row"><%= index + 1 %></th>
-                  <td><%= photo.id %></td>
-                  <td><%= photo.taken_date_time %></td>
-                  <td><%= photo.file_name %></td>
-                  <td><%= photo.latitude %></td>
-                  <td><%= photo.longitude %></td>
-                  <td><%= photo.elevation_meters %></td>
-                  <td><%= photo.street_view_url ? link_to('See street view', photo.street_view_url, target: '_blank') : '' %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+          <%= render partial: 'photos/photos_display', locals: { photos: @tour.photos } %>
         <% end %>
       </div>
 

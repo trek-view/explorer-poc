@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_131328) do
+ActiveRecord::Schema.define(version: 2019_10_01_111733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,9 +67,12 @@ ActiveRecord::Schema.define(version: 2019_09_18_131328) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "country_id"
+    t.string "plus_code"
+    t.boolean "camera_make"
+    t.string "camera_model"
+    t.integer "view_points_count", default: 0, null: false
+    t.boolean "main_photo", default: false, null: false
     t.index ["tour_id"], name: "index_photos_on_tour_id"
-    t.index ["tourer_photo_id", "tour_id"], name: "index_photos_on_tourer_photo_id_and_tour_id", unique: true
-    t.index ["tourer_photo_id"], name: "index_photos_on_tourer_photo_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -158,6 +161,15 @@ ActiveRecord::Schema.define(version: 2019_09_18_131328) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
+  end
+
+  create_table "view_points", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "photo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photo_id"], name: "index_view_points_on_photo_id"
+    t.index ["user_id"], name: "index_view_points_on_user_id"
   end
 
   add_foreign_key "booked_tours", "tour_books"

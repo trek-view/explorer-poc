@@ -3,9 +3,10 @@
     <div class="card h-100">
       <div class="card-body">
         <% if @tour_book.present? && policy(@tour_book).remove_item? %>
-          <%= link_to user_tour_book_remove_item_path(tour.user, @tour_book, item_id: tour.id),
+          <%= link_to remove_item_user_tour_book_path(tour.user, @tour_book, item_id: tour.id),
                       class: 'close delete_from_book',
                       title: 'delete tour from book',
+                      data: {confirm: 'Are you sure?'},
                       method: :delete,
                       remote: true do %>
               <span aria-hidden="true">&times;</span>

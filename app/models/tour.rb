@@ -21,7 +21,7 @@ class Tour < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
   validates :description, length: { maximum: 140 }
-  validates :tourer_tour_id, presence: true, uniqueness: true, length: { maximum: 10 }
+  validates :tourer_tour_id, uniqueness: true, allow_blank: true, length: { maximum: 10 }
   validates :tourer_version, length: { maximum: 5 }
 
   validates_associated :tags
@@ -55,11 +55,14 @@ class Tour < ApplicationRecord
         attribute_value = object.try(attribute_name)
         attribute_value = attribute_value.try(:downcase) if configuration[:case_sensitive] == false
 
-        if track_values[attribute_value].present?
-          track_values[attribute_value].push({index: index, record: record})
-        else
-          track_values[attribute_value] = [{index: index, record: record}]
+        unless configuration[:allow_blank] == true && attribute_value.blank?
+          if track_values[attribute_value].present?
+            track_values[attribute_value].push({index: index, record: record})
+          else
+            track_values[attribute_value] = [{index: index, record: record}]
+          end
         end
+
         track_values.each do |key, track_value|
           if track_value.count > 1
             track_value.each do |value|
@@ -75,6 +78,7 @@ class Tour < ApplicationRecord
 
   validates_uniqueness :photos, { attribute: :tourer_photo_id,
                                   case_sensitive: false,
+                                  allow_blank: true,
                                   message: "Photo's tourer_photo_id should be unique per tour" }
 
   def countries=(codes_string)

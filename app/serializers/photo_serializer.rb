@@ -2,6 +2,8 @@
 class PhotoSerializer < ActiveModel::Serializer
 
   attributes %i[
+                 id
+                 tour_id
                  file_name
                  taken_date_time
                  latitude
@@ -13,7 +15,12 @@ class PhotoSerializer < ActiveModel::Serializer
                  street_view_thumbnail_url
                  connection
                  connection_distance_km
+                 plus_code
+                 camera_make
+                 camera_model
                  tourer_photo_id
+                 main_photo
+                 view_points_count
                ]
 
   def country
