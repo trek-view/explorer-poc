@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_111733) do
+ActiveRecord::Schema.define(version: 2019_10_01_123107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_111733) do
     t.datetime "updated_at", null: false
     t.integer "country_id"
     t.string "plus_code"
-    t.boolean "camera_make"
+    t.string "camera_make"
     t.string "camera_model"
     t.integer "view_points_count", default: 0, null: false
     t.boolean "main_photo", default: false, null: false

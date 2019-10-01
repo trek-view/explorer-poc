@@ -18,6 +18,7 @@ class Photo < ApplicationRecord
   validates :connection_distance_km, numericality: true, length: { maximum: 6 }
   validates :tourer_photo_id, uniqueness: true, allow_blank: true, length: { maximum: 10 }
   validates :plus_code, length: { maximum: 255 }
+  validates :camera_make, length: { maximum: 255 }
   validates :camera_model, length: { maximum: 255 }
 
   validates_associated :country
@@ -34,7 +35,8 @@ class Photo < ApplicationRecord
   end
 
   def clear_view_point(user)
-    self.view_points.find_by(user_id: user.id).destroy
+    view_point = self.view_points.find_by(user_id: user.id)
+    view_point.destroy if view_point
   end
 
   def set_a_view_point(user, tour)
