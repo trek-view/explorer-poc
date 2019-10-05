@@ -107,7 +107,8 @@ module Api::V1
          :plus_code,
          :camera_make,
          :camera_model,
-         :main_photo]
+         :main_photo,
+         :streetview_id]
       end
 
       def authorize_tour

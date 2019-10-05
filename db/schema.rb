@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_123107) do
+ActiveRecord::Schema.define(version: 2019_10_05_101251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_123107) do
     t.string "camera_model"
     t.integer "view_points_count", default: 0, null: false
     t.boolean "main_photo", default: false, null: false
+    t.string "streetview_id"
     t.index ["tour_id"], name: "index_photos_on_tour_id"
   end
 
