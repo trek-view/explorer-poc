@@ -21,6 +21,7 @@ class PhotoSerializer < ActiveModel::Serializer
                  tourer_photo_id
                  main_photo
                  view_points_count
+                 streetview_id
                ]
 
   def country
