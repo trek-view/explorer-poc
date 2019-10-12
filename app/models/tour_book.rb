@@ -14,8 +14,13 @@ class TourBook < ApplicationRecord
   paginates_per Constants::ITEMS_PER_PAGE[:tour_books]
   friendly_id :name, use: :slugged
 
+  # Use default slug, but upper case and with underscores
+  def normalize_friendly_id(string)
+    super.gsub('-', '_')
+  end
+
   def should_generate_new_friendly_id?
-    name_changed?
+    name_changed? || slug.nil?
   end
 
   def build_booked_tours(tour_ids)

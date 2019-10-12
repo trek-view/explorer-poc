@@ -81,6 +81,15 @@ class Tour < ApplicationRecord
                                   allow_blank: true,
                                   message: "Photo's tourer_photo_id should be unique per tour" }
 
+  # Use default slug, but upper case and with underscores
+  def normalize_friendly_id(string)
+    super.gsub('-', '_')
+  end
+
+  def should_generate_new_friendly_id?
+    name_changed? || slug.nil?
+  end
+
   def countries=(codes_string)
     countries = []
     codes_string.split(', ').uniq.each do |code|

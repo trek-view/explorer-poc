@@ -34,7 +34,7 @@ class User < ApplicationRecord
   end
 
   def should_generate_new_friendly_id?
-    name_changed?
+    name_changed? || slug.nil?
   end
 
 end
