@@ -33,11 +33,6 @@ class User < ApplicationRecord
     end
   end
 
-  # Use default slug, but upper case and with underscores
-  def normalize_friendly_id(string)
-    super.gsub('-', '_')
-  end
-
   def should_generate_new_friendly_id?
     name_changed? || slug.nil?
   end

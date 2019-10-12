@@ -6,10 +6,6 @@ namespace :friendly_id do
       tour.slug = nil
       tour.save
     end
-    User.find_each do |user|
-      user.slug = nil
-      user.save
-    end
     TourBook.find_each do |tour_book|
       tour_book.slug = nil
       tour_book.save
