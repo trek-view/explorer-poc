@@ -14,7 +14,9 @@ class ToursController < ApplicationController
     @tours = @tours.page(params[:page])
   end
 
-  def show; end
+  def show
+    @photos = @tour.photos.order(created_at: 'DESC')
+  end
 
   # for ajax search
   def search_tours
@@ -38,7 +40,7 @@ class ToursController < ApplicationController
   def set_photo_view_point
     @photo = @tour.photos.find_by(id: params[:photo_id])
     if @photo.present?
-      @photo.set_a_view_point(current_user, @tour)
+      @photo.set_a_view_point(current_user)
     else
       @photo.errors.add(:base, 'Cannot viewpoint this photo.')
     end

@@ -40,11 +40,8 @@ class Photo < ApplicationRecord
     view_point.destroy if view_point
   end
 
-  def set_a_view_point(user, tour)
+  def set_a_view_point(user)
     self.view_points.create(user_id: user.id)
-    tour.photos.where.not(id: self.id).find_each do |photo|
-      photo.view_points.where(user_id: user.id).destroy_all
-    end
   end
 
   private
