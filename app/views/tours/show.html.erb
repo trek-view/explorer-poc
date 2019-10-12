@@ -146,7 +146,7 @@
             <%= area_chart @tour.photos.group(:taken_date_time).maximum(:elevation_meters) %>
           </div>
 
-          <%= render partial: 'photos/photos_display', locals: { photos: @tour.photos } %>
+          <%= render partial: 'photos/photos_display', locals: { photos: @photos } %>
         <% end %>
       </div>
 

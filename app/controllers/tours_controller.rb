@@ -14,7 +14,9 @@ class ToursController < ApplicationController
     @tours = @tours.page(params[:page])
   end
 
-  def show; end
+  def show
+    @photos = @tour.photos.order(created_at: 'DESC')
+  end
 
   # for ajax search
   def search_tours
