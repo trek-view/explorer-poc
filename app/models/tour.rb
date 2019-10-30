@@ -20,6 +20,7 @@ class Tour < ApplicationRecord
   accepts_nested_attributes_for :photos
 
   validates :name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
+  validates :country_name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
   validates :description, length: { maximum: 140 }
   validates :tourer_tour_id, uniqueness: true, allow_blank: true, length: { maximum: 10 }
   validates :tourer_version, length: { maximum: 5 }
