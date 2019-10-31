@@ -32,3 +32,4 @@ unless User.first
                    tour_type: 'land')
 end
 
+AdminUser.create!(email: ENV['ADMIN_EMAIL'], password: ENV['ADMIN_PASSWORD'], password_confirmation: ENV['ADMIN_PASSWORD']) if Rails.env.development?
