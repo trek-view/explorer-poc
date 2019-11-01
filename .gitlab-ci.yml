@@ -73,8 +73,8 @@ Deploy Staging:
   stage: deploy
   allow_failure: true
   retry: 2
-  except:
-    - production
+  only:
+    - staging
   script:
     - ./bin/setup_heroku
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
