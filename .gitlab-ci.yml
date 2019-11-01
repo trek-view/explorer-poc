@@ -78,5 +78,6 @@ Deploy Staging:
   script:
     - ./bin/setup_heroku
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
+    - heroku cp config/database.yml.example config/database.yml
     - heroku run rake db:migrate --exit-code --app $HEROKU_APP_STAGING
     - heroku run rake statics:seed --exit-code --app $HEROKU_APP_STAGING
