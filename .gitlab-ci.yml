@@ -17,7 +17,7 @@ before_script:
   # Install node and some other deps
   - curl -sL https://deb.nodesource.com/setup_11.x | bash -
   - apt-get update -yq
-  - apt-get install -y apt-transport-https build-essential cmake nodejs python-software-properties software-properties-common unzip
+  - apt-get install -y apt-transport-https build-essential cmake nodejs software-properties-common unzip
   
   # Install yarn
   - wget -q -O - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -65,9 +65,9 @@ Deploy Production:
     - production
   script:
     - ./bin/setup_heroku
-    - dpl --provider=heroku --app=explorer-trekview-org --api-key=$HEROKU_API_KEY
-    - heroku run rake db:migrate --exit-code --app explorer-trekview-org
-    - heroku run rake statics:seed --exit-code --app explorer-trekview-org
+    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+    - heroku run rake db:migrate --exit-code --app $HEROKU_APP_PRODUCTION
+    - heroku run rake statics:seed --exit-code --app $HEROKU_APP_PRODUCTION
 
 Deploy Staging:
   stage: deploy
@@ -77,6 +77,6 @@ Deploy Staging:
     - production
   script:
     - ./bin/setup_heroku
-    - dpl --provider=heroku --app=staging-explorer-trekview-org --api-key=$HEROKU_API_KEY
-    - heroku run rake db:migrate --exit-code --app staging-explorer-trekview-org
-    - heroku run rake statics:seed --exit-code --app staging-explorer-trekview-org
+    - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
+    - heroku run rake db:migrate --exit-code --app $HEROKU_APP_STAGING
+    - heroku run rake statics:seed --exit-code --app $HEROKU_APP_STAGING
