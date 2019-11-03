@@ -135,6 +135,15 @@ ActiveRecord::Schema.define(version: 2019_11_03_190805) do
     t.index ["user_id"], name: "index_tour_books_on_user_id"
   end
 
+  create_table "tour_countries", force: :cascade do |t|
+    t.bigint "tour_id"
+    t.bigint "country_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_tour_countries_on_country_id"
+    t.index ["tour_id"], name: "index_tour_countries_on_tour_id"
+  end
+
   create_table "tours", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -202,6 +211,8 @@ ActiveRecord::Schema.define(version: 2019_11_03_190805) do
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
   add_foreign_key "tour_books", "users"
+  add_foreign_key "tour_countries", "countries"
+  add_foreign_key "tour_countries", "tours"
   add_foreign_key "tours", "countries"
   add_foreign_key "tours", "users"
 end

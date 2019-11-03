@@ -10,6 +10,8 @@ class Tour < ApplicationRecord
   belongs_to :user, :counter_cache => true
   belongs_to :country
 
+  has_many :tour_countries, dependent: :destroy
+  has_many :countries, through: :tour_countries
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :photos, dependent: :destroy
