@@ -3,7 +3,7 @@ class TourBook < ApplicationRecord
 
   extend FriendlyId
 
-  belongs_to :user
+  belongs_to :user, :counter_cache => true
 
   has_many :booked_tours, dependent: :destroy
   has_many :tours, through: :booked_tours, inverse_of: :tour_books
