@@ -79,4 +79,5 @@ Deploy Staging:
     - ./bin/setup_heroku
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
     - heroku run rake db:migrate --exit-code --app $HEROKU_APP_STAGING
+    - heroku run rake db:reset --exit-code --app $HEROKU_APP_STAGING
     - heroku run rake db:seed --exit-code --app $HEROKU_APP_STAGING
