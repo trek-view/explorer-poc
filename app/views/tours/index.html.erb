@@ -37,6 +37,12 @@
         <h1 class="my-4"><%= title 'List of Tours' %></h1>
         <% description app_description %>
       </div>
+
+      <div class="col-lg-12">
+        <div class="row tours-container">
+          <%= render partial: 'tours_display', locals: {tours: @tours} %>
+        </div>
+      </div>
     </div>
 
     <%= paginate @tours %>
