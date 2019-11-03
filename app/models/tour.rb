@@ -8,7 +8,6 @@ class Tour < ApplicationRecord
   enum transport_type: Constants::TRANSPORT_TYPES
 
   belongs_to :user, :counter_cache => true
-  belongs_to :country
 
   has_many :tour_countries, dependent: :destroy
   has_many :countries, through: :tour_countries
