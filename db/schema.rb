@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_03_172228) do
+ActiveRecord::Schema.define(version: 2019_11_03_185905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,15 +135,6 @@ ActiveRecord::Schema.define(version: 2019_11_03_172228) do
     t.index ["user_id"], name: "index_tour_books_on_user_id"
   end
 
-  create_table "tour_countries", force: :cascade do |t|
-    t.bigint "tour_id"
-    t.bigint "country_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country_id"], name: "index_tour_countries_on_country_id"
-    t.index ["tour_id"], name: "index_tour_countries_on_tour_id"
-  end
-
   create_table "tours", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -185,6 +176,7 @@ ActiveRecord::Schema.define(version: 2019_11_03_172228) do
     t.string "slug"
     t.boolean "terms"
     t.string "privilege", default: "user"
+    t.integer "tours_count", default: 0
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -209,8 +201,6 @@ ActiveRecord::Schema.define(version: 2019_11_03_172228) do
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
   add_foreign_key "tour_books", "users"
-  add_foreign_key "tour_countries", "countries"
-  add_foreign_key "tour_countries", "tours"
   add_foreign_key "tours", "countries"
   add_foreign_key "tours", "users"
 end
