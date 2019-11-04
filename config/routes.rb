@@ -54,6 +54,6 @@ Rails.application.routes.draw do
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'
 
-  root to: 'tours#index'
+  root to: 'home#index'
 
 end
