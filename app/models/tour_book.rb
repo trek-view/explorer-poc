@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class TourBook < ApplicationRecord
 
+  include PgSearch::Model
   extend FriendlyId
 
   belongs_to :user, :counter_cache => true
@@ -12,6 +13,11 @@ class TourBook < ApplicationRecord
   validates :description, presence: true, length: { maximum: 240 }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tour_books]
+  pg_search_scope :search,
+                  against: [
+                      :name,
+                      :description
+                  ]
   friendly_id :name, use: :slugged
 
   # Use default slug, but upper case and with underscores
