@@ -2,15 +2,18 @@
 class TourBooksController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_tour_book, except: [:index, :new, :create, :user_tour_books]
+  before_action :set_tour_book, except: [:index, :new, :create, :user_tour_books, :show]
   before_action :set_user, except: [:index]
 
   def index
-    @tour_books = TourBook.includes(:user).order(created_at: 'DESC')
+    @tour_books = TourBook.includes(:user, tours: :photos).order(created_at: 'DESC')
     @tour_books = @tour_books.page(params[:page])
   end
 
-  def show; end
+  def show 
+    @tour_book = TourBook.friendly.find(params[:id])
+    @tour_book.tours = Tour.includes(:photos, :countries, :tags, :user).order(created_at: 'DESC')
+  end
 
   def new
     @tour_book = TourBook.new

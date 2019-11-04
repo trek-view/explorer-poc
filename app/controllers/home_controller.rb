@@ -8,7 +8,7 @@ class HomeController < ApplicationController
 
   def find_tours
     set_search_params
-    @tours = Tour.includes(:countries, :tags, :user).order(created_at: 'DESC')
+    @tours = Tour.includes(:photos, :countries, :tags, :user).order(created_at: 'DESC')
 
     if @query.present?
       @tours = @tours.joins(:countries).where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
@@ -20,7 +20,7 @@ class HomeController < ApplicationController
 
   def find_tour_books
     set_search_params
-    @tour_books = TourBook.order(created_at: 'DESC')
+    @tour_books = TourBook.includes(:user, tours: :photos).order(created_at: 'DESC')
     @tour_books = @tour_books.search(@search_text) if @search_text.present?
   end
 
