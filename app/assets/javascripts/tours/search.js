@@ -11,10 +11,10 @@ $(function(){
     $(document).on('change', '.select-country, .select-tour-type', function(){
         submitTourSearch();
     });
-
 });
 
 function submitTourSearch() {
+    return;
     var form = $('form.index-search-form');
     var valuesToSubmit = form.serialize();
 
