@@ -26,7 +26,20 @@ module Api::V1
 
     # POST /api/v1/tours/:tour_id/photos
     def create
-      photo = @tour.photos.build(photo_params)
+      if params[:file].present?
+        obj = aws_s3_upload_file
+
+        photo_file_params = {
+          file_name: obj.key,
+          file_url: obj.public_url,
+          thumbnail_url: '',
+        }
+        photo_file_params = params.permit(*permitted_photo_params).merge(photo_file_params)
+        
+        photo = @tour.photos.build(photo_file_params)
+      else
+        photo = @tour.photos.build(photo_params)
+      end
 
       if photo.save
         render json: photo, status: :created
@@ -116,6 +129,19 @@ module Api::V1
           render json: {errors: {authorization: 'You cannot perform this action.'}}, status: :forbidden
         end
       end
+
+      def uuid
+        rand(36**8).to_s(36)
+      end
+
+      # Upload file to aws s3 bucket
+      def aws_s3_upload_file
+        key = "#{uuid}_#{params[:file].original_filename}"
+        obj = S3_BUCKET.object(key)
+        obj.put(body: params[:file])
+        obj
+      end
+
   end
 
 end

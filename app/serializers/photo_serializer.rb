@@ -5,6 +5,8 @@ class PhotoSerializer < ActiveModel::Serializer
                  id
                  tour_id
                  file_name
+                 file_url
+                 thumbnail_url
                  taken_date_time
                  latitude
                  longitude
