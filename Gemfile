@@ -15,8 +15,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
-gem 'dotenv-rails', require: 'dotenv/rails-now'
-gem 'dotenv-rails', :groups => [:development, :test]
+gem 'dotenv-rails', require: 'dotenv/rails-now', :groups => [:development, :test]
 gem 'activeadmin'
 gem 'cancancan'
 gem 'draper'
@@ -39,8 +38,6 @@ gem 'jbuilder', '~> 2.5'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
-
-gem 'aws-sdk', '~> 3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -85,3 +82,6 @@ gem 'sitemap_generator'
 gem 'fog-aws'
 gem 'chartkick'
 gem 'font-awesome-rails'
+gem 'aws-sdk', '~> 3'
+gem 'carrierwave', '~> 2.0'
+gem 'file_validators'

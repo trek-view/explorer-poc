@@ -27,16 +27,10 @@ module Api::V1
     # POST /api/v1/tours/:tour_id/photos
     def create
       if params[:file].present?
-        obj = aws_s3_upload_file
 
-        photo_file_params = {
-          file_name: obj.key,
-          file_url: obj.public_url,
-          thumbnail_url: '',
-        }
-        photo_file_params = params.permit(*permitted_photo_params).merge(photo_file_params)
-        
         photo = @tour.photos.build(photo_file_params)
+        photo.image = params[:file]
+        photo.file_name = params[:file].original_filename
       else
         photo = @tour.photos.build(photo_params)
       end
@@ -61,6 +55,7 @@ module Api::V1
 
     # DELETE /api/v1/tours/:tour_id/photos/:id
     def destroy
+      @photo.remove_image
       @photo.destroy
       render json: {
           "photo": {
@@ -100,6 +95,10 @@ module Api::V1
         params.require(:photo).permit(*permitted_photo_params)
       end
 
+      def photo_file_params
+        params.permit(*permitted_photo_params)
+      end
+
       def set_tour
         @tour = Tour.find_by(id: params[:tour_id])
       end
@@ -128,18 +127,6 @@ module Api::V1
         unless api_user.tours.include?(@tour)
           render json: {errors: {authorization: 'You cannot perform this action.'}}, status: :forbidden
         end
-      end
-
-      def uuid
-        rand(36**8).to_s(36)
-      end
-
-      # Upload file to aws s3 bucket
-      def aws_s3_upload_file
-        key = "#{uuid}_#{params[:file].original_filename}"
-        obj = S3_BUCKET.object(key)
-        obj.put(body: params[:file])
-        obj
       end
 
   end
