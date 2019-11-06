@@ -12,6 +12,7 @@ require "action_view/railtie"
 require "action_cable/engine"
 require "sprockets/railtie"
 # require "rails/test_unit/railtie"
+require_relative "../lib/rack_x_robots_tag"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -34,6 +35,8 @@ module Explorer
 
     # App-specific configuration
     # config.x = config_for(:app).with_indifferent_access
+
+    config.middleware.use Rack::XRobotsTag
   end
 
   # def self.config
