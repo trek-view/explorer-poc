@@ -1,14 +1,19 @@
 <% @tour_books.each do |tour_book| %>
   <div class="col-lg-4 col-md-6 mb-4">
     <div class="card h-100">
+      <% thumb_url = tour_book_thumb_url(tour_book) %>
+      <% if thumb_url.present? %>
+        <img class="card-img-top" src="<%= thumb_url %>" alt="">
+      <% end %>
       <div class="card-body">
 
         <h4 class="card-title">
           <%= link_to tour_book.name, user_tour_book_path(tour_book.user, tour_book) %>
         </h4>
 
+        <!--
         <p class="card-text"><%= truncate(tour_book.description, length: 77, separator: ' ') %></p>
-
+        -->
       </div>
 
       <div class="card-footer">

@@ -26,7 +26,14 @@ module Api::V1
 
     # POST /api/v1/tours/:tour_id/photos
     def create
-      photo = @tour.photos.build(photo_params)
+      if params[:file].present?
+
+        photo = @tour.photos.build(photo_file_params)
+        photo.image = params[:file]
+        photo.file_name = params[:file].original_filename
+      else
+        photo = @tour.photos.build(photo_params)
+      end
 
       if photo.save
         render json: photo, status: :created
@@ -48,6 +55,7 @@ module Api::V1
 
     # DELETE /api/v1/tours/:tour_id/photos/:id
     def destroy
+      @photo.remove_image
       @photo.destroy
       render json: {
           "photo": {
@@ -87,6 +95,10 @@ module Api::V1
         params.require(:photo).permit(*permitted_photo_params)
       end
 
+      def photo_file_params
+        params.permit(*permitted_photo_params)
+      end
+
       def set_tour
         @tour = Tour.find_by(id: params[:tour_id])
       end
@@ -116,6 +128,7 @@ module Api::V1
           render json: {errors: {authorization: 'You cannot perform this action.'}}, status: :forbidden
         end
       end
+
   end
 
 end

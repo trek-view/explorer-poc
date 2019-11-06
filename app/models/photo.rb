@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Photo < ApplicationRecord
 
+  mount_uploader :image, PhotoUploader
+
   belongs_to :tour
   belongs_to :country
 
@@ -21,6 +23,8 @@ class Photo < ApplicationRecord
   validates :camera_make, length: { maximum: 255 }
   validates :camera_model, length: { maximum: 255 }
   validates :streetview_id, presence: :true, uniqueness: true, length: { maximum: 255 }
+
+  validates :image, file_size: { less_than: 30.megabytes }
 
   validates_associated :country
 

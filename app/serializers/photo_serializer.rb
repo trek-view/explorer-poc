@@ -4,7 +4,7 @@ class PhotoSerializer < ActiveModel::Serializer
   attributes %i[
                  id
                  tour_id
-                 file_name
+                 image
                  taken_date_time
                  latitude
                  longitude

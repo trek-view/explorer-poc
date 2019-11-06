@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def tours
-    @tours = @user.tours
+    @tours = @user.tours.includes(:photos, :countries, :tags).order(created_at: :desc)
     @tours = @tours.page(params[:page])
   end
 
@@ -26,5 +26,5 @@ class UsersController < ApplicationController
     def set_user
       @user = User.friendly.find(params[:user_id])
     end
-
+    
 end

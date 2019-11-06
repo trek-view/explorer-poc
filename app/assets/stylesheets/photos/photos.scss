@@ -1,3 +1,11 @@
 // Place all the styles related to the Photos controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.photo-container {
+  padding: 5px;
+
+  .photo-card {
+    margin: auto;
+    max-width: 18rem;
+  }
+}

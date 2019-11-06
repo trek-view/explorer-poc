@@ -1,6 +1,10 @@
 <% tours.each do |tour| %>
   <div id="tour-<%= tour.id %>" class="col-lg-4 col-md-6 mb-4 tour-item">
     <div class="card h-100">
+      <% thumb_url = tour_thumb_url(tour) %>
+      <% if thumb_url.present? %>
+        <img class="card-img-top" src="<%= thumb_url %>" alt="">
+      <% end %>
       <div class="card-body">
         <% if @tour_book.present? && policy(@tour_book).remove_item? %>
           <%= link_to remove_item_user_tour_book_path(tour.user, @tour_book, item_id: tour.id),
@@ -21,7 +25,9 @@
           <%= link_to tour.name, user_tour_path(tour.user, tour) %>
         </h4>
 
+        <!--
         <p class="card-text"><%= truncate(tour.description, length: 77, separator: ' ') %></p>
+         -->
 
         <% if tour.tags.any? %>
           <div class="tags">
@@ -29,8 +35,7 @@
               <%= link_to "##{tag.name}", "/tours?search_text=#{tag.name}", class: 'btn btn-info mb-1' %>
             <% end %>
           </div>
-        <% end %>
-
+        <% end %>        
 
         <% if tour.countries.any? %>
           <div class="tour_countries">

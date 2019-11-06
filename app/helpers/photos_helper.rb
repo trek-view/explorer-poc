@@ -21,4 +21,32 @@ module PhotosHelper
     ctrl == 'tours' && action == 'show'
   end
 
+  def tour_thumb_url(tour)
+    if tour.photos.nil?
+      return nil
+    end
+
+    photo = tour.photos.find {|photo| photo.image.thumb.url.present?}
+    photo_thumb_url(photo)
+  end
+
+  def tour_book_thumb_url(tour_book)
+    if tour_book.tours.nil?
+      return nil
+    end
+
+    tour_book.tours.each do |tour|
+      thumb_url = tour_thumb_url(tour)
+      if thumb_url.present?
+        return thumb_url
+      end
+    end    
+  end
+
+  def photo_thumb_url(photo)
+    if photo.present?
+      photo.image.thumb.url  
+    end
+  end
+
 end

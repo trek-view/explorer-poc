@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
   namespace :api, constraints: { format: 'json' } do
@@ -17,6 +19,7 @@ Rails.application.routes.draw do
 
       get 'users/:user_id/tours', to: 'tours#get_tours'
       get 'users/:user_id/tour_books', to: 'tour_books#get_tour_books'
+      get 'users/account_info', to: 'users#account_info'
 
       get '*unmatched_route', to:   'base#user_not_authorized', code: 401
     end
@@ -50,7 +53,8 @@ Rails.application.routes.draw do
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'
+  get '/robots.txt' => 'robots_txts#show'
 
-  root to: 'tours#index'
+  root to: 'home#index'
 
 end
