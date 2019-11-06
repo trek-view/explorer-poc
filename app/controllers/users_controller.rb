@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def tours
-    @tours = @user.tours
+    @tours = @user.tours.includes(:photos, :countries, :tags).order(created_at: :desc)
     @tours = @tours.page(params[:page])
   end
 

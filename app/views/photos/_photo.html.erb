@@ -1,5 +1,5 @@
 <div class="card photo-card h-100">
-  <img class="card-img-top" src="<%= photo.street_view_thumbnail_url %>" alt="">
+  <img class="card-img-top" src="<%= photo_thumb_url(photo) %>" alt="">
   <div class="card-body">
     <p class="card-text"><%= photo.file_name %></p>
     <p class="card-text"><%= photo.latitude %> / <%= photo.longitude %></p>

@@ -15,7 +15,7 @@ class ToursController < ApplicationController
   end
 
   def show
-    @photos = @tour.photos.order(created_at: 'DESC')
+    @photos = @tour.photos.order(created_at: :desc)
   end
 
   # for ajax search
@@ -27,7 +27,7 @@ class ToursController < ApplicationController
   def find_tours
     set_tours_search_params
 
-    @tours = Tour.includes(:photos, :countries, :tags, :user).order(created_at: 'DESC')
+    @tours = Tour.includes(:photos, :countries, :tags, :user).order(created_at: :desc)
 
     if @query.present?
       @tours = @tours.joins(:countries).where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?

@@ -33,7 +33,7 @@
 
   <div class="col-lg-9 home-content">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-9 col-sm-12 mt-8">
         <div class="tours-books-toggle btn-group btn-group-toggle" data-toggle="buttons">
           <label class="btn btn-light active">
             <input type="radio" name="options" id="option-tour" autocomplete="off" checked> Tours
@@ -42,36 +42,36 @@
             <input type="radio" name="options" id="option-tourbooks" autocomplete="off"> Tour Books
           </label>
         </div>
-
-        <div id="tours-content">
-          <div class="row tours-container">
-            <%= render partial: 'tours/tours_display', locals: {tours: @tours} %>
-          </div>  
-          <%= paginate @tours %>
-        </div>
-        <div id="tourbooks-content" style="display: none;">
-          <div class="col-lg-12">
-            <div class="row">
-              <% if user_signed_in? %>
-                <div class="col-lg-3 col-sm-12 mt-4">
-                  <%= link_to "New TourBook", new_user_tour_book_path(current_user), class: 'btn btn-primary float-right' %>
-                </div>
-              <% end %>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="row tours-container">
-                  <%= render partial: 'tour_books/tour_books_display' %>
-                </div>
-              </div>
-
-            </div>
-
-            <%= paginate @tour_books %>
-
+      </div>
+      <% if user_signed_in? %>
+          <div class="col-lg-3 col-sm-12 mt-4">
+            <%= link_to "New TourBook", new_user_tour_book_path(current_user), class: 'btn btn-primary float-right new-tour-book-btn' %>
           </div>
+        <% end %>
+    </div>
+    <div id="tours-content">
+      <div class="row tours-container">
+        <%= render partial: 'tours/tours_display', locals: {tours: @tours} %>
+      </div>  
+      <%= paginate @tours %>
+    </div>
+    <div id="tourbooks-content" style="display: none;">
+      <div class="col-lg-12">
+        <div class="row">
+          
         </div>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row tours-container">
+              <%= render partial: 'tour_books/tour_books_display' %>
+            </div>
+          </div>
+
+        </div>
+
+        <%= paginate @tour_books %>
+
       </div>
     </div>
   </div>

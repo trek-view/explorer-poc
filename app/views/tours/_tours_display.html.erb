@@ -1,8 +1,9 @@
 <% tours.each do |tour| %>
   <div id="tour-<%= tour.id %>" class="col-lg-4 col-md-6 mb-4 tour-item">
     <div class="card h-100">
-      <% if tour.photos.any? %>
-        <img class="card-img-top" src="<%= tour.photos[0].street_view_thumbnail_url %>" alt="">
+      <% thumb_url = tour_thumb_url(tour) %>
+      <% if thumb_url.present? %>
+        <img class="card-img-top" src="<%= thumb_url %>" alt="">
       <% end %>
       <div class="card-body">
         <% if @tour_book.present? && policy(@tour_book).remove_item? %>

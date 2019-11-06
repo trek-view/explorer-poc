@@ -10,7 +10,7 @@ class TourBooksController < ApplicationController
     @tour_books = @tour_books.page(params[:page])
   end
 
-  def show 
+  def show
     @tour_book = TourBook.includes(tours: [:photos, :countries, :tags, :user]).friendly.find(params[:id])
   end
 
@@ -90,7 +90,7 @@ class TourBooksController < ApplicationController
   end
 
   def user_tour_books
-    @tour_books = @user.tour_books
+    @tour_books = @user.tour_books.includes(tours: [:photos])
     @tour_books = @tour_books.page(params[:page])
     render 'index'
   end
