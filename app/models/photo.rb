@@ -50,7 +50,12 @@ class Photo < ApplicationRecord
   end
 
   def s3_dir
-    "#{User.current.id}/#{self.tour.id}"
+    if User.current.present?
+      "#{User.current.id}/#{self.tour.id}"
+    else
+      ""  
+    end
+    
   end
 
   private
