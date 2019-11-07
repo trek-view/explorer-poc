@@ -29,6 +29,7 @@ class Photo < ApplicationRecord
   validates_associated :country
 
   before_save :one_main_photo
+  before_destroy :remove_image
 
   def country=(country_code)
     country = Country.find_or_create_by(code: country_code)
@@ -46,6 +47,15 @@ class Photo < ApplicationRecord
 
   def set_a_view_point(user)
     self.view_points.create(user_id: user.id)
+  end
+
+  def s3_dir
+    if User.current.present?
+      "#{User.current.id}/#{self.tour.id}"
+    else
+      ""  
+    end
+    
   end
 
   private
