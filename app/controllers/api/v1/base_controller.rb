@@ -28,7 +28,8 @@ module Api::V1
 
       def authorize_request
         result = AuthorizeApiRequest.call(request.headers).result
-        @api_user = result[:user]
+        User.current = result[:user]
+        @api_user = result[:user]        
 
         render json: {errors: result[:messages]}, status: 401 unless @api_user
       end

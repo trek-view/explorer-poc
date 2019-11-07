@@ -37,4 +37,12 @@ class User < ApplicationRecord
     name_changed? || slug.nil?
   end
 
+  def self.current
+    Thread.current[:user]
+  end
+  
+  def self.current=(user)
+    Thread.current[:user] = user
+  end
+
 end

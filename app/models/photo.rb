@@ -48,6 +48,10 @@ class Photo < ApplicationRecord
     self.view_points.create(user_id: user.id)
   end
 
+  def s3_dir
+    "#{User.current.id}/#{self.tour.id}"
+  end
+
   private
 
     def one_main_photo
