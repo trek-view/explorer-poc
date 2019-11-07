@@ -29,6 +29,7 @@ class Photo < ApplicationRecord
   validates_associated :country
 
   before_save :one_main_photo
+  before_destroy :remove_image
 
   def country=(country_code)
     country = Country.find_or_create_by(code: country_code)

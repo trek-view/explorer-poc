@@ -54,7 +54,6 @@ module Api::V1
 
     # DELETE /api/v1/tours/:tour_id/photos/:id
     def destroy
-      @photo.remove_image
       @photo.destroy
       render json: {
           "photo": {
