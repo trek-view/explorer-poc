@@ -12,12 +12,13 @@ class Mailchimp::ListUpdater
   end
 
   def call
-    # raise MailchimpFailed.new unless @mailchimp
-    @mailchimp.lists(@list_id).members.create(
-        body: user_fields
-    )
-  rescue Gibbon::MailChimpError => error
-    raise error
+    begin
+      @mailchimp.lists(@list_id).members(lower_case_md5_hashed_email_address).retrieve
+    rescue => exception
+      @mailchimp.lists(@list_id).members.create(
+          body: user_fields
+      )
+    end
   end
 
   def merge_fields
@@ -36,7 +37,12 @@ class Mailchimp::ListUpdater
   end
 
   def delete
-    @mailchimp.lists(@list_id).members(lower_case_md5_hashed_email_address).delete
+    begin
+      @mailchimp.lists(@list_id).members(lower_case_md5_hashed_email_address).retrieve
+      @mailchimp.lists(@list_id).members(lower_case_md5_hashed_email_address).delete if member.present?
+    rescue => exception
+      # go to next
+    end
   end
 
   private
