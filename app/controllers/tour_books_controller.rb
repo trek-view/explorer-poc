@@ -11,7 +11,7 @@ class TourBooksController < ApplicationController
   end
 
   def show
-    @tour_book = TourBook.includes(tours: [:photos, :countries, :tags, :user]).friendly.find(params[:id])
+    @tour_book = TourBook.friendly.find(params[:id])
   end
 
   def new
