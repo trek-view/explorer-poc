@@ -1,4 +1,4 @@
-unless User.first
+unless User.first || Rails.env.production?
   user = User.new(name: 'Johnny', email: 'test_user@example.com', password: 'password', password_confirmation: 'password')
   user.skip_confirmation!
   user.save!
@@ -32,4 +32,4 @@ unless User.first
                    tour_type: 'land')
 end
 
-AdminUser.create!(email: ENV['ADMIN_EMAIL'], password: ENV['ADMIN_PASSWORD'], password_confirmation: ENV['ADMIN_PASSWORD']) if Rails.env.development?
+AdminUser.create!(email: ENV['ADMIN_EMAIL'], password: ENV['ADMIN_PASSWORD'], password_confirmation: ENV['ADMIN_PASSWORD'])
