@@ -1114,8 +1114,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    secure_headers (2.5.3)
-      user_agent_parser
+    secure_headers (6.1.1)
     simple_command (0.0.9)
     sitemap_generator (6.0.2)
       builder (~> 3.0)
@@ -1147,7 +1146,6 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode_utils (1.4.0)
     uniform_notifier (1.12.1)
-    user_agent_parser (2.5.1)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.7.0)
@@ -1199,7 +1197,7 @@ DEPENDENCIES
   rails (~> 5.2.3)
   rspec-rails (~> 3.8)
   sass-rails (~> 5.0)
-  secure_headers (~> 2.1)
+  secure_headers (~> 6.0)
   simple_command
   sitemap_generator
   spring
