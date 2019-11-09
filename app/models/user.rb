@@ -27,6 +27,8 @@ class User < ApplicationRecord
 
   after_create :subscribe_to_global
 
+  before_destroy :delete_from_global
+
   def subscribe_to_global
     if global_subscribe == '1'
       Mailchimp::ListUpdater.new(self).call
@@ -43,6 +45,10 @@ class User < ApplicationRecord
   
   def self.current=(user)
     Thread.current[:user] = user
+  end
+
+  def delete_from_global
+    Mailchimp::ListUpdater.new(self).delete
   end
 
 end
