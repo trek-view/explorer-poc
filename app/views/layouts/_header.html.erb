@@ -9,25 +9,15 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <%= link_to 'TourBooks',
-                      tour_books_path,
-                      class: "nav-link #{current_class? tour_books_path }" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Top ViewPoints',
+          <%= link_to 'Top Viewpoints',
                       photos_path,
                       class: "nav-link #{current_class? photos_path }" %>
         </li>
         <% if user_signed_in? %>
           <li class="nav-item">
-            <%= link_to 'My Tours',
+            <%= link_to 'My Profile',
                         user_tours_path(current_user),
                         class: "nav-link #{current_class? user_tours_path(current_user) }" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'My TourBooks',
-                        user_tour_books_path(current_user),
-                        class: "nav-link #{current_class? user_tour_books_path(current_user) }" %>
           </li>
           <li class="nav-item">
             <%= link_to 'Edit my profile',
