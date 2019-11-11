@@ -15,8 +15,10 @@ class ApplicationController < ActionController::Base
   end
 
   def sitemap
-    aws_s3_url = "http://s3.#{ENV['FOG_REGION']}.amazonaws.com/#{ENV['FOG_DIRECTORY']}/sitemaps/sitemap.xml.gz"
-    redirect_to(aws_s3_url, status: 301)
+    if Rails.env.production?
+      aws_s3_url = "http://s3.#{ENV['FOG_REGION']}.amazonaws.com/#{ENV['FOG_DIRECTORY']}/sitemaps/sitemap.xml.gz"
+      redirect_to(aws_s3_url, status: 301)  
+    end
   end
 
   protected
