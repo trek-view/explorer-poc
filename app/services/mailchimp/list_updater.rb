@@ -39,7 +39,7 @@ class Mailchimp::ListUpdater
   def delete
     begin
       @mailchimp.lists(@list_id).members(lower_case_md5_hashed_email_address).retrieve
-      @mailchimp.lists(@list_id).members(lower_case_md5_hashed_email_address).delete if member.present?
+      @mailchimp.lists(@list_id).members(lower_case_md5_hashed_email_address).delete
     rescue => exception
       # go to next
     end
