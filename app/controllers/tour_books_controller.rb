@@ -11,7 +11,7 @@ class TourBooksController < ApplicationController
   end
 
   def show
-    @tour_book = TourBook.friendly.find(params[:id])
+    @tour_book = TourBook.includes(:user, tours: [:photos, :countries, :tags, :user]).friendly.find(params[:id])
   end
 
   def new
@@ -97,30 +97,28 @@ class TourBooksController < ApplicationController
 
   private
 
-    def set_tour_book
-      @tour_book = TourBook.friendly.find(params[:id])
-    end
+  def set_tour_book
+    @tour_book = TourBook.friendly.find(params[:id])
+  end
 
-    def tour_book_params
-      params.require(:tour_book).permit(*permitted_params)
-    end
+  def tour_book_params
+    params.require(:tour_book).permit(*permitted_params)
+  end
 
-    def permitted_params
-      [
-          :name,
-          :description
-      ]
-    end
+  def permitted_params
+    [
+        :name,
+        :description
+    ]
+  end
 
-    def set_user
-      @user = if params[:user_id]
-                User.friendly.find(params[:user_id])
-              elsif params[:user]
-                User.friendly.find(params[:id])
-              else
-                current_user
-              end
-
-    end
-
+  def set_user
+    @user = if params[:user_id]
+              User.friendly.find(params[:user_id])
+            elsif params[:user]
+              User.friendly.find(params[:id])
+            else
+              current_user
+            end
+  end
 end

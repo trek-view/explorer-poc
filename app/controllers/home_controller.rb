@@ -19,18 +19,33 @@ class HomeController < ApplicationController
   end
 
   def find_tour_books
-    @tour_books = TourBook.includes(:user, tours: :photos).order(created_at: :desc)
-    tour_ids = @tours.pluck(:id)
-    @tour_books = @tour_books.joins(:booked_tours).where('booked_tours.tour_id in (?)', tour_ids)
+    @tour_books = TourBook
+                  .includes(:user, tours: :photos)
+                  .order(created_at: :desc)
+
+    return unless @search_text.present? ||
+                  (@query.present? && (
+                    @query['country_id'].present? ||
+                    @query['tour_type'].present?
+                  ))
+
+    tour_ids = @tours.map(&:id)
+    @tour_books = TourBook
+                    .includes(:user, tours: :photos)
+                    .joins(:booked_tours)
+                    .where('booked_tours.tour_id in (?)', tour_ids)
+                    .order(created_at: :desc)
+                    .distinct
   end
 
   private
-    def set_search_params
-      @search_text = search_params[:search_text]
-      @query = search_params[:query]
-    end
 
-    def search_params
-      params.permit(:search_text, query: [:country_id, :tour_type])
-    end
+  def set_search_params
+    @search_text = search_params[:search_text]
+    @query = search_params[:query]
+  end
+
+  def search_params
+    params.permit(:search_text, query: [:country_id, :tour_type])
+  end
 end
