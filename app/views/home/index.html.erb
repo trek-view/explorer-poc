@@ -78,6 +78,8 @@
 </div>
 
 <%= javascript_tag do %>
+  $('.new-tour-book-btn').hide();
+  
   $('#option-tour').change(function() {
     $('#tourbooks-content').hide();
     $('#tours-content').show();
@@ -86,5 +88,6 @@
   $('#option-tourbooks').change(function() {
     $('#tours-content').hide();
     $('#tourbooks-content').show();
+    $('.new-tour-book-btn').show();
   });
 <% end %>
