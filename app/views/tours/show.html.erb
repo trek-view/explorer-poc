@@ -82,7 +82,7 @@
             <label class="col-sm-2 col-form-label">Tour location</label>
             <div class="col-sm-10">
               <% @tour.countries.each do |country| %>
-                <%= link_to country.name, "/tours?query[country_id]=#{country.id}", class: 'btn btn-warning' %>
+                <%= link_to country.name, "?query[country_id]=#{country.id}", class: 'btn btn-warning' %>
               <% end %>
             </div>
           </div>
@@ -93,7 +93,7 @@
             <label class="col-sm-2 col-form-label">Tags</label>
             <div class="col-sm-10">
               <% @tour.tags.each do |tag| %>
-                <%= link_to tag.name, "/tours?search_text=#{tag.name}", class: 'btn btn-info' %>
+                <%= link_to tag.name, "?search_text=#{tag.name}", class: 'btn btn-info' %>
               <% end %>
 
             </div>
@@ -104,7 +104,7 @@
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">Tour type</label>
             <div class="col-sm-10">
-              <%= link_to @tour.tour_type, "/tours?query[tour_type]=#{@tour.tour_type}", class: 'btn btn-primary' %>
+              <%= link_to @tour.tour_type, "?query[tour_type]=#{@tour.tour_type}", class: 'btn btn-primary' %>
             </div>
           </div>
         <% end %>
