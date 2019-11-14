@@ -51,7 +51,7 @@
     </div>
     <div id="tours-content">
       <div class="row tours-container">
-        <%= render partial: 'tours/tours_display', locals: {tours: @tours} %>
+        <%= render partial: 'tours/tour', collection: @tours %>
       </div>  
       <%= paginate @tours %>
     </div>

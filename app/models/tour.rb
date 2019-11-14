@@ -9,11 +9,10 @@ class Tour < ApplicationRecord
 
   belongs_to :user, :counter_cache => true
 
-  has_many :tour_countries, dependent: :destroy
-  has_many :countries, through: :tour_countries
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :photos, dependent: :destroy
+  has_many :countries, through: :photos
   has_many :booked_tours, dependent: :destroy
   has_many :tour_books, -> { distinct }, through: :booked_tours, inverse_of: :tours
 

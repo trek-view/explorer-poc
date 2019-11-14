@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_05_234129) do
+ActiveRecord::Schema.define(version: 2019_11_14_163455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,15 +66,6 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
-  end
-
-  create_table "photo_countries", force: :cascade do |t|
-    t.bigint "photo_id"
-    t.bigint "country_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country_id"], name: "index_photo_countries_on_country_id"
-    t.index ["photo_id"], name: "index_photo_countries_on_photo_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -136,19 +127,9 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.index ["user_id"], name: "index_tour_books_on_user_id"
   end
 
-  create_table "tour_countries", force: :cascade do |t|
-    t.bigint "tour_id"
-    t.bigint "country_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country_id"], name: "index_tour_countries_on_country_id"
-    t.index ["tour_id"], name: "index_tour_countries_on_tour_id"
-  end
-
   create_table "tours", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.bigint "country_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -158,7 +139,6 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.string "tourer_version"
     t.string "tourer_tour_id"
     t.integer "tour_books_count", default: 0, null: false
-    t.index ["country_id"], name: "index_tours_on_country_id"
     t.index ["slug"], name: "index_tours_on_slug", unique: true
     t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_tours_on_user_id"
@@ -205,15 +185,10 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
 
   add_foreign_key "booked_tours", "tour_books"
   add_foreign_key "booked_tours", "tours"
-  add_foreign_key "photo_countries", "countries"
-  add_foreign_key "photo_countries", "photos"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
   add_foreign_key "tour_books", "users"
-  add_foreign_key "tour_countries", "countries"
-  add_foreign_key "tour_countries", "tours"
-  add_foreign_key "tours", "countries"
   add_foreign_key "tours", "users"
 end
