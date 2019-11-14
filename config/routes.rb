@@ -17,11 +17,13 @@ Rails.application.routes.draw do
 
       resources :tour_books, only: %i[show create update destroy]
 
-      get 'users/:user_id/tours', to: 'tours#get_tours'
-      get 'users/:user_id/tour_books', to: 'tour_books#get_tour_books'
-      get 'users/account_info', to: 'users#account_info'
+      resources :users, only: %i[show] do
+        collection do
+          get 'current_account'
+        end
+      end
 
-      get '*unmatched_route', to:   'base#user_not_authorized', code: 401
+      get '*unmatched_route', to: 'base#user_not_authorized', code: 401
     end
   end
 

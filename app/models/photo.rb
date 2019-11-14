@@ -22,7 +22,7 @@ class Photo < ApplicationRecord
   validates :plus_code, length: { maximum: 255 }
   validates :camera_make, length: { maximum: 255 }
   validates :camera_model, length: { maximum: 255 }
-  validates :streetview_id, presence: :true, uniqueness: true, length: { maximum: 255 }
+  validates :streetview_id, presence: true, uniqueness: true, length: { maximum: 255 }
 
   validates :image, file_size: { less_than: 30.megabytes }
 
