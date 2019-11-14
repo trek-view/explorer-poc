@@ -6,8 +6,8 @@
       <img class="card-img-top" src="<%= thumb_url %>" alt="">
     <% end %>
     <div class="card-body">
-      <% if @tour_book.present? && policy(@tour_book).remove_item? %>
-        <%= link_to remove_item_user_tour_book_path(tour.user, @tour_book, item_id: tour.id),
+      <% if @tourbook.present? && policy(@tourbook).remove_item? %>
+        <%= link_to remove_item_user_tourbook_path(tour.user, @tourbook, item_id: tour.id),
                     class: 'close delete_from_book',
                     title: 'delete tour from book',
                     data: {confirm: 'Are you sure?'},
@@ -18,7 +18,7 @@
       <% end %>
 
       <div class="float-right">
-        <span class="badge badge-pill badge-success" title="Added to TourBooks"><%= tour.tour_books_count %></span>
+        <span class="badge badge-pill badge-success" title="Added to TourBooks"><%= tour.tourbooks_count %></span>
       </div>
 
       <h4 class="card-title">

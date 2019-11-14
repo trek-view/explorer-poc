@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 class BookedTour < ApplicationRecord
 
-  belongs_to :tour, counter_cache: :tour_books_count
-  belongs_to :tour_book
+  belongs_to :tour, counter_cache: :tourbooks_count
+  belongs_to :tourbook
 
-  validates_uniqueness_of :tour_id, scope: :tour_book_id, message: 'has already been added.'
+  validates_uniqueness_of :tour_id, scope: :tourbook_id, message: 'has already been added.'
 
 end

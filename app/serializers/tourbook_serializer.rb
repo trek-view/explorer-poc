@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class TourBookSerializer < ActiveModel::Serializer
+class TourbookSerializer < ActiveModel::Serializer
   attributes %i[
                 id
                 name

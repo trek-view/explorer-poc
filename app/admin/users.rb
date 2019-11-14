@@ -40,7 +40,7 @@ ActiveAdmin.register User do
     column :terms
     column :privilege
     column :tours_count
-    column :tour_books_count
+    column :tourbooks_count
 
     actions defaults: false do |user|
       item "View", admin_user_path(user), class: 'member_link'

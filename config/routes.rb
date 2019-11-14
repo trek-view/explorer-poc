@@ -15,7 +15,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :tour_books, only: %i[show create update destroy]
+      resources :tourbooks, only: %i[show create update destroy]
 
       resources :users, only: %i[show] do
         collection do
@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   resources :users, only: %i[] do
     post 'generate_new_token', to: 'users#generate_new_token'
     get 'tours'
-    get 'tour_books', to: 'tour_books#user_tour_books'
+    get 'tourbooks', to: 'tourbooks#user_tourbooks'
 
     resources :tours, only: %i[show] do
       member do
@@ -39,15 +39,15 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :tour_books, except: %i[index] do
+    resources :tourbooks, except: %i[index] do
       member do
-        post 'add_item', to: 'tour_books#add_item'
-        delete 'remove_item', to: 'tour_books#remove_item'
+        post 'add_item', to: 'tourbooks#add_item'
+        delete 'remove_item', to: 'tourbooks#remove_item'
       end
     end
   end
 
-  resources :tour_books, only: %i[index]
+  resources :tourbooks, only: %i[index]
 
   resources :tours, only: %i[index]
 

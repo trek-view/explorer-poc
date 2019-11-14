@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class TourBook < ApplicationRecord
+class Tourbook < ApplicationRecord
 
   include PgSearch::Model
   extend FriendlyId
@@ -7,12 +7,12 @@ class TourBook < ApplicationRecord
   belongs_to :user, :counter_cache => true
 
   has_many :booked_tours, dependent: :destroy
-  has_many :tours, through: :booked_tours, inverse_of: :tour_books
+  has_many :tours, through: :booked_tours, inverse_of: :tourbooks
 
   validates :name, presence: true, uniqueness: {scope: :user}, length: { maximum: 70 }
   validates :description, presence: true, length: { maximum: 240 }
 
-  paginates_per Constants::ITEMS_PER_PAGE[:tour_books]
+  paginates_per Constants::ITEMS_PER_PAGE[:tourbooks]
   pg_search_scope :search,
                   against: [
                       :name,

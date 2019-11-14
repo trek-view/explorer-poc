@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_163455) do
+ActiveRecord::Schema.define(version: 2019_11_14_215244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,11 +43,11 @@ ActiveRecord::Schema.define(version: 2019_11_14_163455) do
 
   create_table "booked_tours", force: :cascade do |t|
     t.bigint "tour_id"
-    t.bigint "tour_book_id"
+    t.bigint "tourbook_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tour_book_id"], name: "index_booked_tours_on_tour_book_id"
     t.index ["tour_id"], name: "index_booked_tours_on_tour_id"
+    t.index ["tourbook_id"], name: "index_booked_tours_on_tourbook_id"
   end
 
   create_table "countries", force: :cascade do |t|
@@ -116,15 +116,15 @@ ActiveRecord::Schema.define(version: 2019_11_14_163455) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "tour_books", force: :cascade do |t|
+  create_table "tourbooks", force: :cascade do |t|
     t.bigint "user_id"
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
-    t.index ["slug"], name: "index_tour_books_on_slug", unique: true
-    t.index ["user_id"], name: "index_tour_books_on_user_id"
+    t.index ["slug"], name: "index_tourbooks_on_slug", unique: true
+    t.index ["user_id"], name: "index_tourbooks_on_user_id"
   end
 
   create_table "tours", force: :cascade do |t|
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 2019_11_14_163455) do
     t.integer "transport_type"
     t.string "tourer_version"
     t.string "tourer_tour_id"
-    t.integer "tour_books_count", default: 0, null: false
+    t.integer "tourbooks_count", default: 0, null: false
     t.index ["slug"], name: "index_tours_on_slug", unique: true
     t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_tours_on_user_id"
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 2019_11_14_163455) do
     t.boolean "terms"
     t.string "privilege", default: "user"
     t.integer "tours_count", default: 0
-    t.integer "tour_books_count", default: 0
+    t.integer "tourbooks_count", default: 0
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -183,12 +183,12 @@ ActiveRecord::Schema.define(version: 2019_11_14_163455) do
     t.index ["user_id"], name: "index_view_points_on_user_id"
   end
 
-  add_foreign_key "booked_tours", "tour_books"
+  add_foreign_key "booked_tours", "tourbooks"
   add_foreign_key "booked_tours", "tours"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
-  add_foreign_key "tour_books", "users"
+  add_foreign_key "tourbooks", "users"
   add_foreign_key "tours", "users"
 end

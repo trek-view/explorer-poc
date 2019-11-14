@@ -1,7 +1,7 @@
-<div class="modal fade" id="createTourBookModal" tabindex="-1" role="dialog" aria-labelledby="createTourBookModalCenter" aria-hidden="true">
+<div class="modal fade" id="createTourbookModal" tabindex="-1" role="dialog" aria-labelledby="createTourBookModalCenter" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <%= form_with(url: user_tour_books_path, scope: 'tour_book') do |f| %>
+      <%= form_with(url: user_tourbooks_path, scope: 'tourbook') do |f| %>
 
         <%= hidden_field_tag 'item_id', @tour.id %>
 
@@ -16,12 +16,12 @@
             <%= form_errors_for f.object %>
           </div>
           <div class="form-group">
-            <label for="create_tour_book_name" class="col-form-label">Name</label>
-            <input type="text" class="form-control" id="create_tour_book_name" name="tour_book[name]">
+            <label for="create_tourbook_name" class="col-form-label">Name</label>
+            <input type="text" class="form-control" id="create_tourbook_name" name="tourbook[name]">
           </div>
           <div class="form-group">
-            <label for="create_tour_book_description" class="col-form-label">Description</label>
-            <textarea class="form-control" id="create_tour_book_description" name="tour_book[description]"></textarea>
+            <label for="create_tourbook_description" class="col-form-label">Description</label>
+            <textarea class="form-control" id="create_tourbook_description" name="tourbook[description]"></textarea>
           </div>
         </div>
         <div class="modal-footer">

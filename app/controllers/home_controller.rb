@@ -1,9 +1,9 @@
 class HomeController < ApplicationController
   def index
     find_tours
-    find_tour_books
+    find_tourbooks
     @tours = @tours.page(params[:page])
-    @tour_books = @tour_books.page(params[:page])
+    @tourbooks = @tourbooks.page(params[:page])
   end
 
   def find_tours
@@ -18,8 +18,8 @@ class HomeController < ApplicationController
     @tours = @tours.search(@search_text) if @search_text.present?
   end
 
-  def find_tour_books
-    @tour_books = TourBook
+  def find_tourbooks
+    @tourbooks = Tourbook
                   .includes(:user, tours: :photos)
                   .order(created_at: :desc)
 
@@ -30,7 +30,7 @@ class HomeController < ApplicationController
                   ))
 
     tour_ids = @tours.map(&:id)
-    @tour_books = TourBook
+    @tourbooks = Tourbook
                     .includes(:user, tours: :photos)
                     .joins(:booked_tours)
                     .where('booked_tours.tour_id in (?)', tour_ids)

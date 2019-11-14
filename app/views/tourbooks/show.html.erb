@@ -5,24 +5,24 @@
       <div class="card-header">
         <div class="row">
 
-          <h1 class="col-lg-10 col-sm-12"><%= title "#{@tour_book.name} tour book" %></h1>
-          <% description @tour_book.description %>
+          <h1 class="col-lg-10 col-sm-12"><%= title "#{@tourbook.name} tour book" %></h1>
+          <% description @tourbook.description %>
 
-          <% if policy(@tour_book).update? %>
+          <% if policy(@tourbook).update? %>
             <div class="col-lg-1 col-sm-6">
               <div class="float-right">
                 <%= link_to 'Edit',
-                            edit_user_tour_book_path(@tour_book.user, @tour_book),
+                            edit_user_tourbook_path(@tourbook.user, @tourbook),
                             class: 'btn btn-warning mt-2' %>
               </div>
             </div>
           <% end %>
 
-          <% if policy(@tour_book).destroy? %>
+          <% if policy(@tourbook).destroy? %>
             <div class="col-lg-1 col-sm-6">
               <div class="float-right">
                 <%= link_to 'Delete',
-                            url_for(action: :destroy, id: @tour_book.slug),
+                            url_for(action: :destroy, id: @tourbook.slug),
                             method: :delete,
                             data: {confirm: 'Are you sure?'},
                             class: 'btn btn-danger mt-2'%>
@@ -35,21 +35,21 @@
 
       <div class="card-body">
 
-        <h3 class="card-title"><%= @tour_book.name %></h3>
+        <h3 class="card-title"><%= @tourbook.name %></h3>
 
-        <% if @tour_book.description.present? %>
+        <% if @tourbook.description.present? %>
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">Desciption</label>
             <div class="col-sm-10 mt-2">
-              <p><%= @tour_book.description %></p>
+              <p><%= @tourbook.description %></p>
             </div>
           </div>
         <% end %>
 
-        <% if @tour_book.tours.any? %>
+        <% if @tourbook.tours.any? %>
           <h4>Added Tours</h4>
           <div class="row">
-            <%= render partial: 'tours/tour', collection: @tour_book.tours %>
+            <%= render partial: 'tours/tour', collection: @tourbook.tours %>
           </div>
         <% end %>
 

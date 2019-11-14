@@ -30,12 +30,12 @@ module PhotosHelper
     photo_thumb_url(photo)
   end
 
-  def tour_book_thumb_url(tour_book)
-    if tour_book.tours.nil?
+  def tourbook_thumb_url(tourbook)
+    if tourbook.tours.nil?
       return nil
     end
 
-    tour_book.tours.each do |tour|
+    tourbook.tours.each do |tour|
       thumb_url = tour_thumb_url(tour)
       if thumb_url.present?
         return thumb_url

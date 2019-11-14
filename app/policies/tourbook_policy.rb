@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class TourBookPolicy < ApplicationPolicy
+class TourbookPolicy < ApplicationPolicy
 
   def index?
     true

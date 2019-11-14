@@ -42,13 +42,13 @@
                     Add to TourBook
                   </button>
                   <div id="tourBooksList" class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createTourBookModal">Create new TourBook</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createTourbookModal">Create new Tourbook</a>
 
-                    <% if current_user.tour_books.any? %>
+                    <% if current_user.tourbooks.any? %>
                       <div class="dropdown-divider"></div>
-                      <% current_user.tour_books.each do |book| %>
+                      <% current_user.tourbooks.each do |book| %>
                         <%= link_to book.name,
-                                    add_item_user_tour_book_path(current_user, book, item_id: @tour.id),
+                                    add_item_user_tourbook_path(current_user, book, item_id: @tour.id),
                                     class: 'dropdown-item',
                                     remote: true,
                                     method: :post %>
@@ -157,4 +157,4 @@
   </div>
 </div>
 
-<%= render 'create_tour_book' %>
+<%= render 'create_tourbook' %>
