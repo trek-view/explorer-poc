@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class BookedTour < ApplicationRecord
+class TourTourbook < ApplicationRecord
 
   belongs_to :tour, counter_cache: :tourbooks_count
   belongs_to :tourbook

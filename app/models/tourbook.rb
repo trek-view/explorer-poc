@@ -6,8 +6,8 @@ class Tourbook < ApplicationRecord
 
   belongs_to :user, :counter_cache => true
 
-  has_many :booked_tours, dependent: :destroy
-  has_many :tours, through: :booked_tours, inverse_of: :tourbooks
+  has_many :tour_tourbooks, dependent: :destroy
+  has_many :tours, through: :tour_tourbooks, inverse_of: :tourbooks
 
   validates :name, presence: true, uniqueness: {scope: :user}, length: { maximum: 70 }
   validates :description, presence: true, length: { maximum: 240 }
@@ -29,11 +29,11 @@ class Tourbook < ApplicationRecord
     name_changed? || slug.nil?
   end
 
-  def build_booked_tours(tour_ids)
+  def build_tour_tourbooks(tour_ids)
     if tour_ids.present?
       tour_ids.each do |tour_id|
         tour = Tour.find_by(id: tour_id)
-        self.booked_tours.build(tour_id: tour.id) if tour
+        self.tour_tourbooks.build(tour_id: tour.id) if tour
       end
     end
   end

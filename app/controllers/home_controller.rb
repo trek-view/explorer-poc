@@ -32,8 +32,8 @@ class HomeController < ApplicationController
     tour_ids = @tours.map(&:id)
     @tourbooks = Tourbook
                     .includes(:user, tours: :photos)
-                    .joins(:booked_tours)
-                    .where('booked_tours.tour_id in (?)', tour_ids)
+                    .joins(:tour_tourbooks)
+                    .where('tour_tourbooks.tour_id in (?)', tour_ids)
                     .order(created_at: :desc)
                     .distinct
   end

@@ -13,8 +13,8 @@ class Tour < ApplicationRecord
   has_many :tags, through: :taggings
   has_many :photos, dependent: :destroy
   has_many :countries, through: :photos
-  has_many :booked_tours, dependent: :destroy
-  has_many :tourbooks, -> { distinct }, through: :booked_tours, inverse_of: :tours
+  has_many :tour_tourbooks, dependent: :destroy
+  has_many :tourbooks, -> { distinct }, through: :tour_tourbooks, inverse_of: :tours
 
   accepts_nested_attributes_for :photos
 

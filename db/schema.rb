@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_215244) do
+ActiveRecord::Schema.define(version: 2019_11_14_221033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,15 +39,6 @@ ActiveRecord::Schema.define(version: 2019_11_14_215244) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
-  end
-
-  create_table "booked_tours", force: :cascade do |t|
-    t.bigint "tour_id"
-    t.bigint "tourbook_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["tour_id"], name: "index_booked_tours_on_tour_id"
-    t.index ["tourbook_id"], name: "index_booked_tours_on_tourbook_id"
   end
 
   create_table "countries", force: :cascade do |t|
@@ -114,6 +105,15 @@ ActiveRecord::Schema.define(version: 2019_11_14_215244) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "tour_tourbooks", force: :cascade do |t|
+    t.bigint "tour_id"
+    t.bigint "tourbook_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_id"], name: "index_tour_tourbooks_on_tour_id"
+    t.index ["tourbook_id"], name: "index_tour_tourbooks_on_tourbook_id"
   end
 
   create_table "tourbooks", force: :cascade do |t|
@@ -183,12 +183,12 @@ ActiveRecord::Schema.define(version: 2019_11_14_215244) do
     t.index ["user_id"], name: "index_view_points_on_user_id"
   end
 
-  add_foreign_key "booked_tours", "tourbooks"
-  add_foreign_key "booked_tours", "tours"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
+  add_foreign_key "tour_tourbooks", "tourbooks"
+  add_foreign_key "tour_tourbooks", "tours"
   add_foreign_key "tourbooks", "users"
   add_foreign_key "tours", "users"
 end

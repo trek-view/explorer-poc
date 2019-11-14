@@ -20,7 +20,7 @@ module Api::V1
     def create
       @tourbook = api_user.tourbooks.build(tourbook_params)
 
-      @tourbook.build_booked_tours(params[:tourbook][:tour_ids])
+      @tourbook.build_tour_tourbooks(params[:tourbook][:tour_ids])
 
       if @tourbook.save
         render json: @tourbook, status: :created
