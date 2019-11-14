@@ -25,29 +25,22 @@
         <%= link_to tour.name, user_tour_path(tour.user, tour) %>
       </h4>
 
-      <!--
       <p class="card-text"><%= truncate(tour.description, length: 77, separator: ' ') %></p>
-        -->
-
       
-        <div class="tags">
-          <% tour.tags.each do |tag| %>
-            <%= link_to "##{tag.name}", "/tours?search_text=#{tag.name}", class: 'btn btn-info mb-1' %>
-          <% end %>
-        </div>
-      
-
-      
-      
-        <div class="tour_countries">
-          <% tour.countries.each do |country| %>
-            <%= link_to country.name, "/tours?query[country_id]=#{country.id}", class: 'btn btn-warning mb-1' %>
-          <% end %>
-        </div>
-      
+      <div class="tags">
+        <% tour.tags.each do |tag| %>
+          <%= link_to "##{tag.name}", "?search_text=#{tag.name}", class: 'btn btn-info mb-1' %>
+        <% end %>
+      </div>
+    
+      <div class="tour_countries">
+        <% tour.countries.each do |country| %>
+          <%= link_to country.name, "?query[country_id]=#{country.id}", class: 'btn btn-warning mb-1' %>
+        <% end %>
+      </div>
 
       <div class="tour_type">
-        <%= link_to tour.tour_type, "/tours?query[tour_type]=#{Tour.tour_types[tour.tour_type]}", class: 'btn btn-primary mb-1' %>
+        <%= link_to tour.tour_type, "?query[tour_type]=#{Tour.tour_types[tour.tour_type]}", class: 'btn btn-primary mb-1' %>
       </div>
 
     </div>
