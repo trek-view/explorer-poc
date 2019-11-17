@@ -46,6 +46,8 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'capybara'
   gem 'factory_bot_rails'
+  gem 'database_cleaner'
+  gem 'faker'
 end
 
 group :development do
@@ -72,6 +74,7 @@ gem 'friendly_id', '~> 5.2.4'
 gem 'bootstrap', '~> 4.3.1'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.5'
 gem 'kaminari', '~> 1.1', '>= 1.1.1'
+gem 'api-pagination'
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'pundit', '~> 2.0', '>= 2.0.1'
 gem 'pg_search'

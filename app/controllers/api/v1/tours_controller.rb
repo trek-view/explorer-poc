@@ -7,8 +7,9 @@ module Api::V1
 
     # GET /api/v1/tours
     def index
-      @tours = Tour.includes(:tags, :countries, :photos)
-      render json: @tours, status: :ok
+      find_tours
+      @tours = @tours.page(params[:page] ? params[:page].to_i : 1)
+      render json: {tours: @tours, _metadata: pagination_meta(@tours) }
     end
 
     # GET /api/v1/tours/:id
@@ -75,48 +76,81 @@ module Api::V1
 
     private
 
-      def set_tour
-        @tour = Tour.find_by(id: params[:id])
-      end
+    def set_tour
+      @tour = Tour.find_by(id: params[:id])
+    end
 
-      def tour_params
-        params.require(:tour).permit(*permitted_params)
-      end
+    def tour_params
+      params.require(:tour).permit(*permitted_params)
+    end
 
-      def set_user
-        @user = User.find_by(id: params[:user_id])
-      end
+    def set_user
+      @user = User.find_by(id: params[:user_id])
+    end
 
-      def permitted_params
-        [
-            :name,
-            :description,
-            :tourer_tour_id,
-            :tourer_version,
-            :countries,
-            :tour_type,
-            :transport_type,
-            :tag_names,
-            photos_attributes: [:id,
-                                :file_name,
-                                :taken_date_time,
-                                :latitude,
-                                :longitude,
-                                :country,
-                                :elevation_meters,
-                                :heading,
-                                :street_view_thumbnail_url,
-                                :street_view_url,
-                                :connection,
-                                :connection_distance_km,
-                                :tourer_photo_id,
-                                :plus_code,
-                                :camera_make,
-                                :camera_model,
-                                :main_photo,
-                                :streetview_id]
-        ]
+    def permitted_params
+      [
+          :name,
+          :description,
+          :tourer_tour_id,
+          :tourer_version,
+          :countries,
+          :tour_type,
+          :transport_type,
+          :tag_names,
+          photos_attributes: [:id,
+                              :file_name,
+                              :taken_date_time,
+                              :latitude,
+                              :longitude,
+                              :country,
+                              :elevation_meters,
+                              :heading,
+                              :street_view_thumbnail_url,
+                              :street_view_url,
+                              :connection,
+                              :connection_distance_km,
+                              :tourer_photo_id,
+                              :plus_code,
+                              :camera_make,
+                              :camera_model,
+                              :main_photo,
+                              :streetview_id]
+      ]
+    end
+
+    def pagination_meta(object)
+      {
+        current_page: object.current_page,
+        per_page: Constants::ITEMS_PER_PAGE[:tours],
+        next_page: object.next_page,
+        prev_page: object.prev_page,
+        total_pages: object.total_pages,
+        total_count: object.total_count
+      }
+    end
+
+    def find_tours
+      set_tours_search_params
+
+      @tours = Tour.includes(:countries, :tags, :user).order(updated_at: :desc)
+
+      if @query.present?
+        @tours = @tours.reorder("#{@query[:sort_by]} DESC")
+        @tours = @tours.where(user_id: @query['user_id']) if @query['user_id'].present?
+        @tours = @tours.where(id: @query['id']) if @query['id'].present?
+        @tours = @tours.joins(:countries).where('countries.name like ?', "%#{@query['country']}%" ) if @query['country'].present?
+        @tours = @tours.search(@query['tag']) if @query['tag'].present?
       end
+    end
+
+    def set_tours_search_params
+      @query = tour_search_params
+    end
+
+    def tour_search_params
+      params.permit(:country, :tag, :user_id, :id, :tag, :sort_by)
+    end
 
   end
 

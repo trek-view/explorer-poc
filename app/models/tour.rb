@@ -40,7 +40,7 @@ class Tour < ApplicationRecord
                       :description
                   ],
                   associated_against: {
-                      tags: [:name]
+                      tags: [:name],
                   }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tours]

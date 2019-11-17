@@ -22,6 +22,4 @@ class TourSerializer < ActiveModel::Serializer
 
   has_many :photos
 
-  has_many :countries
-
 end
