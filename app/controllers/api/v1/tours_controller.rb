@@ -9,7 +9,8 @@ module Api::V1
     def index
       find_tours
       @tours = @tours.page(params[:page] ? params[:page].to_i : 1)
-      render json: {tours: @tours, _metadata: pagination_meta(@tours) }
+      tours_json = ActiveModelSerializers::SerializableResource.new(@tours).as_json
+      render json: {tours: tours_json, _metadata: pagination_meta(@tours) }
     end
 
     # GET /api/v1/tours/:id
@@ -119,6 +120,22 @@ module Api::V1
       ]
     end
 
+    def list_tours
+      @tours.map do |tour|
+        {
+            id: tour[:id],
+            name: tour[:name],
+            description: tour[:description],
+            tour_type: tour[:tour_type],
+            transport_type: tour[:transport_type],
+            tourer_version: tour[:tourer_version],
+            tourer_tour_id: tour[:tourer_tour_id],
+            created_at: tour[:created_at],
+            user_id: tour[:user_id]
+        }
+      end
+    end
+
     def pagination_meta(object)
       {
         current_page: object.current_page,
@@ -136,10 +153,10 @@ module Api::V1
       @tours = Tour.includes(:countries, :tags, :user).order(updated_at: :desc)
 
       if @query.present?
-        @tours = @tours.reorder("#{@query[:sort_by]} DESC")
+        @tours = @tours.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         @tours = @tours.where(user_id: @query['user_id']) if @query['user_id'].present?
         @tours = @tours.where(id: @query['id']) if @query['id'].present?
-        @tours = @tours.joins(:countries).where('countries.name like ?', "%#{@query['country']}%" ) if @query['country'].present?
+        @tours = @tours.joins(:countries).where('lower(countries.name) like ?', "%#{@query['country'].downcase}%" ) if @query['country'].present?
         @tours = @tours.search(@query['tag']) if @query['tag'].present?
       end
     end

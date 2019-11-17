@@ -3,13 +3,14 @@ class TourSerializer < ActiveModel::Serializer
 
   attributes %i[
                 id
-                tourer_tour_id
                 name
                 description
                 countries
+                tags
                 tour_type
                 transport_type
-                tags
+                tourer_version
+                tourer_tour_id
               ]
 
   def countries
@@ -19,7 +20,5 @@ class TourSerializer < ActiveModel::Serializer
   def tags
     object.tag_names
   end
-
-  has_many :photos
 
 end
