@@ -82,7 +82,9 @@ module Api::V1
     end
 
     def tour_params
-      params.require(:tour).permit(*permitted_params)
+      parameters = params.require(:tour).permit(*permitted_params)
+      parameters[:tag_names] = parameters[:tags] if parameters[:tags]
+      parameters.except(:tags)
     end
 
     def set_user
@@ -95,28 +97,9 @@ module Api::V1
           :description,
           :tourer_tour_id,
           :tourer_version,
-          :countries,
           :tour_type,
           :transport_type,
-          :tag_names,
-          photos_attributes: [:id,
-                              :file_name,
-                              :taken_date_time,
-                              :latitude,
-                              :longitude,
-                              :country,
-                              :elevation_meters,
-                              :heading,
-                              :street_view_thumbnail_url,
-                              :street_view_url,
-                              :connection,
-                              :connection_distance_km,
-                              :tourer_photo_id,
-                              :plus_code,
-                              :camera_make,
-                              :camera_model,
-                              :main_photo,
-                              :streetview_id]
+          :tags
       ]
     end
 

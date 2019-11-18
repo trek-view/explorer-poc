@@ -6,7 +6,7 @@ RSpec.shared_examples 'respond to missing' do |url|
     header "api-key", user.api_token
   end
 
-  it 'responds with 404' do
+  it 'should respond with error' do
     expect do
       get url
     end.to raise_error(ActiveRecord::RecordNotFound)

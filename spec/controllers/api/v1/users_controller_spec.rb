@@ -2,7 +2,7 @@ require 'rails_helper'
 
 require Rails.root.join('spec', 'controllers', 'api', 'v1', 'shared_examples', 'respond_to_missing.rb')
 
-describe Api::V1::UsersController, :type => :api do
+describe Api::V1::UsersController, :type => :controller do
 
   let(:user) { create :user }
 

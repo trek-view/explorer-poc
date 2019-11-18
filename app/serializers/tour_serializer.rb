@@ -11,6 +11,8 @@ class TourSerializer < ActiveModel::Serializer
                 transport_type
                 tourer_version
                 tourer_tour_id
+                created_at
+                updated_at
               ]
 
   def countries

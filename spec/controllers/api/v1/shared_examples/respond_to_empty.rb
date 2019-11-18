@@ -6,7 +6,7 @@ RSpec.shared_examples 'respond to empty' do |url|
     header "api-key", user.api_token
   end
 
-  it 'responds with empty data' do
+  it 'should respond with empty data' do
     get url
     expect(json).not_to be_empty
     expect(json['_metadata']).not_to be_empty

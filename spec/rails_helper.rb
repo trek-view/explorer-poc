@@ -64,6 +64,6 @@ RSpec.configure do |config|
   config.include Capybara::DSL
   config.include FactoryBot::Syntax::Methods
 
-  config.include ApiHelper, type: :api
-  config.include Requests::JsonHelpers, type: :api
+  config.include ApiHelper, type: :controller
+  config.include Requests::JsonHelpers, type: :controller
 end
