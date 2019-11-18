@@ -1,0 +1,2 @@
+class Tourer < ApplicationRecord
+end

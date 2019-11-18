@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_221033) do
+ActiveRecord::Schema.define(version: 2019_11_18_170524) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
   enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -27,6 +28,20 @@ ActiveRecord::Schema.define(version: 2019_11_14_221033) do
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
+  end
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "cafe"
+    t.string "road"
+    t.string "suburb"
+    t.string "county"
+    t.string "region"
+    t.string "state"
+    t.string "postcode"
+    t.string "country"
+    t.string "country_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "admin_users", force: :cascade do |t|
@@ -59,30 +74,48 @@ ActiveRecord::Schema.define(version: 2019_11_14_221033) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+  create_table "googles", force: :cascade do |t|
+    t.string "plus_code_global_code"
+    t.string "plus_code_compound_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "photos", force: :cascade do |t|
     t.bigint "tour_id"
-    t.string "file_name"
     t.datetime "taken_date_time"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.integer "elevation_meters"
-    t.float "heading"
-    t.text "street_view_url"
-    t.text "street_view_thumbnail_url"
-    t.string "connection"
-    t.float "connection_distance_km"
-    t.string "tourer_photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "country_id"
-    t.string "plus_code"
     t.string "camera_make"
     t.string "camera_model"
     t.integer "view_points_count", default: 0, null: false
-    t.boolean "main_photo", default: false, null: false
-    t.string "streetview_id"
     t.string "image"
+    t.hstore "address"
+    t.hstore "google"
+    t.hstore "street_view"
     t.index ["tour_id"], name: "index_photos_on_tour_id"
+  end
+
+  create_table "street_views", force: :cascade do |t|
+    t.string "photo_id"
+    t.datetime "capture_time"
+    t.text "share_link"
+    t.text "download_url"
+    t.text "thumbnail_url"
+    t.decimal "lat"
+    t.decimal "lon"
+    t.integer "altitude"
+    t.integer "heading"
+    t.integer "pitch"
+    t.integer "roll"
+    t.integer "level"
+    t.text "connections", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -125,6 +158,16 @@ ActiveRecord::Schema.define(version: 2019_11_14_221033) do
     t.string "slug"
     t.index ["slug"], name: "index_tourbooks_on_slug", unique: true
     t.index ["user_id"], name: "index_tourbooks_on_user_id"
+  end
+
+  create_table "tourers", force: :cascade do |t|
+    t.string "photo_id"
+    t.string "connection_method"
+    t.string "connection_photo"
+    t.integer "connection_distance_meters"
+    t.float "heading"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tours", force: :cascade do |t|
