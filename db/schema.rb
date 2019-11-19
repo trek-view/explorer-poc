@@ -30,20 +30,6 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
-  create_table "addresses", force: :cascade do |t|
-    t.string "cafe"
-    t.string "road"
-    t.string "suburb"
-    t.string "county"
-    t.string "region"
-    t.string "state"
-    t.string "postcode"
-    t.string "country"
-    t.string "country_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -74,16 +60,8 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
-  create_table "googles", force: :cascade do |t|
-    t.string "plus_code_global_code"
-    t.string "plus_code_compound_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "photos", force: :cascade do |t|
     t.bigint "tour_id"
-    t.datetime "taken_date_time"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.integer "elevation_meters"
@@ -94,28 +72,13 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.string "camera_model"
     t.integer "view_points_count", default: 0, null: false
     t.string "image"
+    t.string "tourer_photo_id"
+    t.datetime "taken_at"
     t.hstore "address"
     t.hstore "google"
     t.hstore "streetview"
+    t.hstore "tourer"
     t.index ["tour_id"], name: "index_photos_on_tour_id"
-  end
-
-  create_table "street_views", force: :cascade do |t|
-    t.string "photo_id"
-    t.datetime "capture_time"
-    t.text "share_link"
-    t.text "download_url"
-    t.text "thumbnail_url"
-    t.decimal "lat"
-    t.decimal "lon"
-    t.integer "altitude"
-    t.integer "heading"
-    t.integer "pitch"
-    t.integer "roll"
-    t.integer "level"
-    t.text "connections", default: [], array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -158,16 +121,6 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.string "slug"
     t.index ["slug"], name: "index_tourbooks_on_slug", unique: true
     t.index ["user_id"], name: "index_tourbooks_on_user_id"
-  end
-
-  create_table "tourers", force: :cascade do |t|
-    t.string "photo_id"
-    t.string "connection_method"
-    t.string "connection_photo"
-    t.integer "connection_distance_meters"
-    t.float "heading"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "tours", force: :cascade do |t|

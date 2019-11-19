@@ -26,13 +26,8 @@ module Api::V1
 
     # POST /api/v1/tours/:tour_id/photos
     def create
-      if params[:file].present?
-        photo = @tour.photos.build(photo_file_params)
-        photo.file_name = params[:file].original_filename
-        photo.image = params[:file]
-      else
-        photo = @tour.photos.build(photo_params)
-      end
+      photo = @tour.photos.build(photo_params)
+      photo.image = params[:image]
 
       if photo.save
         render json: photo, status: :created
@@ -90,11 +85,10 @@ module Api::V1
       end
 
       def photo_params
-        params.require(:photo).permit(*permitted_photo_params)
-      end
-
-      def photo_file_params
-        params.permit(*permitted_photo_params)
+        prms = params.permit(*permitted_photo_params)
+        prms[:country] = prms[:address][:country_code]
+        prms[:tourer_photo_id] = prms[:tourer][:photo_id]
+        prms
       end
 
       def set_tour
@@ -102,23 +96,18 @@ module Api::V1
       end
 
       def permitted_photo_params
-        [:file_name,
-         :taken_date_time,
+        [:image,
+         :taken_at,
          :latitude,
          :longitude,
-         :country,
          :elevation_meters,
-         :heading,
-         :street_view_thumbnail_url,
-         :street_view_url,
-         :connection,
-         :connection_distance_km,
-         :tourer_photo_id,
-         :plus_code,
          :camera_make,
          :camera_model,
-         :main_photo,
-         :streetview_id]
+         address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code],
+         google: [:plus_code_global_code, :plus_code_compound_code],
+         streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
+         tourer: [:photo_id, :connection_photo, :connection_method, :connection_distance_meters, :heading]
+        ]
       end
 
       def authorize_tour

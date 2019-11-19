@@ -5,23 +5,15 @@ class PhotoSerializer < ActiveModel::Serializer
                  id
                  tour_id
                  image
-                 taken_date_time
+                 taken_at
                  latitude
                  longitude
                  elevation_meters
                  country
-                 heading
-                 street_view_url
-                 street_view_thumbnail_url
-                 connection
-                 connection_distance_km
-                 plus_code
-                 camera_make
-                 camera_model
-                 tourer_photo_id
-                 main_photo
-                 view_points_count
-                 streetview_id
+                 address
+                 google
+                 streetview
+                 tourer
                ]
 
   def country

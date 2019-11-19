@@ -1,2 +1,0 @@
-class Tourer < ApplicationRecord
-end

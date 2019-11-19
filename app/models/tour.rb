@@ -16,7 +16,7 @@ class Tour < ApplicationRecord
   has_many :tour_tourbooks, dependent: :destroy
   has_many :tourbooks, -> { distinct }, through: :tour_tourbooks, inverse_of: :tours
 
-  accepts_nested_attributes_for :photos
+  # accepts_nested_attributes_for :photos
 
   validates :name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
   validates :description, length: { maximum: 16777215 }
@@ -75,10 +75,10 @@ class Tour < ApplicationRecord
     end
   end
 
-  validates_uniqueness :photos, { attribute: :tourer_photo_id,
-                                  case_sensitive: false,
-                                  allow_blank: true,
-                                  message: "Photo's tourer_photo_id should be unique per tour" }
+  # validates_uniqueness :photos, { attribute: :tourer_photo_id,
+  #                                 case_sensitive: false,
+  #                                 allow_blank: true,
+  #                                 message: "Photo's tourer_photo_id should be unique per tour" }
 
   # Use default slug, but upper case and with underscores
   def normalize_friendly_id(string)
