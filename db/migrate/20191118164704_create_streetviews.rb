@@ -1,6 +1,6 @@
-class CreateStreetViews < ActiveRecord::Migration[5.2]
+class CreateStreetviews < ActiveRecord::Migration[5.2]
   def change
-    create_table :street_views do |t|
+    create_table :streetviews do |t|
       t.string :photo_id
       t.datetime :capture_time
       t.text :share_link

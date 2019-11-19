@@ -13,6 +13,6 @@ class ChangePhotoColumns < ActiveRecord::Migration[5.2]
 
     add_column :photos, :address, :hstore
     add_column :photos, :google, :hstore
-    add_column :photos, :street_view, :hstore
+    add_column :photos, :streetview, :hstore
   end
 end

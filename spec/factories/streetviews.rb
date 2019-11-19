@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :street_view do
+  factory :streetview do
     photo_id { "MyString" }
     capture_time { "2019-11-18 18:47:04" }
     share_link { "MyText" }

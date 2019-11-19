@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.string "image"
     t.hstore "address"
     t.hstore "google"
-    t.hstore "street_view"
+    t.hstore "streetview"
     t.index ["tour_id"], name: "index_photos_on_tour_id"
   end
 

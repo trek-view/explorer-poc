@@ -1,2 +1,0 @@
-class StreetView < ApplicationRecord
-end
