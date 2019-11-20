@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.integer "elevation_meters"
+    t.string "tourer_photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "country_id"
@@ -72,7 +73,6 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.string "camera_model"
     t.integer "view_points_count", default: 0, null: false
     t.string "image"
-    t.string "tourer_photo_id"
     t.datetime "taken_at"
     t.hstore "address"
     t.hstore "google"

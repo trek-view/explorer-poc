@@ -3,8 +3,8 @@ require Rails.root.join('spec', 'controllers', 'api', 'v1', 'shared_examples', '
 
 describe Api::V1::ToursController, :type => :controller do
 
-  let(:user) { create :user }
-  let(:tours) { create_list(:tour, 10) }
+  let!(:user) { create :user }
+  let!(:tours) { create_list(:tour, 10) }
   let(:tour_id) { tours.first.id }
 
   describe 'GET /api/v1/tours', focus: true do
