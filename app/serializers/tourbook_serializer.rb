@@ -4,8 +4,9 @@ class TourbookSerializer < ActiveModel::Serializer
                 id
                 name
                 description
-                tours
+                created_at
+                updated_at
               ]
 
-  has_many :tours
+  # has_many :tours
 end

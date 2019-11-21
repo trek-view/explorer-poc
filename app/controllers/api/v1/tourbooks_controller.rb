@@ -69,7 +69,11 @@ module Api::V1
     # GET /api/v1/users/:user_id/tourbooks
     def get_tourbooks
       if api_user == @user
-        render json: api_user.tourbooks, status: :ok
+        find_tourbooks
+        @tourbooks = @tourbooks.page(params[:page] ? params[:page].to_i : 1)
+        tourbooks_json = ActiveModelSerializers::SerializableResource.new(@tourbooks).as_json
+        tourbooks_json['_metadata'] = pagination_meta(@tourbooks)
+        render json: tourbooks_json, status: :ok
       else
         render json: {errors: 'You can get only your own tours'}, status: :forbidden
       end
@@ -95,6 +99,36 @@ module Api::V1
             :description,
             tour_ids: []
         ]
+      end
+
+      def find_tourbooks
+        set_tourbooks_search_params
+
+        @tourbooks = api_user.tourbooks.order(updated_at: :desc)
+
+        if @query.present?
+          @tourbooks = @tourbooks.joins(:tours).where(tours: { id: @query[:tours_id] }) if @query[:tour_ids].present?
+          @tourbooks = @tourbooks.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+        end
+      end
+
+      def set_tourbooks_search_params
+        @query = tourbook_search_params
+      end
+
+      def tourbook_search_params
+        params.permit(:sort_by, tour_ids: [])
+      end
+
+      def pagination_meta(object)
+        {
+            current_page: object.current_page,
+            per_page: Constants::ITEMS_PER_PAGE[:tourbooks],
+            next_page: object.next_page,
+            prev_page: object.prev_page,
+            total_pages: object.total_pages,
+            total_count: object.total_count
+        }
       end
 
   end

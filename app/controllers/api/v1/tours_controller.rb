@@ -10,7 +10,8 @@ module Api::V1
       find_tours
       @tours = @tours.page(params[:page] ? params[:page].to_i : 1)
       tours_json = ActiveModelSerializers::SerializableResource.new(@tours).as_json
-      render json: {tours: tours_json, _metadata: pagination_meta(@tours) }
+      tours_json['_metadata'] = pagination_meta(@tours)
+      render json: tours_json, status: :ok
     end
 
     # GET /api/v1/tours/:id
@@ -136,11 +137,10 @@ module Api::V1
       @tours = Tour.includes(:countries, :tags, :user).order(updated_at: :desc)
 
       if @query.present?
-        @tours = @tours.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+        @tours = @tours.joins(:countries).where(countries: { code: @query['countries'] } ) if @query['countries'].present?
         @tours = @tours.where(user_id: @query['user_id']) if @query['user_id'].present?
-        @tours = @tours.where(id: @query['id']) if @query['id'].present?
-        @tours = @tours.joins(:countries).where('lower(countries.name) like ?', "%#{@query['country'].downcase}%" ) if @query['country'].present?
         @tours = @tours.search(@query['tag']) if @query['tag'].present?
+        @tours = @tours.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
       end
     end
 
@@ -149,7 +149,7 @@ module Api::V1
     end
 
     def tour_search_params
-      params.permit(:country, :tag, :user_id, :id, :tag, :sort_by)
+      params.permit(:tag, :user_id, :id, :tag, :sort_by, countries: [])
     end
 
   end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Photo < ApplicationRecord
 
+  include PgSearch::Model
+
   mount_uploader :image, PhotoUploader
 
   belongs_to :tour
@@ -36,6 +38,13 @@ class Photo < ApplicationRecord
   validates_associated :country
 
   before_destroy :remove_image
+
+  pg_search_scope :search,
+                  against: [],
+                  associated_against: {
+                      country: [:code]
+                  }
+  paginates_per Constants::ITEMS_PER_PAGE[:photos]
 
   def country=(country_code)
     country = Country.find_or_create_by(code: country_code)

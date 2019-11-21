@@ -16,7 +16,11 @@ module Api::V1
 
     # GET /api/v1/tours/:tour_id/photos
     def index
-      render json: @tour.photos, status: :ok
+      find_photos
+      @photos = @photos.page(params[:page] ? params[:page].to_id : 1)
+      photos_json = ActiveModelSerializers::SerializableResource.new(@photos).as_json
+      photos_json['_metadata'] = pagination_meta(@photos)
+      render json: photos_json, status: :ok
     end
 
     # GET /api/v1/tours/:tour_id/photos/:id
@@ -114,6 +118,36 @@ module Api::V1
         unless api_user.tours.include?(@tour)
           render json: {errors: {authorization: 'You cannot perform this action.'}}, status: :forbidden
         end
+      end
+
+      def find_photos
+        set_photo_search_params
+
+        @photos = @tour.photos.order(taken_at: :desc)
+
+        if @query.present?
+          @photos = @photos.search(@query[:country]) if @query[:country].present?
+          @photos = @photos.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+        end
+      end
+
+      def set_photo_search_params
+        @query = photo_search_params
+      end
+
+      def photo_search_params
+        params.permit(:country_id, :user_id, :sort_by)
+      end
+
+      def pagination_meta(object)
+        {
+          current_page: object.current_page,
+          per_page: Constants::ITEMS_PER_PAGE[:photos],
+          next_page: object.next_page,
+          prev_page: object.prev_page,
+          total_pages: object.total_pages,
+          total_count: object.total_count
+        }
       end
   end
 

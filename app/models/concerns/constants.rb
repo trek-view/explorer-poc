@@ -3,7 +3,8 @@ module Constants
 
   ITEMS_PER_PAGE = {
       tours: 50,
-      tourbooks: 15
+      tourbooks: 15,
+      photos: 50
   }
 
   TOUR_TYPES = {

@@ -14,6 +14,8 @@ class PhotoSerializer < ActiveModel::Serializer
                  google
                  streetview
                  tourer
+                 created_at
+                 updated_at
                ]
 
   def country

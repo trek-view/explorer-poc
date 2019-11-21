@@ -62,13 +62,35 @@ describe Api::V1::PhotosController, :type => :controller do
     context 'When photos exists' do
       before do
         header 'api-key', user.api_token
-        get "/api/v1/tours/#{tour_id}/photos"
+        get "/api/v1/tours/#{tour_id}/photos?country=#{photos.first.country.code}&user_id=#{user.id}&sot_by=created_at"
       end
 
       it 'should return photos' do
-        p photos
         expect(json).not_to be_empty
+        expect(json['_metadata']).not_to be_empty
         expect(json['photos']).not_to be_empty
+      end
+
+      it 'should return status code 200' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
+
+  describe 'GET /api/v1/tours/:tour_id/photos/:id' do
+    context 'When photos exists' do
+      before do
+        header 'api-key', user.api_token
+        get "/api/v1/tours/#{tour_id}/photos/#{photo_id}"
+      end
+
+      it 'should return photos' do
+        expect(json).not_to be_empty
+        expect(json['photo']).not_to be_empty
+      end
+
+      it 'should return status code 200' do
+        expect(response).to have_http_status(:ok)
       end
     end
   end
@@ -107,7 +129,7 @@ describe Api::V1::PhotosController, :type => :controller do
     end
   end
 
-  describe 'DELETE /api/v1/tours/:tour_id/photos/:id', focus: true do
+  describe 'DELETE /api/v1/tours/:tour_id/photos/:id' do
     before do
       header 'api-key', user.api_token
       delete "/api/v1/tours/#{tour_id}/photos/#{photo_id}"
