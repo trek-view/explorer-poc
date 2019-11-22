@@ -7,12 +7,7 @@ Rails.application.routes.draw do
   namespace :api, constraints: { format: 'json' } do
     namespace :v1 do
       resources :tours, only: %i[index show create update destroy] do
-        resources :photos, only: %i[index show create update destroy] do
-          member do
-            post 'set_photo_view_point'
-            delete 'unset_photo_view_point'
-          end
-        end
+        resources :photos, only: %i[index show create update destroy]
       end
 
       resources :tourbooks, only: %i[show create update destroy]
@@ -23,6 +18,9 @@ Rails.application.routes.draw do
           get 'current_account'
         end
       end
+
+      post '/viewpoints', to: 'viewpoints#set_viewpoints'
+      get '/viewpoints', to: 'viewpoints#get_viewpoints'
 
       get '*unmatched_route', to: 'base#user_not_authorized', code: 401
     end

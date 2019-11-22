@@ -45,6 +45,7 @@ class Photo < ApplicationRecord
                       country: [:code]
                   }
   paginates_per Constants::ITEMS_PER_PAGE[:photos]
+  acts_as_favoritable
 
   def country=(country_code)
     country = Country.find_or_create_by(code: country_code)

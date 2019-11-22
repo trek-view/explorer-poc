@@ -24,6 +24,7 @@ class User < ApplicationRecord
 
   has_secure_token :api_token
   friendly_id :name, use: :slugged
+  acts_as_favoritor
 
   after_create :subscribe_to_global
 

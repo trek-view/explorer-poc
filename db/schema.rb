@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_18_170524) do
+ActiveRecord::Schema.define(version: 2019_11_22_190743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -49,6 +49,23 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.string "code"
   end
 
+  create_table "favorites", force: :cascade do |t|
+    t.string "favoritable_type", null: false
+    t.bigint "favoritable_id", null: false
+    t.string "favoritor_type", null: false
+    t.bigint "favoritor_id", null: false
+    t.string "scope", default: "favorite", null: false
+    t.boolean "blocked", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blocked"], name: "index_favorites_on_blocked"
+    t.index ["favoritable_id", "favoritable_type"], name: "fk_favoritables"
+    t.index ["favoritable_type", "favoritable_id"], name: "index_favorites_on_favoritable_type_and_favoritable_id"
+    t.index ["favoritor_id", "favoritor_type"], name: "fk_favorites"
+    t.index ["favoritor_type", "favoritor_id"], name: "index_favorites_on_favoritor_type_and_favoritor_id"
+    t.index ["scope"], name: "index_favorites_on_scope"
+  end
+
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
     t.integer "sluggable_id", null: false
@@ -78,6 +95,8 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.hstore "google"
     t.hstore "streetview"
     t.hstore "tourer"
+    t.text "favoritable_score"
+    t.text "favoritable_total"
     t.index ["tour_id"], name: "index_photos_on_tour_id"
   end
 
@@ -164,19 +183,12 @@ ActiveRecord::Schema.define(version: 2019_11_18_170524) do
     t.string "privilege", default: "user"
     t.integer "tours_count", default: 0
     t.integer "tourbooks_count", default: 0
+    t.text "favoritor_score"
+    t.text "favoritor_total"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
-  end
-
-  create_table "view_points", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "photo_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["photo_id"], name: "index_view_points_on_photo_id"
-    t.index ["user_id"], name: "index_view_points_on_user_id"
   end
 
   add_foreign_key "photos", "tours"

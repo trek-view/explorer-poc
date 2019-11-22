@@ -88,5 +88,9 @@ gem 'fog-aws'
 gem 'chartkick'
 gem 'font-awesome-rails'
 gem 'aws-sdk', '~> 3'
+# Classier solution for file uploads for Rails, Sinatra and other Ruby web frameworks
 gem 'carrierwave', '~> 2.0'
+# Adds file validators to ActiveModel.
 gem 'file_validators'
+# A Rubygem to add Favorite, Follow, Vote, etc. functionality to ActiveRecord models
+gem 'acts_as_favoritor'
