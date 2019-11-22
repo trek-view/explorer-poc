@@ -58,7 +58,7 @@ describe Api::V1::PhotosController, :type => :controller do
       image: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg')
   }}
 
-  describe 'GET /api/v1/tours/:tour_id/photos', focus: true do
+  describe 'GET /api/v1/tours/:tour_id/photos' do
     context 'When photos exists' do
       before do
         header 'api-key', user.api_token

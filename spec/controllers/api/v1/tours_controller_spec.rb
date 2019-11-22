@@ -4,7 +4,7 @@ require Rails.root.join('spec', 'controllers', 'api', 'v1', 'shared_examples', '
 describe Api::V1::ToursController, :type => :controller do
 
   let!(:user) { create :user }
-  let!(:tours) { create_list(:tour, 1, :with_photos) }
+  let!(:tours) { create_list(:tour, 2, :with_photos) }
   let(:tour_id) { tours.first.id }
 
   describe 'GET /api/v1/tours' do
@@ -14,7 +14,7 @@ describe Api::V1::ToursController, :type => :controller do
         get "/api/v1/tours?tags[]=#{tours.first.tags[0].name}&user_id=#{user.id}&ids[]=#{tours.first.id}&countries[]=#{tours.first.photos.first.country.code}"
       end
 
-      it 'should return tours', focus: true do
+      it 'should return tours' do
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['tours']).not_to be_empty
