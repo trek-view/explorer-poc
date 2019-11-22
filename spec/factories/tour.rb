@@ -9,7 +9,7 @@ FactoryBot.define do
 
     trait :with_photos do
       after(:create) do |tour|
-        create_list(:photo, 2, tour: tour)
+        create_list(:photo, 1, tour: tour)
       end
     end
   end

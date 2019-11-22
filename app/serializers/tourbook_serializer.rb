@@ -5,8 +5,13 @@ class TourbookSerializer < ActiveModel::Serializer
                 name
                 description
                 created_at
-                updated_at
+                user_id
+                tour_ids
               ]
+
+  def tour_ids
+    object.tours.any? ? object.tours.map(&:id) : []
+  end
 
   # has_many :tours
 end

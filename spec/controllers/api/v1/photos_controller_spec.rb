@@ -58,17 +58,34 @@ describe Api::V1::PhotosController, :type => :controller do
       image: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg')
   }}
 
-  describe 'GET /api/v1/tours/:tour_id/photos' do
+  describe 'GET /api/v1/tours/:tour_id/photos', focus: true do
     context 'When photos exists' do
       before do
         header 'api-key', user.api_token
-        get "/api/v1/tours/#{tour_id}/photos?country=#{photos.first.country.code}&user_id=#{user.id}&sot_by=created_at"
+        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&user_id=#{user.id}&sot_by=created_at"
       end
 
       it 'should return photos' do
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['photos']).not_to be_empty
+        json['photos'].each do |photo|
+          expect(photo.keys).to contain_exactly('id',
+                                                'tour_id',
+                                                'created_at',
+                                                'updated_at',
+                                                'taken_at',
+                                                'user_id',
+                                                'image',
+                                                'latitude',
+                                                'longitude',
+                                                'elevation_meters',
+                                                'country',
+                                                'address',
+                                                'google',
+                                                'streetview',
+                                                'tourer')
+        end
       end
 
       it 'should return status code 200' do

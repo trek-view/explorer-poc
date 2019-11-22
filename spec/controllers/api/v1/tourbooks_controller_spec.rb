@@ -12,7 +12,7 @@ describe Api::V1::TourbooksController, :type => :controller do
       before do
         header 'api-key', user.api_token
         tours = tourbooks.first.tours
-        get "/api/v1/users/#{user.id}/tourbooks?tour_ids=#{[tours.first.id]}&sort_by=name"
+        get "/api/v1/users/#{user.id}/tourbooks?tour_ids[]=#{tours.first.id}&sort_by=name"
       end
 
       it 'should return json with metadata', focus:true do
@@ -20,6 +20,16 @@ describe Api::V1::TourbooksController, :type => :controller do
         expect(json).not_to be_empty
         expect(json['tourbooks']).not_to be_empty
         expect(json['_metadata']).not_to be_empty
+        json['tourbooks'].each do |tourbook|
+          expect(tourbook.keys).to contain_exactly(
+                                       'id',
+                                        'name',
+                                        'description',
+                                        'created_at',
+                                        'user_id',
+                                        'tour_ids'
+                                   )
+        end
       end
 
       it 'should return HTTP code 200' do

@@ -104,11 +104,11 @@ module Api::V1
       def find_tourbooks
         set_tourbooks_search_params
 
-        @tourbooks = api_user.tourbooks.order(updated_at: :desc)
+        @tourbooks = api_user.tourbooks.includes(:tours).order(updated_at: :desc)
 
         if @query.present?
-          @tourbooks = @tourbooks.joins(:tours).where(tours: { id: @query[:tours_id] }) if @query[:tour_ids].present?
-          @tourbooks = @tourbooks.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+          @tourbooks = @tourbooks.joins(:tours).where(tours: { id: @query[:tour_ids] }).distinct if @query[:tour_ids].present?
+          @tourbooks = @tourbooks.reorder("tourbooks.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         end
       end
 

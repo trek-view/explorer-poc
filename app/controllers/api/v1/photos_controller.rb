@@ -19,6 +19,10 @@ module Api::V1
       find_photos
       @photos = @photos.page(params[:page] ? params[:page].to_id : 1)
       photos_json = ActiveModelSerializers::SerializableResource.new(@photos).as_json
+      photos_json[:photos] = photos_json[:photos].map do |photo|
+        photo['user_id'] = @tour.user_id
+        photo
+      end
       photos_json['_metadata'] = pagination_meta(@photos)
       render json: photos_json, status: :ok
     end
@@ -123,11 +127,12 @@ module Api::V1
       def find_photos
         set_photo_search_params
 
-        @photos = @tour.photos.order(taken_at: :desc)
+        @photos = @tour.photos.includes(:country).order(taken_at: :desc)
 
         if @query.present?
-          @photos = @photos.search(@query[:country]) if @query[:country].present?
-          @photos = @photos.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+          @photos = @photos.where(id: @query[:ids]) if @query[:ids].present?
+          @photos = @photos.join(:countries).where(countries: { code: @query[:countries] }) if @query[:countries].present?
+          @photos = @photos.reorder("photos.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         end
       end
 
@@ -136,7 +141,7 @@ module Api::V1
       end
 
       def photo_search_params
-        params.permit(:country_id, :user_id, :sort_by)
+        params.permit(:countries, :sort_by, :ids)
       end
 
       def pagination_meta(object)

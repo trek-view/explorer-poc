@@ -137,10 +137,11 @@ module Api::V1
       @tours = Tour.includes(:countries, :tags, :user).order(updated_at: :desc)
 
       if @query.present?
-        @tours = @tours.joins(:countries).where(countries: { code: @query['countries'] } ) if @query['countries'].present?
-        @tours = @tours.where(user_id: @query['user_id']) if @query['user_id'].present?
-        @tours = @tours.search(@query['tag']) if @query['tag'].present?
-        @tours = @tours.reorder("#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+        @tours = @tours.where(id: @query[:ids]) if @query[:ids].present?
+        @tours = @tours.where(user_id: @query[:user_id]) if @query[:user_id].present?
+        @tours = @tours.joins(:countries).where(countries: { code: @query[:countries] }).distinct if @query[:countries].present?
+        @tours = @tours.joins(:tags).where(tags: { name: @query[:tags] }) if @query[:tag].present?
+        @tours = @tours.reorder("tours.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
       end
     end
 
@@ -149,7 +150,7 @@ module Api::V1
     end
 
     def tour_search_params
-      params.permit(:tag, :user_id, :id, :tag, :sort_by, countries: [])
+      params.permit(:user_id, :ids, :tags, :sort_by, countries: [])
     end
 
   end

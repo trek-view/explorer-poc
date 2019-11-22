@@ -13,10 +13,11 @@ class TourSerializer < ActiveModel::Serializer
                 tourer_tour_id
                 created_at
                 updated_at
+                user_id
               ]
 
   def countries
-    object.countries.any? ? object.countries.pluck(:name) : []
+    object.countries.any? ? object.countries.map(&:code) : []
   end
 
   def tags
