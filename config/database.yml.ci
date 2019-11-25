@@ -57,10 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  username: bdohxewfmjenil
-  password: 2058dccb8c6d98bf1f3e9aa5e856becafc6d3e34b88c1418c222656ba8ea8c3d
-  host: ec2-54-217-219-235.eu-west-1.compute.amazonaws.com
-  database: d26b9j9rrtvuf9
+  url: <%= ENV['DATABASE_URL'] %>
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
