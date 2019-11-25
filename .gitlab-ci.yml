@@ -39,10 +39,10 @@ stages:
   - lint
   - deploy
 
- Tests:
-   stage: test
-   script:
-     - bundle exec rails test -d
+Tests:
+  stage: test
+  script:
+    - bundle exec rails test -d
 
 # System Tests:
 #   stage: test
