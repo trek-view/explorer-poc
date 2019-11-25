@@ -43,7 +43,7 @@ stages:
 Tests:
   stage: test
   script:
-    - bundle exec rails test -d
+    - bundle exec rspec
 
 # System Tests:
 #   stage: test
