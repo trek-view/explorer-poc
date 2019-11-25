@@ -127,7 +127,7 @@ module Api::V1
       end
 
       def photo_search_params
-        params.permit(:countries, :sort_by, :ids)
+        params.permit(:sort_by, countries: [], ids: [])
       end
 
       def pagination_meta(object)

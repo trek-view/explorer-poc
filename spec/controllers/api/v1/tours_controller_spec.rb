@@ -1,4 +1,5 @@
 require 'rails_helper'
+require Rails.root.join('spec', 'controllers', 'api', 'v1', 'shared_examples', 'respond_to_empty.rb')
 
 describe Api::V1::ToursController, :type => :controller do
 
@@ -38,7 +39,7 @@ describe Api::V1::ToursController, :type => :controller do
       end
     end
 
-    context 'when tours do not exist' do
+    context 'when tours do not exist', focus: true do
       it_behaves_like "respond to empty", '/api/v1/tours?countries[]=xx'
       it_behaves_like "respond to empty", '/api/v1/tours?tags[]=xxx'
       it_behaves_like "respond to empty", '/api/v1/tours?user_id=-1'
