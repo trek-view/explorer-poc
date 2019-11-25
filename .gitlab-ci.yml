@@ -30,19 +30,19 @@ before_script:
   - yarn install
 
   - cp config/database.yml.ci config/database.yml
-  # - bundle exec rails db:create RAILS_ENV=test
-  # - bundle exec rails db:schema:load RAILS_ENV=test
-  # - bundle exec webpack
+  - bundle exec rails db:create RAILS_ENV=test
+  - bundle exec rails db:schema:load RAILS_ENV=test
+  - bundle exec webpack
 
 stages:
   - test
   - lint
   - deploy
 
-# Tests:
-#   stage: test
-#   script:
-#     - bundle exec rails test -d
+ Tests:
+   stage: test
+   script:
+     - bundle exec rails test -d
 
 # System Tests:
 #   stage: test
