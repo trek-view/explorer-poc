@@ -36,6 +36,8 @@ module Explorer
     # App-specific configuration
     # config.x = config_for(:app).with_indifferent_access
 
+    config.autoload_paths += %W(#{config.root}/lib)
+
     config.middleware.use Rack::XRobotsTag
   end
 

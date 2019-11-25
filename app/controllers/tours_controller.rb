@@ -40,7 +40,7 @@ class ToursController < ApplicationController
   def set_photo_view_point
     @photo = @tour.photos.find_by(id: params[:photo_id])
     if @photo.present?
-      @photo.set_a_view_point(current_user)
+      current_user.favorite(@photo)
     else
       @photo.errors.add(:base, 'Cannot viewpoint this photo.')
     end
@@ -50,7 +50,7 @@ class ToursController < ApplicationController
   def unset_photo_view_point
     @photo = @tour.photos.find_by(id: params[:photo_id])
     if @photo.present?
-      @photo.clear_view_point(current_user)
+      current_user.unfavorite(@photo)
     else
       @photo.errors.add(:base, 'Cannot unset viewpoint for this photo.')
     end

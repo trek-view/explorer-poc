@@ -4,6 +4,8 @@ module Api::V1
 
     respond_to :json
 
+    include Error::ErrorHandler
+
     before_action :authorize_request, except: [:user_not_authorized]
 
     attr_reader :api_user

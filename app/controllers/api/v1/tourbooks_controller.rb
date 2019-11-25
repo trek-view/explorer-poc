@@ -25,7 +25,10 @@ module Api::V1
       if @tourbook.save
         render json: @tourbook, status: :created
       else
-        render json: {errors: @tourbook.errors}, status: :unprocessable_entity
+        render json: {
+            status: :unprocessable_entity,
+            message: @tourbook.errors
+        }, status: :unprocessable_entity
       end
     end
 
@@ -39,11 +42,17 @@ module Api::V1
         if @tourbook.update(tourbook_params)
           render json: @tourbook, status: :ok
         else
-          render json: {errors: @tourbook.errors}, status: :unprocessable_entity
+          render json: {
+              status: :unprocessable_entity,
+              message: @tourbook.errors
+          }, status: :unprocessable_entity
         end
 
       else
-        render json: {errors: 'You cannot update this tour'}, status: :unauthorized
+        render json: {
+            status: :unauthorized,
+            message: 'You cannot update this tour'
+        }, status: :unauthorized
       end
     end
 
@@ -52,7 +61,10 @@ module Api::V1
       if api_user.tourbooks.include?(@tourbook)
         @tourbook.destroy
         if @tourbook.errors.any?
-          render json: {errors: @tourbook.errors}, status: :unprocessable_entity
+          render json: {
+              status: :unprocessable_entity,
+              message: @tourbook.errors
+          }, status: :unprocessable_entity
         else
           render json: {
               "tourbook": {
@@ -62,7 +74,10 @@ module Api::V1
           }, status: :ok
         end
       else
-        render json: {errors: 'You cannot delete this Tourbook'}, status: :unauthorized
+        render json: {
+            status: :unauthorized,
+            message: 'You cannot delete this Tourbook'
+        }, status: :unauthorized
       end
     end
 
@@ -75,7 +90,10 @@ module Api::V1
         tourbooks_json['_metadata'] = pagination_meta(@tourbooks)
         render json: tourbooks_json, status: :ok
       else
-        render json: {errors: 'You can get only your own tours'}, status: :forbidden
+        render json: {
+            status: :forbidden,
+            message: 'You can get only your own tours'
+        }, status: :forbidden
       end
     end
 

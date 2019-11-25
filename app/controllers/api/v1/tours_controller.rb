@@ -26,7 +26,10 @@ module Api::V1
       if @tour.save
         render json: @tour, status: :created
       else
-        render json: {errors: @tour.errors}, status: :unprocessable_entity
+        render json: {
+            status: :unprocessable_entity,
+            message: @tour.errors
+        }, status: :unprocessable_entity
       end
     end
 
@@ -37,14 +40,23 @@ module Api::V1
           if @tour.update(tour_params)
             render json: @tour, status: :ok
           else
-            render json: {errors: @tour.errors}, status: :unprocessable_entity
+            render json: {
+                status: :unprocessable_entity,
+                message: @tour.errors
+            }, status: :unprocessable_entity
           end
         rescue ArgumentError => e
           @tour.errors.add(:tour_type, e)
-          render json: {errors: @tour.errors}, status: :unprocessable_entity
+          render json: {
+              status: :unprocessable_entity,
+              message: @tour.errors
+          }, status: :unprocessable_entity
         end
       else
-        render json: {errors: 'You cannot update this tour'}, status: :unauthorized
+        render json: {
+            status: :unauthorized,
+            message: 'You cannot update this tour'
+        }, status: :unauthorized
       end
     end
 
@@ -53,7 +65,10 @@ module Api::V1
       if api_user.tours.include?(@tour)
         @tour.destroy
         if @tour.errors.any?
-          render json: {errors: @tour.errors}, status: :unprocessable_entity
+          render json: {
+              status: :unprocessable_entity,
+              message: @tour.errors
+          }, status: :unprocessable_entity
         else
           render json: {
                         "tour": {
@@ -63,7 +78,10 @@ module Api::V1
                         }, status: :ok
         end
       else
-        render json: {errors: 'You cannot delete this tour'}, status: :unauthorized
+        render json: {
+            status: :unauthorized,
+            message: 'You cannot delete this tour'
+        }, status: :unauthorized
       end
     end
 
@@ -72,7 +90,10 @@ module Api::V1
       if api_user == @user
         render json: api_user.tours, status: :ok
       else
-        render json: {errors: 'You can get only your own tours'}, status: :forbidden
+        render json: {
+            status: :forbidden,
+            message: 'You can get only your own tours'
+        }, status: :forbidden
       end
     end
 

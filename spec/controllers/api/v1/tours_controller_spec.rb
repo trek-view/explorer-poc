@@ -1,5 +1,4 @@
 require 'rails_helper'
-require Rails.root.join('spec', 'controllers', 'api', 'v1', 'shared_examples', 'respond_to_empty.rb')
 
 describe Api::V1::ToursController, :type => :controller do
 
@@ -41,7 +40,7 @@ describe Api::V1::ToursController, :type => :controller do
 
     context 'when tours do not exist' do
       it_behaves_like "respond to empty", '/api/v1/tours?countries[]=xx'
-      it_behaves_like "respond to empty", '/api/v1/tours?tag=xxx'
+      it_behaves_like "respond to empty", '/api/v1/tours?tags[]=xxx'
       it_behaves_like "respond to empty", '/api/v1/tours?user_id=-1'
     end
   end
@@ -90,18 +89,6 @@ describe Api::V1::ToursController, :type => :controller do
 
       it 'should return status code 201' do
         expect(response).to have_http_status(:ok)
-      end
-    end
-
-    context 'when the request is invalid' do
-      before do
-        header 'api-key', user.api_token
-      end
-
-      it 'returns status code 422' do
-        expect do
-          post '/api/v1/tours', tour: {  }
-        end.to raise_error(ActionController::ParameterMissing)
       end
     end
   end

@@ -40,7 +40,10 @@ module Api::V1
       if photo.save
         render json: photo, status: :created
       else
-        render json: { errors: photo.errors }, status: :unprocessable_entity
+        render json: {
+            status: :unprocessable_entity,
+            message: photo.errors
+        }, status: :unprocessable_entity
       end
     end
 
@@ -51,7 +54,10 @@ module Api::V1
       if photo.update(photo_params)
         render json: { photo: photo } , status: :ok
       else
-        render json: { errors: photo.errors }, status: :unprocessable_entity
+        render json: {
+            status: :unprocessable_entity,
+            message: photo.errors
+        }, status: :unprocessable_entity
       end
     end
 
@@ -64,26 +70,6 @@ module Api::V1
               "deleted_at": DateTime.now.rfc3339
           }
       }, head: :no_content, status: :ok
-    end
-
-    # POST /api/v1/tours/:tour_id/photos/:id/set_photo_view_point
-    def set_photo_view_point
-      if @photo.present?
-        @photo.set_a_view_point(api_user, @photo.tour)
-        render json: { photo: @photo } , status: :ok
-      else
-        render json: { errors: 'Cannot viewpoint this photo' }, status: :unprocessable_entity
-      end
-    end
-
-    # DELETE /api/v1/tours/:tour_id/photos/:id/unset_photo_view_point
-    def unset_photo_view_point
-      if @photo.present?
-        @photo.clear_view_point(api_user)
-        render json: { photo: @photo } , status: :ok
-      else
-        render json: { errors: 'Cannot unset viewpoint for this photo.' }, status: :unprocessable_entity
-      end
     end
 
     private

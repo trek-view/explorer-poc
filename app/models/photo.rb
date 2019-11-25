@@ -8,8 +8,6 @@ class Photo < ApplicationRecord
   belongs_to :tour
   belongs_to :country
 
-  has_many :view_points, dependent: :destroy
-
   store_accessor :address, :cafe, :road, :suburb, :county, :region, :state, :postcode, :country_code
   store_accessor :google, :plus_code_global_code, :plus_code_compound_code
   store_accessor :streetview,  :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections
@@ -50,19 +48,6 @@ class Photo < ApplicationRecord
   def country=(country_code)
     country = Country.find_or_create_by(code: country_code)
     super country
-  end
-
-  def check_view_points(user)
-    self.view_points.where(user_id: user.id).any?
-  end
-
-  def clear_view_point(user)
-    view_point = self.view_points.find_by(user_id: user.id)
-    view_point.destroy if view_point
-  end
-
-  def set_a_view_point(user)
-    self.view_points.create(user_id: user.id)
   end
 
   def s3_dir
