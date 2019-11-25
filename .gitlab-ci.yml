@@ -11,7 +11,7 @@ services:
 variables:
   BUNDLE_PATH: vendor/bundle
   DISABLE_SPRING: 1
-  DB_HOST: postgres
+#  DB_HOST: postgres
 
 before_script:
   # Install node and some other deps
@@ -32,7 +32,7 @@ before_script:
   - cp config/database.yml.ci config/database.yml
   - bundle exec rails db:create RAILS_ENV=test
   - bundle exec rails db:schema:load RAILS_ENV=test
-  - bundle exec webpack
+#  - bundle exec webpack
 
 stages:
   - test
