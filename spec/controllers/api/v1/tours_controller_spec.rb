@@ -8,7 +8,7 @@ describe Api::V1::ToursController, :type => :controller do
   let(:tour_id) { tours.first.id }
 
   describe 'GET /api/v1/tours' do
-    context 'when tours exist' do
+    context 'when tours exist', focus: true do
       before do
         header 'api-key', user.api_token
         get "/api/v1/tours?tags[]=#{tours.first.tags[0].name}&user_id=#{user.id}&ids[]=#{tours.first.id}&countries[]=#{tours.first.photos.first.country.code}"
@@ -39,7 +39,7 @@ describe Api::V1::ToursController, :type => :controller do
       end
     end
 
-    context 'when tours do not exist', focus: true do
+    context 'when tours do not exist' do
       it_behaves_like "respond to empty", '/api/v1/tours?countries[]=xx'
       it_behaves_like "respond to empty", '/api/v1/tours?tags[]=xxx'
       it_behaves_like "respond to empty", '/api/v1/tours?user_id=-1'

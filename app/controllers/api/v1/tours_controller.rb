@@ -155,15 +155,17 @@ module Api::V1
     def find_tours
       set_tours_search_params
 
-      @tours = Tour.includes(:countries, :tags, :user).order(updated_at: :desc)
+      @tours = Tour.includes(:countries, :tags, :user)
 
       if @query.present?
-        @tours = @tours.where(id: @query[:ids]) if @query[:ids].present?
-        @tours = @tours.where(user_id: @query[:user_id]) if @query[:user_id].present?
         @tours = @tours.joins(:countries).where(countries: { code: @query[:countries] }).distinct if @query[:countries].present?
         @tours = @tours.joins(:tags).where(tags: { name: @query[:tags] }) if @query[:tags].present?
+        @tours = @tours.where(id: @query[:ids]) if @query[:ids].present?
+        @tours = @tours.where(user_id: @query[:user_id]) if @query[:user_id].present?
         @tours = @tours.reorder("tours.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
       end
+
+      @tours = @tours.order(updated_at: :desc)
     end
 
     def set_tours_search_params

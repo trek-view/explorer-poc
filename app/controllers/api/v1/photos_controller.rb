@@ -113,13 +113,15 @@ module Api::V1
       def find_photos
         set_photo_search_params
 
-        @photos = @tour.photos.includes(:country).order(taken_at: :desc)
+        @photos = @tour.photos.includes(:country)
 
         if @query.present?
-          @photos = @photos.where(id: @query[:ids]) if @query[:ids].present?
-          @photos = @photos.join(:countries).where(countries: { code: @query[:countries] }) if @query[:countries].present?
-          @photos = @photos.reorder("photos.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+          @photos = @photos.joins(:country).where(countries: { code: @query[:countries] }) if @query[:countries].present?
+          @photos = @photos.where(photos: {id: @query[:ids]}) if @query[:ids].present?
+          @photos = @photos.order("photos.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         end
+
+        @photos = @photos.order(taken_at: :desc)
       end
 
       def set_photo_search_params
@@ -127,7 +129,7 @@ module Api::V1
       end
 
       def photo_search_params
-        params.permit(:sort_by, countries: [], ids: [])
+        params.permit(:sort_by, :user_id, countries: [], ids: [])
       end
 
       def pagination_meta(object)
