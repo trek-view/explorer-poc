@@ -6,7 +6,7 @@ FactoryBot.define do
 
     trait :with_tours do
       after(:create) do |tourbook|
-        tourbook.tours << build_list(:tour, 2)
+        tourbook.tours << create_list(:tour, 2, :with_photos, user: tourbook.user)
       end
     end
   end
