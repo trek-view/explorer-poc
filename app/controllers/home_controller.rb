@@ -8,34 +8,24 @@ class HomeController < ApplicationController
 
   def find_tours
     set_search_params
-    @tours = Tour.includes(:photos, :countries, :tags, :user).order(created_at: :desc)
+    @tours = Tour.includes(:countries, :taggings, :tags, :user, photos: :country).references(:countries)
 
     if @query.present?
-      @tours = @tours.joins(:countries).where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
-
+      @tours = @tours.where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
       @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
     end
     @tours = @tours.search(@search_text) if @search_text.present?
+
+    @tours = @tours.order(created_at: :desc)
   end
 
   def find_tourbooks
-    @tourbooks = Tourbook
-                  .includes(:user, tours: :photos)
-                  .order(created_at: :desc)
-
-    return unless @search_text.present? ||
-                  (@query.present? && (
-                    @query['country_id'].present? ||
-                    @query['tour_type'].present?
-                  ))
-
-    tour_ids = @tours.map(&:id)
-    @tourbooks = Tourbook
-                    .includes(:user, tours: :photos)
-                    .joins(:tour_tourbooks)
-                    .where('tour_tourbooks.tour_id in (?)', tour_ids)
-                    .order(created_at: :desc)
-                    .distinct
+    tour_ids = @tours.present? ? @tours.map(&:id) : []
+    @tourbooks = Tourbook.includes(:user, :tour_tourbooks, tours: :photos)
+                     .references(:tours)
+                     .where(tours: { id: tour_ids })
+                     .order("tourbooks.created_at DESC")
+                     .distinct
   end
 
   private
