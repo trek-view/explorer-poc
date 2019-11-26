@@ -143,7 +143,7 @@
           <h3 class="card-title">Elevation Change</h3>
 
           <div class="mb-3">
-            <%= area_chart @tour.photos.group(:taken_date_time).maximum(:elevation_meters) %>
+            <%= area_chart @tour.photos.group(:taken_at).maximum(:elevation_meters) %>
           </div>
 
           <%= render partial: 'photos/photos_display', locals: { photos: @photos } %>

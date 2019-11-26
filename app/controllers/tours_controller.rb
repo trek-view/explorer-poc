@@ -60,7 +60,7 @@ class ToursController < ApplicationController
   private
 
     def set_tour
-      @tour = Tour.friendly.find(params[:id])
+      @tour = Tour.includes(:countries).friendly.find(params[:id])
     end
 
     def set_tours_search_params
