@@ -49,7 +49,6 @@ FactoryBot.define do
     image { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg') }
     tourer_photo_id { Faker::Lorem.characters(number:10) }
     country { Faker::Address.country_code }
-
-    tour {Tour.first || association(:tour)}
+    tour
   end
 end

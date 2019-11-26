@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Api::V1::PhotosController, :type => :controller do
 
   let!(:user) { create :user }
-  let!(:tour) { create :tour }
-  let!(:photos) { create_list(:photo, 2) }
+  let!(:tour) { create :tour, user: user }
+  let!(:photos) { create_list(:photo, 2, tour: tour) }
   let(:tour_id) { tour.id }
   let(:photo_id) { photos.first.id }
 
@@ -65,7 +65,7 @@ describe Api::V1::PhotosController, :type => :controller do
         get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&user_id=#{user.id}&sot_by=created_at"
       end
 
-      it 'should return photos', focus: true do
+      it 'should return photos' do
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['photos']).not_to be_empty

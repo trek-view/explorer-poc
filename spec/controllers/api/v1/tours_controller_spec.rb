@@ -4,7 +4,7 @@ require Rails.root.join('spec', 'controllers', 'api', 'v1', 'shared_examples', '
 describe Api::V1::ToursController, :type => :controller do
 
   let!(:user) { create :user }
-  let!(:tours) { create_list(:tour, 2, :with_photos) }
+  let!(:tours) { create_list(:tour, 2, :with_photos, user: user) }
   let(:tour_id) { tours.first.id }
 
   describe 'GET /api/v1/tours' do

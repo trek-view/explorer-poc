@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Api::V1::ViewpointsController, :type => :controller do
 
   let!(:user) { create :user }
-  let!(:tours) { create_list(:tour, 1, :with_photos) }
+  let!(:tours) { create_list(:tour, 1, :with_photos, user: user) }
 
   describe 'POST /api/v1/viewpoints' do
     let(:valid_attributes) do {

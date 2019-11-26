@@ -1,11 +1,10 @@
 FactoryBot.define do
   factory :tour do
-    name { Faker::Name.name }
+    name { Faker::Lorem.characters(number: 10) }
     description { Faker::Lorem.sentence }
-    tag_names { "#{Faker::Name.name}, #{Faker::Name.name}" }
+    tag_names { "#{Faker::Lorem.characters(number: 4)}, #{Faker::Lorem.characters(number: 5)}" }
     tour_type { Constants::TOUR_TYPES[:land] }
-
-    user {User.first || association(:user)}
+    user
 
     trait :with_photos do
       after(:create) do |tour|
