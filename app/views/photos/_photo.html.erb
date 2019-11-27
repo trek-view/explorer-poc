@@ -1,10 +1,11 @@
-<div class="card photo-card h-100">
-  <img class="card-img-top" src="<%= photo_thumb_url(photo) %>" alt="">
-  <div class="card-body">
-<!--    <p class="card-text"><%#= photo.file_name %></p>-->
-    <p class="card-text"><%= photo.latitude %> / <%= photo.longitude %></p>
-    <p class="card-text"><%= photo.elevation_meters %></p>
-    <p class="card-text"><%= photo.taken_at.to_formatted_s(:short) %></p>
-    <p class="card-text"><%= photo.streetview['share_link'] ? link_to('See street view', photo.streetview['share_link'], target: '_blank') : '' %></p>
+<a class="photo-card-link" href="<%= photo_path(photo.id) %>">
+  <div class="card photo-card h-100">
+    <img class="card-img-top" src="<%= photo_thumb_url(photo) %>" alt="">
+    <div class="card-body">
+      <p class="card-text"><%= photo.latitude %> / <%= photo.longitude %></p>
+      <p class="card-text"><%= photo.elevation_meters %>m</p>
+      <p class="card-text"><%= photo.taken_at.to_formatted_s(:short) %></p>
+      <p class="card-text"><%= photo.streetview['share_link'] ? link_to('See street view', photo.streetview['share_link'], target: '_blank') : '' %></p>
+    </div>
   </div>
-</div>
+</a>

@@ -50,7 +50,7 @@ Rails.application.routes.draw do
 
   resources :tours, only: %i[index]
 
-  resources :photos, only: %i[index]
+  resources :photos, only: %i[index show]
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'

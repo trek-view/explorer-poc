@@ -17,7 +17,7 @@ function initMap(objects) {
             position: latLng,
             map: map,
             animation: google.maps.Animation.DROP,
-            url: objects[i]['street_view_url']
+            url: objects[i]['streetview']['share_link']
         });
 
         google.maps.event.addListener(marker, 'click', function() {

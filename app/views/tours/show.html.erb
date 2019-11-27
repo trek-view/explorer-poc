@@ -7,7 +7,7 @@
 <% end %>
 
 <% content_for :meta_image do %>
-  <% @tour.photos.first.try(:street_view_thumbnail_url) if @tour.photos.any? %>
+  <% @tour.photos.first.try(:streetview).try(:thumbnail_url) if @tour.photos.any? %>
 <% end %>
 
 <% if @tour.photos.any? %>

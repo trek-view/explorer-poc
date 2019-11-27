@@ -49,4 +49,16 @@ module PhotosHelper
     end
   end
 
+  def full_address(address)
+    buffer = "".dup
+    buffer << "#{address['cafe']} #{address['road']} #{address['state']}"
+    buffer << ", #{address['county']}" if address['county'].present?
+    buffer << ", #{address['region']}" if address['region'].present?
+    buffer << ", #{address['suburb']}" if address['suburb'].present?
+    buffer << ", #{address['country']}" if address['country'].present?
+    buffer << ", #{address['postcode']}" if address['postcode'].present?
+    buffer.sub! '  ,', ''
+    buffer
+  end
+
 end

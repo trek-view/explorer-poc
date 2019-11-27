@@ -4,8 +4,24 @@
 .photo-container {
   padding: 5px;
 
+  .photo-card-link {
+    text-decoration: none;
+    color: black;
+  }
+
   .photo-card {
     margin: auto;
     max-width: 18rem;
   }
+
+  .photo-image {
+    object-fit: contain;
+  }
+
+  .photo-attributes-table {
+    th:first-child {
+      width: 300px;
+    }
+  }
 }
+

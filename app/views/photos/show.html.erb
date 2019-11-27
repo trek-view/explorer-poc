@@ -1,0 +1,142 @@
+<div class="photo-container row">
+  <div class="py-5 col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <img class="card-img-top photo-image" src="<%= photo_thumb_url(@photo) %>" alt="">
+      </div>
+      <div class="card-body">
+
+        <table class="table table-response table-bordered photo-attributes-table">
+          <thead>
+            <th>Attribute</th>
+            <th>Value</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tour</td>
+              <td><%= link_to @photo.tour.name, user_tour_path(@photo.tour.user, @photo.tour) %></td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td><%= "#{@photo.latitude} / #{@photo.longitude}" %></td>
+            </tr>
+            <tr>
+              <td>Elevation meter</td>
+              <td><%= @photo.elevation_meters %></td>
+            </tr>
+            <tr>
+              <td>Taken at</td>
+              <td><%= @photo.taken_at.to_formatted_s(:short) %></td>
+            </tr>
+            <tr>
+              <td>Camera make</td>
+              <td><%= @photo.camera_make %></td>
+            </tr>
+            <tr>
+              <td>Camera model</td>
+              <td><%= @photo.camera_model %></td>
+            </tr>
+            <tr>
+              <td>Address</td>
+              <td><%= full_address(@photo.address) %></td>
+            </tr>
+            <tr>
+              <td>Google plus code</td>
+              <td><%= @photo['google']['plus_code_global_code'] %></td>
+            </tr>
+            <tr>
+              <td>Google compound code</td>
+              <td><%= @photo['google']['plus_code_compound_code'] %></td>
+            </tr>
+            <tr>
+              <td>Street view photo id</td>
+              <td><%= @photo['streetview']['photo_id'] %></td>
+            </tr>
+            <tr>
+              <td>Street view capture time</td>
+              <td><%= @photo %></td>
+            </tr>
+            <tr>
+              <td>Street view share link</td>
+              <td><%= link_to @photo['streetview']['share_link'], @photo['streetview']['share_link'], target: "_blank" %></td>
+            </tr>
+            <tr>
+              <td>Street view download url</td>
+              <td><%= link_to @photo['streetview']['download_url'], @photo['streetview']['download_url'], target: "_blank" %></td>
+            </tr>
+            <tr>
+              <td>Street view thumbnail url</td>
+              <td><%= link_to @photo['streetview']['thumbnail_url'], @photo['streetview']['thumbnail_url'], target: "_blank" %></td>
+            </tr>
+            <tr>
+              <td>Street view location</td>
+              <td><%= "#{@photo['streetview']['lat']} / #{@photo['streetview']['lon']}" %></td>
+            </tr>
+            <tr>
+              <td>Street view altitude</td>
+              <td><%= @photo['streetview']['altitude'] %></td>
+            </tr>
+            <tr>
+              <td>Street view heading</td>
+              <td><%= @photo['streetview']['heading'] %></td>
+            </tr>
+            <tr>
+              <td>Street view pitch</td>
+              <td><%= @photo['streetview']['pitch'] %></td>
+            </tr>
+            <tr>
+              <td>Street view roll</td>
+              <td><%= @photo['streetview']['roll'] %></td>
+            </tr><tr>
+              <td>Street view level</td>
+              <td><%= @photo['streetview']['level'] %></td>
+            </tr><tr>
+              <td>Street view connections</td>
+              <td><%= @photo['streetview']['connections'] %></td>
+            </tr>
+            <tr>
+              <td>Tourer photo id</td>
+              <td><%= @photo['tourer']['photo_id'] %></td>
+            </tr>
+            <tr>
+              <td>Tourer connection method</td>
+              <td><%= @photo['tourer']['connection_method'] %></td>
+            </tr>
+            <tr>
+              <td>Tourer connection photo</td>
+              <td><%= @photo['tourer']['connection_photo'] %></td>
+            </tr>
+            <tr>
+              <td>Tourer connection distance meters</td>
+              <td><%= @photo['tourer']['connection_distance_meters'] %></td>
+            </tr>
+            <tr>
+              <td>Tourer heading</td>
+              <td><%= @photo['tourer']['heading'] %></td>
+            </tr>
+          </tbody>
+        </table>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -13,6 +13,9 @@
 
       <div class="card-body">
         <%= render partial: 'photos_display', locals: { photos: @photos } %>
+
+        <br/>
+        <%= paginate @photos %>
       </div>
 
     </div>
