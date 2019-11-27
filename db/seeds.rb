@@ -5,11 +5,11 @@ unless Rails.env.production?
     test_user = User.new(name: 'Johnny', email: 'test_user@example.com', password: 'password', password_confirmation: 'password')
     test_user.skip_confirmation!
     test_user.save!
-    FactoryBot.create_list(:tourbook, 1, :with_tours, user: test_user)
+    FactoryBot.create_list(:tour, 6, :with_photos, user: test_user)
 
     4.times do
       user = FactoryBot.create(:confirmed_user)
-      FactoryBot.create_list(:tourbook, 1, :with_tours, user: user)
+      FactoryBot.create_list(:tour, 6, :with_photos, user: user)
     end
   end
 end
