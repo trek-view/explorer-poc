@@ -14,4 +14,5 @@ unless Rails.env.production?
   end
 end
 
+
 AdminUser.create!(email: ENV['ADMIN_EMAIL'], password: ENV['ADMIN_PASSWORD'], password_confirmation: ENV['ADMIN_PASSWORD']) if Rails.env.development?
