@@ -46,7 +46,7 @@ FactoryBot.define do
       connection_distance_meters: rand(1...10),
       heading: rand(1...359)
     }}
-    image { Rack::Test::UploadedFile.new(Rails.root.join(Rails.env.test? ? 'spec/support/images/sample.jpeg' : "spec/support/images/sample#{rand(45)}.jpg"), 'image/jpeg') }
+    image { Rack::Test::UploadedFile.new(Rails.root.join(Rails.env.test? ? 'spec/support/images/sample.jpeg' : "spec/support/images/#{rand(5)}.jpg"), 'image/jpeg') }
     tourer_photo_id { Faker::Lorem.characters(number:10) }
     country { Faker::Address.country_code }
     tour
