@@ -94,3 +94,5 @@ gem 'carrierwave', '~> 2.0'
 gem 'file_validators'
 # A Rubygem to add Favorite, Follow, Vote, etc. functionality to ActiveRecord models
 gem 'acts_as_favoritor'
+# framework for building view components in Rails.
+gem 'actionview-component'

@@ -24,6 +24,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    actionview-component (1.5.3)
     active_model_serializers (0.10.10)
       actionpack (>= 4.1, < 6.1)
       activemodel (>= 4.1, < 6.1)
@@ -1186,6 +1187,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionview-component
   active_model_serializers (~> 0.10.2)
   activeadmin
   acts_as_favoritor
@@ -1239,3 +1241,6 @@ DEPENDENCIES
 
 RUBY VERSION
    ruby 2.6.3p62
+
+BUNDLED WITH
+   2.0.2

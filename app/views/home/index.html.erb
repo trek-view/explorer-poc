@@ -12,12 +12,21 @@
       
       <% if user_signed_in? %>
         <div class="col-lg-3 col-sm-12 mt-4">
-          <%= link_to "New TourBook", new_user_tourbook_path(current_user), class: 'btn btn-primary float-right new-tour-book-btn' %>
+          <%= link_to 'New TourBook', new_user_tourbook_path(current_user), class: 'btn btn-primary float-right new-tour-book-btn' %>
         </div>
       <% end %>
     </div>
     
     <div id="tours-content">
+      <div class="sort-wrapper">
+        <%= render SortComponent,
+                   options: [
+                                ['created at', 'created_at'],
+                                ['count of tour books', 'tourbooks_count'],
+                                %w(name name)
+                            ],
+                   value: @sort_by %>
+      </div>
       <div class="row tours-container">
         <%= render partial: 'tours/tour', collection: @tours %>
       </div>  

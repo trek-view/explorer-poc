@@ -8,6 +8,7 @@ class HomeController < ApplicationController
 
   def find_tours
     set_search_params
+    set_sort_params
     @tours = Tour.includes(:countries, :taggings, :tags, :user, photos: :country).references(:countries)
 
     if @query.present?
@@ -35,7 +36,15 @@ class HomeController < ApplicationController
     @query = search_params[:query]
   end
 
+  def set_sort_params
+    @sort_by = sort_params[:sort_by]
+  end
+
   def search_params
     params.permit(:search_text, query: [:country_id, :tour_type])
+  end
+
+  def sort_params
+    params.permit(:sort_by)
   end
 end
