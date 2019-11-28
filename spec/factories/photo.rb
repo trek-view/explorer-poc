@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :photo do
     taken_at { 1.day.ago }
-    latitude { "-20.516189" }
-    longitude { "44.533069" }
-    elevation_meters { "745" }
+    latitude { rand(-90.000000000...90.000000000) }
+    longitude { rand(-180.000000000...180.000000000) }
+    elevation_meters { rand(100...999) }
     camera_make { Faker::Lorem.characters(number:5) }
     camera_model { Faker::Lorem.characters(number:5) }
     google {{
@@ -23,30 +23,30 @@ FactoryBot.define do
     }}
     streetview {{
         photo_id: Faker::Lorem.characters(number:10),
-        capture_time: 1.day.ago,
+        capture_time: rand(1...10).day.ago,
         share_link: Faker::Internet.url,
         download_url: Faker::Internet.url,
         thumbnail_url: Faker::Internet.url,
-        "lat": -20.516189,
-        "lon": 44.533069,
-        altitude: 745,
-        heading: 90,
-        pitch: 90,
-        roll: 90,
-        level: 1,
+        "lat": rand(-90.000000000...90.000000000),
+        "lon": rand(-180.000000000...180.000000000),
+        altitude: rand(100...999),
+        heading: rand(1...359),
+        pitch: rand(-90...90),
+        roll: rand(1...360),
+        level: rand(1...10),
         connections: [
-          738475838,
-          738475839
+          rand(1...10),
+          rand(1...10)
         ]
     }}
     tourer {{
       photo_id: Faker::Lorem.characters(number:10),
       connection_photo: Faker::Lorem.characters(number:10),
       connection_method: "time",
-      connection_distance_meters: 4,
-      heading: 90
+      connection_distance_meters: rand(1...10),
+      heading: rand(1...359)
     }}
-    image { Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg') }
+    image { Rack::Test::UploadedFile.new(Rails.root.join(Rails.env.test? ? 'spec/support/images/sample.jpeg' : "spec/support/images/sample#{rand(45)}.jpg"), 'image/jpeg') }
     tourer_photo_id { Faker::Lorem.characters(number:10) }
     country { Faker::Address.country_code }
     tour
