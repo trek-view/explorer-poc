@@ -12,7 +12,10 @@ unless Rails.env.production?
       FactoryBot.create_list(:tour, 6, :with_photos, user: user)
     end
   end
-end
 
+  unless Tourbook.first
+    FactoryBot.create_list(:tourbook, 3, :with_tours, user: User.first)
+  end
+end
 
 AdminUser.create!(email: ENV['ADMIN_EMAIL'], password: ENV['ADMIN_PASSWORD'], password_confirmation: ENV['ADMIN_PASSWORD']) if Rails.env.development?
