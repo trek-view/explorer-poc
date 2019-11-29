@@ -15,8 +15,13 @@ class HomeController < ApplicationController
       @tours = @tours.where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
       @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
     end
+
     @tours = @tours.search(@search_text) if @search_text.present?
 
+    if @sort.present?
+      @tours = @tours.order(:name) if @sort[:tours] == 'name'
+      @tours = @tours.order("tours.tourbooks_count DESC") if @sort[:tours] == 'tourbooks_count'
+    end
     @tours = @tours.order(created_at: :desc)
   end
 
@@ -25,8 +30,11 @@ class HomeController < ApplicationController
     @tourbooks = Tourbook.includes(:user, :tour_tourbooks, tours: :photos)
                      .references(:tours)
                      .where(tours: { id: tour_ids })
-                     .order("tourbooks.created_at DESC")
                      .distinct
+    if @sort.present?
+      @tourbooks = @tourbooks.order('tourbooks.name ASC') if @sort[:tourbooks] == 'name'
+    end
+    @tourbooks = @tourbooks.order('tourbooks.created_at DESC')
   end
 
   private
@@ -37,7 +45,7 @@ class HomeController < ApplicationController
   end
 
   def set_sort_params
-    @sort_by = sort_params[:sort_by]
+    @sort = sort_params[:sort]
   end
 
   def search_params
@@ -45,6 +53,6 @@ class HomeController < ApplicationController
   end
 
   def sort_params
-    params.permit(:sort_by)
+    params.permit(sort: [:tours, :tourbooks])
   end
 end

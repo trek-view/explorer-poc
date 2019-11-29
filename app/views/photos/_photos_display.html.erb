@@ -1,5 +1,17 @@
 <h3 class="card-title">Photos</h3>
 
+<div class="sort-wrapper">
+  <%= select_tag 'sort_by',
+                 options_for_select([
+                                        ['Capture date', 'taken_at'],
+                                        ['count of view points', 'count_of_viewpoints']
+                                    ], @sort.try(:[], :photos)),
+                 class: 'select-sort-by sort-photos form-control',
+                 include_blank: 'Sort by'%>
+</div>
+
+<br/>
+
 <div class="row">
   <% photos.each do |photo| %>
     <div class="col-md-4 photo-container">
