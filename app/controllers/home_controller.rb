@@ -4,6 +4,7 @@ class HomeController < ApplicationController
     find_tourbooks
     @tours = @tours.page(params[:page])
     @tourbooks = @tourbooks.page(params[:page])
+    set_photo_meta_tags
   end
 
   def find_tours
@@ -54,5 +55,15 @@ class HomeController < ApplicationController
 
   def sort_params
     params.permit(sort: [:tours, :tourbooks])
+  end
+
+  def set_photo_meta_tags
+    if Rails.env.production?
+      tour = @tours.first
+      if tour.present? && tour.photos.present?
+        photo = tour.photos.first
+        set_meta_tags og: {image_src: photo.image.url }
+      end
+    end
   end
 end
