@@ -20,14 +20,7 @@
     <div id="tours-content">
 
       <div class="sort-wrapper">
-        <%= select_tag 'sort_by',
-                       options_for_select([
-                                              ['created at', 'created_at'],
-                                              ['count of tour books', 'tourbooks_count'],
-                                              %w(name name)
-                                          ], @sort.try(:[], :tours)),
-                       class: 'select-sort-by sort-tours form-control',
-                       include_blank: 'Sort by'%>
+        <%= render(SortComponent, collection_name: :tours, value: @sort.try(:[], :tours)) %>
       </div>
 
       <div class="row tours-container">
@@ -39,14 +32,7 @@
     <div id="tourbooks-content" style="display: none;">
 
       <div class="sort-wrapper">
-        <%= select_tag 'sort_by',
-                       options_for_select([
-                                              ['created at', 'created_at'],
-                                              ['count of tours', 'tours_count'],
-                                              %w(name name)
-                                          ], @sort.try(:[], :tourbooks)),
-                       class: 'select-sort-by sort-tourbooks form-control',
-                       include_blank: 'Sort by'%>
+        <%= render(SortComponent, collection_name: :tourbooks, value: @sort.try(:[], :tourbooks)) %>
       </div>
 
       <div class="row">
