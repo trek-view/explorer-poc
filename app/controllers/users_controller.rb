@@ -17,7 +17,16 @@ class UsersController < ApplicationController
   end
 
   def tours
-    @tours = @user.tours.includes(:photos, :countries, :tags).order(created_at: :desc)
+    set_sort_params
+
+    @tours = @user.tours.includes(:photos, :countries, :tags)
+
+    if @sort.present?
+      @tours = @tours.order(:name) if @sort[:tours] == 'name'
+      @tours = @tours.order( tourbooks_count: :desc) if @sort[:tours] == 'tourbooks_count'
+    end
+
+    @tours = @tours.order(created_at: :desc)
     @tours = @tours.page(params[:page])
   end
 
@@ -25,6 +34,14 @@ class UsersController < ApplicationController
 
     def set_user
       @user = User.friendly.find(params[:user_id])
+    end
+
+    def set_sort_params
+      @sort = sort_params[:sort]
+    end
+
+    def sort_params
+      params.permit(sort: [:tours, :tourbooks])
     end
     
 end

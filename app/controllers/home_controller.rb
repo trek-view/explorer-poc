@@ -44,12 +44,12 @@ class HomeController < ApplicationController
     @query = search_params[:query]
   end
 
-  def set_sort_params
-    @sort = sort_params[:sort]
-  end
-
   def search_params
     params.permit(:search_text, query: [:country_id, :tour_type])
+  end
+
+  def set_sort_params
+    @sort = sort_params[:sort]
   end
 
   def sort_params

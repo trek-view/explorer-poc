@@ -46,10 +46,13 @@
           </div>
         <% end %>
 
-        <% if @tourbook.tours.any? %>
+        <% if @tours.any? %>
           <h4>Added Tours</h4>
+          <div class="sort-wrapper">
+            <%= render(SortComponent, collection_name: :tours, value: @sort.try(:[], :tours)) %>
+          </div>
           <div class="row">
-            <%= render partial: 'tours/tour', collection: @tourbook.tours %>
+            <%= render partial: 'tours/tour', collection: @tours %>
           </div>
         <% end %>
 

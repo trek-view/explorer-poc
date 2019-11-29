@@ -11,7 +11,16 @@ class TourbooksController < ApplicationController
   end
 
   def show
-    @tourbook = Tourbook.includes(tours: [:photos, :countries, :tags, :user]).friendly.find(params[:id])
+    set_sort_params
+
+    @tourbook = Tourbook.friendly.find(params[:id])
+    @tours = @tourbook.tours.includes(:photos, :countries, :tags, :user)
+
+    if @sort.present?
+      @tours = @tours.order(:name) if @sort[:tours] == 'name'
+      @tours = @tours.order(tourbooks_count: :desc) if @sort[:tours] == 'tourbooks_count'
+    end
+    @tours = @tours.order(created_at: :desc)
   end
 
   def new
@@ -120,5 +129,13 @@ class TourbooksController < ApplicationController
             else
               current_user
             end
+  end
+
+  def set_sort_params
+    @sort = sort_params[:sort]
+  end
+
+  def sort_params
+    params.permit(sort: [:tours])
   end
 end

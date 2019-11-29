@@ -7,6 +7,9 @@
       </div>
 
       <div class="col-lg-12">
+        <div class="sort-wrapper">
+          <%= render(SortComponent, collection_name: :tours, value: @sort.try(:[], :tours)) %>
+        </div>
         <div class="row tours-container">
           <%= render partial: 'tours/tour', collection: @tours %>
         </div>

@@ -10,31 +10,16 @@ class ToursController < ApplicationController
                                     unset_photo_view_point]
 
   def index
-    find_tours
     @tours = @tours.page(params[:page])
   end
 
   def show
-    @photos = @tour.photos.order(created_at: :desc)
-  end
-
-  # for ajax search
-  def search_tours
-    find_tours
-    render layout: false
-  end
-
-  def find_tours
-    set_tours_search_params
-
-    @tours = Tour.includes(:photos, :countries, :tags, :user).order(created_at: :desc)
-
-    if @query.present?
-      @tours = @tours.joins(:countries).where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
-
-      @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
+    set_sort_params
+    @photos = @tour.photos
+    if @sort.present?
+      @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
     end
-    @tours = @tours.search(@search_text) if @search_text.present?
+    @photos = @photos.order('favoritable_total::integer DESC')
   end
 
   def set_photo_view_point
@@ -71,5 +56,13 @@ class ToursController < ApplicationController
     def tour_search_params
       params.permit(:search_text, query: [:country_id, :tour_type])
     end
+
+  def set_sort_params
+    @sort = sort_params[:sort]
+  end
+
+  def sort_params
+    params.permit(sort: [:photos])
+  end
 
 end
