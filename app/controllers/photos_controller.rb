@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 class PhotosController < ApplicationController
 
-  before_action :set_photo, only: %i[show]
+  before_action :authenticate_user!, only: %i[set_photo_view_point]
+  before_action :set_photo, only: %i[show
+                                      set_photo_view_point]
 
   def index
     find_photos
@@ -17,7 +19,7 @@ class PhotosController < ApplicationController
       @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
     end
 
-    @photos = @photos.order('favoritable_total::integer DESC')
+    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
   end
 
   private

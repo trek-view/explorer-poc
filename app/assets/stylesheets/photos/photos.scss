@@ -23,5 +23,21 @@
       width: 300px;
     }
   }
+
+  .viewpoint {
+    background: url("/assets/heart-icon.png") no-repeat;
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    background-size: contain;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    padding-top: 5px;
+    position: absolute;
+    right: 0;
+    margin: 5px 5px 0 0;
+    cursor: pointer;
+  }
 }
 

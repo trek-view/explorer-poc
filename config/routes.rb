@@ -31,12 +31,7 @@ Rails.application.routes.draw do
     get 'tours'
     get 'tourbooks', to: 'tourbooks#user_tourbooks'
 
-    resources :tours, only: %i[show] do
-      member do
-        post 'set_photo_view_point', to: 'tours#set_photo_view_point'
-        delete 'unset_photo_view_point', to: 'tours#unset_photo_view_point'
-      end
-    end
+    resources :tours, only: %i[show]
 
     resources :tourbooks, except: %i[index] do
       member do

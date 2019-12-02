@@ -5,14 +5,10 @@ module Api::V1
     before_action :set_tour
     before_action :set_photo, only: %i[show
                                         update
-                                        destroy
-                                        set_photo_view_point
-                                        unset_photo_view_point]
+                                        destroy]
     before_action :authorize_tour, only: %i[create
                                         update
-                                        destroy
-                                        set_photo_view_point
-                                        unset_photo_view_point]
+                                        destroy]
 
     # GET /api/v1/tours/:tour_id/photos
     def index

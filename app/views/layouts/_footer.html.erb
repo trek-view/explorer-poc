@@ -11,3 +11,12 @@
     <p class="m-0 text-center text-white"><a href="https://github.com/trekview/explorer/" target="_blank">View the source code here</a>.</p>
   </div>
 </footer>
+
+<%= javascript_tag do %>
+  <% if current_user.present? %>
+    localStorage.setItem('api_token', "<%= current_user.api_token %>")
+  <% else %>
+    localStorage.removeItem('api_token')
+  <% end %>
+
+<% end %>

@@ -148,8 +148,30 @@
 
           <%= render partial: 'photos/photos_display', locals: { photos: @photos } %>
 
+        <% else %>
+
+          <h3 class="card-title">Photos</h3>
+          <p>None exist</p>
+
+        <% end %>
+
+          <br/>
           <h3 class="card-title">Tourbooks</h3>
 
+        <% if @tourbooks.any? %>
+          <div class="sort-wrapper">
+            <%= render(SortComponent, collection_name: :tourbooks, value: @sort.try(:[], :tourbooks)) %>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row tours-container">
+              <%= render partial: 'tourbooks/tourbooks_display' %>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <p>None exist</p>
         <% end %>
       </div>
 

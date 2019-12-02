@@ -34,6 +34,7 @@ class HomeController < ApplicationController
                      .distinct
     if @sort.present?
       @tourbooks = @tourbooks.order('tourbooks.name ASC') if @sort[:tourbooks] == 'name'
+      @tourbooks = @tourbooks.order('tourbooks.tours_count DESC') if @sort[:tourbooks] == 'tours_count'
     end
     @tourbooks = @tourbooks.order('tourbooks.created_at DESC')
   end

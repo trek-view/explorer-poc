@@ -3,11 +3,7 @@ class ToursController < ApplicationController
 
   include MetaTagsHelper
 
-  before_action :authenticate_user!, only: %i[set_photo_view_point
-                                              unset_photo_view_point]
-  before_action :set_tour, only: %i[show
-                                    set_photo_view_point
-                                    unset_photo_view_point]
+  before_action :set_tour, only: %i[show]
 
   def index
     @tours = @tours.page(params[:page])
@@ -16,30 +12,15 @@ class ToursController < ApplicationController
   def show
     set_sort_params
     @photos = @tour.photos
+    @tourbooks = @tour.tourbooks
+
     if @sort.present?
       @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
+      @tourbooks = @tourbooks.order(name: :desc) if @sort[:tourbooks] == 'name'
+      @tourbooks = @tourbooks.order('tourbooks.tours_count DESC') if @sort[:tourbooks] == 'tours_count'
     end
-    @photos = @photos.order('favoritable_total::integer DESC')
-  end
-
-  def set_photo_view_point
-    @photo = @tour.photos.find_by(id: params[:photo_id])
-    if @photo.present?
-      current_user.favorite(@photo)
-    else
-      @photo.errors.add(:base, 'Cannot viewpoint this photo.')
-    end
-    redirect_to user_tour_path(current_user, @tour)
-  end
-
-  def unset_photo_view_point
-    @photo = @tour.photos.find_by(id: params[:photo_id])
-    if @photo.present?
-      current_user.unfavorite(@photo)
-    else
-      @photo.errors.add(:base, 'Cannot unset viewpoint for this photo.')
-    end
-    redirect_to user_tour_path(current_user, @tour)
+    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
+    @tourbooks = @tourbooks.order(created_at: :desc)
   end
 
   private
@@ -62,7 +43,7 @@ class ToursController < ApplicationController
   end
 
   def sort_params
-    params.permit(sort: [:photos])
+    params.permit(sort: [:photos, :tourbooks])
   end
 
 end
