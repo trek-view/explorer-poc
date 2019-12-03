@@ -26,6 +26,7 @@ before_script:
   - apt-get install -y yarn
 
   # Project setup
+  - gem install bundler:2.0.2
   - bundle check || bundle install --jobs $(nproc)
   - yarn install
 
