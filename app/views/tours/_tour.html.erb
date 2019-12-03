@@ -45,7 +45,7 @@
     </div>
 
     <div class="card-footer">
-      <small class="text-muted">uploaded by: <%= link_to tour.user.try(:name), user_tours_path(tour.user) %></small>
+      <small class="text-muted">uploaded by: <%= link_to tour.user.try(:name), user_path(tour.user) %></small>
     </div>
   </div>
 

@@ -4,6 +4,15 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:tours]
   before_action :set_user
 
+  def show
+    result = ToursFinder.new(params, @user).search
+    @tours = result[:tours]
+    @tourbooks = result[:tourbooks]
+    @sort = result[:sort]
+    @query = result[:query]
+    @search_text = result[:search_text]
+  end
+
   def generate_new_token
     authorize @user
 
@@ -16,24 +25,15 @@ class UsersController < ApplicationController
     end
   end
 
-  def tours
-    set_sort_params
-
-    @tours = @user.tours.includes(:photos, :countries, :tags)
-
-    if @sort.present?
-      @tours = @tours.order(:name) if @sort[:tours] == 'name'
-      @tours = @tours.order( tourbooks_count: :desc) if @sort[:tours] == 'tourbooks_count'
-    end
-
-    @tours = @tours.order(created_at: :desc)
-    @tours = @tours.page(params[:page])
-  end
-
   private
 
     def set_user
-      @user = User.friendly.find(params[:user_id])
+      if params[:user_id].present?
+        @user = User.friendly.find(params[:user_id])
+      else
+        @user = User.friendly.find(params[:id])
+      end
+
     end
 
     def set_sort_params

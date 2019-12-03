@@ -26,9 +26,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, only: %i[] do
+  resources :users, only: %i[show] do
     post 'generate_new_token', to: 'users#generate_new_token'
-    get 'tours'
     get 'tourbooks', to: 'tourbooks#user_tourbooks'
 
     resources :tours, only: %i[show]
@@ -40,10 +39,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  resources :tourbooks, only: %i[index]
-
-  resources :tours, only: %i[index]
 
   resources :photos, only: %i[index show]
 

@@ -1,14 +1,9 @@
 # frozen_string_literal: true
 class TourbooksController < ApplicationController
 
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_tourbook, except: [:index, :new, :create, :user_tourbooks, :show]
-  before_action :set_user, except: [:index]
-
-  def index
-    @tourbooks = Tourbook.includes(:user, tours: :photos).order(created_at: 'DESC')
-    @tourbooks = @tourbooks.page(params[:page])
-  end
+  before_action :authenticate_user!, except: [:show]
+  before_action :set_tourbook, except: [:new, :create, :user_tourbooks, :show]
+  before_action :set_user
 
   def show
     set_sort_params

@@ -21,7 +21,7 @@ SitemapGenerator::Sitemap.create do
   end
 
   User.find_each do |user|
-    add user_tours_path(user), changefreq: 'weekly'
+    add user_path(user), changefreq: 'weekly'
 
     user.tourbooks.each do |book|
       add user_tourbook_path(user, book)

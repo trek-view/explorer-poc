@@ -5,10 +5,6 @@ class ToursController < ApplicationController
 
   before_action :set_tour, only: %i[show]
 
-  def index
-    @tours = @tours.page(params[:page])
-  end
-
   def show
     set_sort_params
     @photos = @tour.photos
