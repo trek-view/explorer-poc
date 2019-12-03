@@ -970,6 +970,8 @@ GEM
       multi_json (>= 1.11.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    groupdate (4.2.0)
+      activesupport (>= 5)
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
@@ -1214,6 +1216,7 @@ DEPENDENCIES
   font-awesome-rails
   friendly_id (~> 5.2.4)
   gibbon
+  groupdate
   jbuilder (~> 2.5)
   jquery-rails (~> 4.3, >= 4.3.5)
   kaminari (~> 1.1, >= 1.1.1)

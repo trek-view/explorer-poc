@@ -96,3 +96,5 @@ gem 'file_validators'
 gem 'acts_as_favoritor'
 # framework for building view components in Rails.
 gem 'actionview-component'
+# The simplest way to group by: day, week, hour of day, and more
+gem 'groupdate'
