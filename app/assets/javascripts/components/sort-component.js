@@ -1,5 +1,7 @@
+console.log('new file added');
 $(function(){
     $(document).on('change', '.sort-tours', function (event) {
+        console.log('sort tours changed');
         setSortParm('tours', event.target.value)
     });
 
