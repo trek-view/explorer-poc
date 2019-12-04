@@ -68,6 +68,8 @@ Deploy Production:
   script:
     - ./bin/setup_heroku
     - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+    - heroku run rake assets:clean --exit-code --app=$HEROKU_APP_PRODUCTION
+    - heroku run rake assets:precompile --exit-code --app=$HEROKU_APP_PRODUCTION
     - heroku run rake db:migrate --exit-code --app $HEROKU_APP_PRODUCTION
     - heroku run rake db:seed --exit-code --app $HEROKU_APP_PRODUCTION
 
@@ -80,5 +82,7 @@ Deploy Staging:
   script:
     - ./bin/setup_heroku
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
+    - heroku run rake assets:clean --exit-code --app=$HEROKU_APP_STAGING
+    - heroku run rake assets:precompile --exit-code --app=$HEROKU_APP_STAGING
     - heroku run rake db:migrate --exit-code --app $HEROKU_APP_STAGING
     - heroku run rake db:seed --exit-code --app $HEROKU_APP_STAGING
