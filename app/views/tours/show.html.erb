@@ -17,6 +17,9 @@
         document.addEventListener("DOMContentLoaded", function(){
             var photos = <%= raw @tour.photos.try(:to_json) %>;
             initMap(photos);
+
+            var chartData = <%= raw @tour.photos.group(:taken_at).maximum(:elevation_meters).try(:to_json) %>
+            initElevationChart(chartData, photos);
         });
     </script>
   <% end %>
@@ -143,11 +146,11 @@
           <h3 class="card-title">Elevation Change</h3>
 
           <div class="mb-3">
-            <%= scatter_chart @tour.photos.group(:taken_at).maximum(:elevation_meters) %>
+            <div id="elevation-chart-container" />
           </div>
 
           <%= render partial: 'photos/photos_display', locals: { photos: @photos } %>
-
+g
         <% else %>
 
           <h3 class="card-title">Photos</h3>
@@ -178,5 +181,7 @@
     </div>
   </div>
 </div>
+
+<%= render 'show_photo' %>
 
 <%= render 'create_tourbook' %>
