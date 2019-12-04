@@ -66,4 +66,8 @@ RSpec.configure do |config|
 
   config.include ApiHelper, type: :controller
   config.include Requests::JsonHelpers, type: :controller
+
+  config.include Devise::Test::IntegrationHelpers, type: :controller
+
+  config.include Rails.application.routes.url_helpers
 end
