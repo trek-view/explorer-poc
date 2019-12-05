@@ -19,4 +19,6 @@
 //= require activestorage
 //= require turbolinks
 //= require highcharts
+
+//= require_tree ./components
 //= require_tree .

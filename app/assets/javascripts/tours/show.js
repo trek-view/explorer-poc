@@ -78,7 +78,7 @@ function initElevationChart(data, photos) {
                             for (var i = 0; i < photos.length; i++) {
                                 var p = photos[i];
                                 if (milisecondsToDatetime(p.taken_at) === milisecondsToDatetime(this.category)) {
-                                    return showThumbModal(photo);
+                                    return showThumbModal(p);
                                 }
                             }
                         }
