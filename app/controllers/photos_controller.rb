@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class PhotosController < ApplicationController
+  include MetaTagsHelper
 
   before_action :authenticate_user!, only: %i[set_photo_view_point]
   before_action :set_photo, only: %i[show
@@ -7,7 +8,12 @@ class PhotosController < ApplicationController
 
   def index
     find_photos
-    @photos = @photos.page(params[:page])
+    @photos = @photos.page(params[:page])   
+    photo_og_meta_tag(@photos.first) unless @photos.empty?
+  end
+
+  def show
+    photo_og_meta_tag(@photo)
   end
 
   def find_photos
@@ -35,5 +41,4 @@ class PhotosController < ApplicationController
   def sort_params
     params.permit(sort: [:photos])
   end
-
 end

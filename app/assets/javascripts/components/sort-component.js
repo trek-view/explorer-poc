@@ -1,4 +1,4 @@
-console.log('sort-component.js');
+
 $(function(){
     $(document).on('change', '.sort-tours', function (event) {
         console.log('sort tours changed');

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class ToursController < ApplicationController
-
   include MetaTagsHelper
 
   before_action :set_tour, only: %i[show]
@@ -17,6 +16,8 @@ class ToursController < ApplicationController
     end
     @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
     @tourbooks = @tourbooks.order(created_at: :desc)
+
+    tour_og_meta_tag(@tour)
   end
 
   private
@@ -41,5 +42,4 @@ class ToursController < ApplicationController
   def sort_params
     params.permit(sort: [:photos, :tourbooks])
   end
-
 end

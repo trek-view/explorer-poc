@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+  include MetaTagsHelper
   def index
     result = ToursFinder.new(params).search
 
@@ -8,18 +9,6 @@ class HomeController < ApplicationController
     @query = result[:query]
     @search_text = result[:search_text]
 
-    set_photo_meta_tags
-  end
-
-  private
-
-  def set_photo_meta_tags
-    if Rails.env.production?
-      tour = @tours.first
-      if tour.present? && tour.photos.present?
-        photo = tour.photos.first
-        set_meta_tags og: {image_src: photo.image.url }
-      end
-    end
+    tour_og_meta_tag(@tours.first) unless @tours.empty?
   end
 end
