@@ -1,7 +1,7 @@
 $(function(){
    $(document).on('click', '.viewpoint', function (e) {
-       const target = event.target || event.srcElement;
-       const photoId = e.target.id.replace('photo-', '');
+       var target = event.target || event.srcElement;
+       var photoId = e.target.id.replace('photo-', '');
 
        $.ajax({
            type: 'POST',

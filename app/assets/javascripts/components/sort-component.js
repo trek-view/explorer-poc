@@ -1,4 +1,4 @@
-console.log('new file added');
+console.log('sort-component.js');
 $(function(){
     $(document).on('change', '.sort-tours', function (event) {
         console.log('sort tours changed');
@@ -15,8 +15,8 @@ $(function(){
 });
 
 function setSortParm(collection, value) {
-    let url = new URL(location.href);
-    const uri = window.decodeURI(location.href);
+    var url = new URL(location.href);
+    var uri = window.decodeURI(location.href);
 
     if(uri.indexOf(`sort[${collection}]`) === -1) {
         url.searchParams.append(`sort[${collection}]`, value);

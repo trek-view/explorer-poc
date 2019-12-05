@@ -27,8 +27,8 @@ function initMap(objects) {
 }
 
 function initElevationChart(data, photos) {
-    const chartData = [];
-    for (const key in data) {
+    var chartData = [];
+    for (var key in data) {
         if (data.hasOwnProperty(key)) {
             chartData.push([Date.parse(key), data[key]]);
         }
@@ -75,10 +75,12 @@ function initElevationChart(data, photos) {
                     events: {
                         click: function () {
                             // alert('Category: ' + this.category + ', value: ' + this.y);
-                            const photo = photos.find(p => (
-                                milisecondsToDatetime(p.taken_at) === milisecondsToDatetime(this.category)
-                            ));
-                            showThumbModal(photo);
+                            for (var i = 0; i < photos.length; i++) {
+                                var p = photos[i];
+                                if (milisecondsToDatetime(p.taken_at) === milisecondsToDatetime(this.category)) {
+                                    return showThumbModal(photo);
+                                }
+                            }
                         }
                     }
                 }
