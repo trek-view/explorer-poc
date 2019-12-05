@@ -18,11 +18,12 @@ function setSortParm(collection, value) {
     var url = new URL(location.href);
     var uri = window.decodeURI(location.href);
 
-    if(uri.indexOf(`sort[${collection}]`) === -1) {
-        url.searchParams.append(`sort[${collection}]`, value);
+    const prm = "sort[" + collection + "]";
+    if (uri.indexOf(prm) === -1) {
+        url.searchParams.append(prm, value);
         return location.href = url.href;
     }
 
-    url.searchParams.set(`sort[${collection}]`, value);
+    url.searchParams.set(prm, value);
     location.href = url.href;
 }
