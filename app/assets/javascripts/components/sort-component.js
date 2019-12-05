@@ -18,7 +18,7 @@ function setSortParm(collection, value) {
     var url = new URL(location.href);
     var uri = window.decodeURI(location.href);
 
-    const prm = "sort[" + collection + "]";
+    var prm = "sort[" + collection + "]";
     if (uri.indexOf(prm) === -1) {
         url.searchParams.append(prm, value);
         return location.href = url.href;
