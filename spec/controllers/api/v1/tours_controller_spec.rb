@@ -8,10 +8,17 @@ describe Api::V1::ToursController, :type => :controller do
   let(:tour_id) { tours.first.id }
 
   describe 'GET /api/v1/tours' do
-    context 'when tours exist', focus: true do
+    context 'when tours exist' do
       before do
         header 'api-key', user.api_token
-        get "/api/v1/tours?tags[]=#{tours.first.tags[0].name}&user_id=#{user.id}&ids[]=#{tours.first.id}&countries[]=#{tours.first.photos.first.country.code}"
+        get "/api/v1/tours?
+tags[]=#{tours.first.tags[0].name}
+&user_ids[]=#{user.id}
+&ids[]=#{tours.first.id}
+&countries[]=#{tours.first.photos.first.country.code}
+&tour_types[]=#{tours.first.tour_type}
+&transport_types[]=#{tours.first.transport_type}
+&sort_by=name"
       end
 
       it 'should return tours' do
@@ -34,15 +41,18 @@ describe Api::V1::ToursController, :type => :controller do
         end
       end
 
-      it 'should return status code 200' do
+      it 'should return status code 200', focus: true do
         expect(response).to have_http_status(:ok)
       end
     end
 
-    context 'when tours do not exist' do
+    context 'when tours do not exist', focus:true do
       it_behaves_like "respond to empty", '/api/v1/tours?countries[]=xx'
       it_behaves_like "respond to empty", '/api/v1/tours?tags[]=xxx'
-      it_behaves_like "respond to empty", '/api/v1/tours?user_id=-1'
+      it_behaves_like "respond to empty", '/api/v1/tours?tour_types[]=xxx'
+      # it_behaves_like "respond to empty", '/api/v1/tours?transport_types[]=xxx'
+      it_behaves_like "respond to empty", '/api/v1/tours?ids[]=-1'
+      it_behaves_like "respond to empty", '/api/v1/tours?user_ids[]=-1'
     end
   end
 

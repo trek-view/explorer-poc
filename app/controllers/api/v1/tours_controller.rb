@@ -161,8 +161,31 @@ module Api::V1
         @tours = @tours.joins(:countries).where(countries: { code: @query[:countries] }).distinct if @query[:countries].present?
         @tours = @tours.joins(:tags).where(tags: { name: @query[:tags] }) if @query[:tags].present?
         @tours = @tours.where(id: @query[:ids]) if @query[:ids].present?
-        @tours = @tours.where(user_id: @query[:user_id]) if @query[:user_id].present?
-        @tours = @tours.reorder("tours.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+        @tours = @tours.where(user_id: @query[:user_ids]) if @query[:user_ids].present?
+
+        if @query[:tour_types].present?
+          tour_types = [];
+          @query[:tour_types].each do |t|
+            tour_types << Constants::TOUR_TYPES[t.to_sym] if Constants::TOUR_TYPES.has_key?(t.to_sym)
+          end
+          @tours = @tours.where(tour_type: tour_types)
+        end
+
+        if @query[:transport_types].present?
+          transport_types = [];
+          @query[:transport_types].each do |t|
+            transport_types << Constants::TRANSPORT_TYPES[t.to_sym] if Constants::TRANSPORT_TYPES.has_key?(t.to_sym)
+          end
+          @tours = @tours.where(tour_type: transport_types)
+        end
+
+        if @query[:sort_by].present?
+          if @query[:sort_by] == 'name'
+            @tours = @tours.reorder("tours.#{@query[:sort_by]} ASC")
+          else
+            @tours = @tours.reorder("tours.#{@query[:sort_by]} DESC")
+          end
+        end
       end
 
       @tours = @tours.order(updated_at: :desc)
@@ -173,7 +196,7 @@ module Api::V1
     end
 
     def tour_search_params
-      params.permit(:user_id, :sort_by, ids: [], tags: [], countries: [])
+      params.permit(:sort_by, ids: [], tags: [], countries: [], user_ids: [], tour_types: [], transport_types: [])
     end
 
   end
