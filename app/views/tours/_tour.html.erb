@@ -33,7 +33,7 @@
       </div>
     
       <div class="tour_countries">
-        <% tour.countries.each do |country| %>
+        <% tour_countries(tour.countries).each do |country| %>
           <%= link_to country.name, "?query[country_id]=#{country.id}", class: 'btn btn-warning mb-1' %>
         <% end %>
       </div>

@@ -17,7 +17,7 @@ class TourSerializer < ActiveModel::Serializer
               ]
 
   def countries
-    object.countries.any? ? object.countries.map(&:code) : []
+    object.countries.any? ? object.countries.map(&:code).uniq : []
   end
 
   def tags
