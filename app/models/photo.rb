@@ -13,7 +13,7 @@ class Photo < ApplicationRecord
   store_accessor :streetview,  :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections
   store_accessor :tourer, :photo_id, :connection_method, :connection_photo, :connection_distance_meters
 
-  validates :image, file_size: { less_than: 30.megabytes }
+  validates :image, file_size: { less_than: 30.megabytes }, presence: true
   validates :taken_at, presence: true
   validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }, length: { maximum: 20 }
   validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, length: { maximum: 20 }
