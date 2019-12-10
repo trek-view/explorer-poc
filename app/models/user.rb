@@ -21,6 +21,10 @@ class User < ApplicationRecord
                       message: 'should not contain whitespaces or special characters'
   validates_acceptance_of :terms
 
+  validates :name, :email, :password, presence: true
+  validates :email, uniqueness: true
+  validates :name, length: { minimum: 5, maximum: 16 }
+
   has_secure_token :api_token
   friendly_id :name, use: :slugged
   acts_as_favoritor
