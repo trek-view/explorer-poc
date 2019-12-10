@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    name { Faker::Name.unique.name.gsub!(/[^0-9A-Za-z]/, '') }
+    name { Faker::Lorem.characters(number: 10) }
     email { Faker::Internet.email }
     password { 'password' }
     password_confirmation { 'password' }

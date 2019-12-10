@@ -4,7 +4,7 @@ describe "Spec for Sign Up" do
   it "should create new user account" do
     visit new_user_registration_path
     email = "test1@gmail.com"
-    fill_in 'user_name', :with => "abcd"
+    fill_in 'user_name', :with => "abcdefg"
     fill_in 'user_email', :with => email
     fill_in 'user_password', :with => "password"
     fill_in 'user_password_confirmation', :with => "password"

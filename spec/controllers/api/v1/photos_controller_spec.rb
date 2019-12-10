@@ -164,7 +164,7 @@ describe Api::V1::PhotosController, :type => :controller do
     }
     end
 
-    context 'Mark viewpoint' do
+    context 'Mark viewpoint', focus:true do
       before do
         header 'api-key', user.api_token
         post '/api/v1/viewpoints', viewpoint: valid_attributes
@@ -201,7 +201,7 @@ describe Api::V1::PhotosController, :type => :controller do
       get "/api/v1/viewpoints?photo_ids[]=#{photo.id}&user_ids[]=#{user.id}"
     end
 
-    it 'should return viewpoints', focus:true do
+    it 'should return viewpoints' do
       expect(json).not_to be_empty
       expect(json['_metadata']).not_to be_empty
       expect(json['viewpoints']).not_to be_empty
