@@ -6,11 +6,11 @@ module Api::V1
       render json: @user, status: :ok
     end
     
-    def current_account
+    def get_info
       resp = {
         user: {
           id: @api_user.id,
-          name: @api_user.name,
+          username: @api_user.name,
           email: @api_user.email
         }
       }

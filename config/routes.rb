@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
       post '/viewpoints', to: 'photos#set_viewpoints'
       get '/viewpoints', to: 'photos#get_viewpoints'
+      get '/users', to: 'users#get_info'
 
       get '*unmatched_route', to: 'base#user_not_authorized', code: 401
     end
