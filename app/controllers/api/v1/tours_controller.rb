@@ -115,7 +115,6 @@ module Api::V1
 
     def permitted_params
       [
-          :name,
           :description,
           :tourer_tour_id,
           :tourer_version,

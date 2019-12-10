@@ -27,7 +27,7 @@
     <% if flash[:danger].present? || flash[:alert].present? || flash[:error] %>
       <div class="alert alert-danger alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <%= raw flash[:danger] || flash[:alert] || flash[:error] %>
+        <%= handle_custom_flash(flash) %>
       </div>
     <% end %>
   </div>

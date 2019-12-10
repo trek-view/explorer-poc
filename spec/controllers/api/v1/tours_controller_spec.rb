@@ -14,7 +14,7 @@ describe Api::V1::ToursController, :type => :controller do
         get "/api/v1/tours?tags[]=#{tours.first.tags[0].name}&user_ids[]=#{user.id}&ids[]=#{tours.first.id}&countries[]=#{tours.first.photos.first.country.code}&tour_types[]=#{tours.first.tour_type}&sort_by=name"
       end
 
-      it 'should return tours', focus:true do
+      it 'should return tours' do
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['tours']).not_to be_empty
@@ -97,10 +97,9 @@ describe Api::V1::ToursController, :type => :controller do
     end
   end
 
-  describe 'PUT /api/v1/tours/:tour_id' do
+  describe 'PUT /api/v1/tours/:tour_id', focus:true do
     let(:valid_attributes) do
       {
-          name: "My tour of Windsor castle",
           description: "I did not meet the queen",
           tags: "royal, castle, history",
           tour_type: "land",

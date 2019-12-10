@@ -31,4 +31,15 @@ module ApplicationHelper
     render('shared/form_errors', object: object) unless object.blank?
   end
 
+  def handle_custom_flash(flash)
+    # binding.pry
+    msg = flash[:danger] || flash[:alert] || flash[:error]
+
+    if msg.include?('You have to confirm your email address')
+      confirm_url = new_confirmation_path(:user)
+      raw "#{msg} <a href='#{confirm_url}'>click here</a>"
+    else
+      raw msg
+    end
+  end
 end
