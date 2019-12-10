@@ -164,7 +164,7 @@ module Api::V1
         @tours = @tours.where(user_id: @query[:user_ids]) if @query[:user_ids].present?
 
         if @query[:tour_types].present?
-          tour_types = [];
+          tour_types = []
           @query[:tour_types].each do |t|
             tour_types << Constants::TOUR_TYPES[t.to_sym] if Constants::TOUR_TYPES.has_key?(t.to_sym)
           end
@@ -172,11 +172,11 @@ module Api::V1
         end
 
         if @query[:transport_types].present?
-          transport_types = [];
+          transport_types = []
           @query[:transport_types].each do |t|
             transport_types << Constants::TRANSPORT_TYPES[t.to_sym] if Constants::TRANSPORT_TYPES.has_key?(t.to_sym)
           end
-          @tours = @tours.where(tour_type: transport_types)
+          @tours = @tours.where(transport_type: transport_types)
         end
 
         if @query[:sort_by].present?

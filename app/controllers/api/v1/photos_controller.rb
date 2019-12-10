@@ -68,6 +68,63 @@ module Api::V1
       }, head: :no_content, status: :ok
     end
 
+    def set_viewpoints
+      prms = params.require(:viewpoint).permit(*viewpoint_permitted_params)
+      photo = Photo.find_by(id: prms[:photo_id])
+
+      unless photo.present?
+        render json: {errors: 'The photo does not exist'}, status: :unprocessable_entity
+        return
+      end
+
+      if photo.favorited_by?(api_user)
+        api_user.unfavorite(photo)
+      else
+        api_user.favorite(photo)
+      end
+
+      render json: {
+          viewpoint: {
+              viewpoint: photo.favoritable_score[:favorite].presence || 0,
+              updated_at: DateTime.now.rfc3339
+          }
+      }, status: :ok
+    end
+
+    def get_viewpoints
+      query = search_viewpoint_params
+
+      if query[:photo_ids].blank? && query[:user_ids].blank?
+        render json: {viewpoints: []}, status: :ok
+        return
+      end
+
+      photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
+      photos = photos.where(id: query[:photo_ids]) if query[:photo_ids].present?
+
+      if query[:user_ids].present?
+        favorites = Favorite.where(favoritor_id: query[:user_ids]).uniq.pluck(:favoritable_id)
+        photos = photos.where(id: favorites)
+      end
+
+      photos = photos.order('substring(favoritable_score from 15)::integer DESC')
+
+      photos = photos.page(params[:page] ? params[:page].to_id : 1)
+
+      viewpoints = []
+      photos.each do |photo|
+        viewpoints << {
+            viewpoint: photo.favoritable_score[:favorite],
+            user_ids: photo.user_favoritors(&:id)
+        }
+      end
+
+      render json: {
+          viewpoints: viewpoints,
+          _metadata: pagination_meta(photos)
+      }, status: :ok
+    end
+
     private
 
       def set_photo
@@ -78,6 +135,7 @@ module Api::V1
         prms = params.permit(*permitted_photo_params)
         prms[:country] = prms[:address][:country_code]
         prms[:tourer_photo_id] = prms[:tourer][:photo_id]
+        prms[:tourer_connection_photo] = prms[:tourer][:connection_photo]
         prms
       end
 
@@ -114,6 +172,9 @@ module Api::V1
         if @query.present?
           @photos = @photos.joins(:country).where(countries: { code: @query[:countries] }) if @query[:countries].present?
           @photos = @photos.where(photos: {id: @query[:ids]}) if @query[:ids].present?
+          @photos = @photos.where("photos.streetview @> hstore(:key, :value)", key: "connections", value: @query[:streetview_connections]) if @query[:streetview_connections].present?
+          @photos = @photos.where("photos.tourer_connection_photo IN (?)", @query[:tourer_connection_photos]) if @query[:tourer_connection_photos].present?
+
           @photos = @photos.order("photos.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         end
 
@@ -125,7 +186,7 @@ module Api::V1
       end
 
       def photo_search_params
-        params.permit(:sort_by, :user_id, countries: [], ids: [])
+        params.permit(:streetview_connections, :sort_by, countries: [], ids: [], tourer_connection_photos: [])
       end
 
       def pagination_meta(object)
@@ -137,6 +198,14 @@ module Api::V1
           total_pages: object.total_pages,
           total_count: object.total_count
         }
+      end
+
+      def viewpoint_permitted_params
+        [:photo_id]
+      end
+
+      def search_viewpoint_params
+        params.permit(photo_ids: [], user_ids: [])
       end
   end
 

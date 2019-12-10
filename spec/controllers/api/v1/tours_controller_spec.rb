@@ -11,17 +11,10 @@ describe Api::V1::ToursController, :type => :controller do
     context 'when tours exist' do
       before do
         header 'api-key', user.api_token
-        get "/api/v1/tours?
-tags[]=#{tours.first.tags[0].name}
-&user_ids[]=#{user.id}
-&ids[]=#{tours.first.id}
-&countries[]=#{tours.first.photos.first.country.code}
-&tour_types[]=#{tours.first.tour_type}
-&transport_types[]=#{tours.first.transport_type}
-&sort_by=name"
+        get "/api/v1/tours?tags[]=#{tours.first.tags[0].name}&user_ids[]=#{user.id}&ids[]=#{tours.first.id}&countries[]=#{tours.first.photos.first.country.code}&tour_types[]=#{tours.first.tour_type}&sort_by=name"
       end
 
-      it 'should return tours' do
+      it 'should return tours', focus:true do
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['tours']).not_to be_empty

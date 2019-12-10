@@ -126,10 +126,18 @@ module Api::V1
 
         if @query.present?
           @tourbooks = @tourbooks.joins(:tours).where(tours: { id: @query[:tour_ids] }).distinct if @query[:tour_ids].present?
-          @tourbooks = @tourbooks.reorder("tourbooks.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
+          @tourbooks = @tourbooks.where(tourbooks: { id: @query[:ids] }) if @query[:ids].present?
+
+          if @query[:sort_by].present?
+            if @query[:sort_by] == "name"
+              @tourbooks = @tourbooks.order("tourbooks.#{@query[:sort_by]} ASC")
+            else
+              @tourbooks = @tourbooks.order("tourbooks.#{@query[:sort_by]} DESC")
+            end
+          end
         end
 
-        @tourbooks = @tourbooks.order(updated_at: :desc)
+        @tourbooks = @tourbooks.order("tourbooks.updated_at DESC")
       end
 
       def set_tourbooks_search_params
@@ -137,7 +145,7 @@ module Api::V1
       end
 
       def tourbook_search_params
-        params.permit(:sort_by, tour_ids: [])
+        params.permit(:sort_by, tour_ids: [], ids: [])
       end
 
       def pagination_meta(object)

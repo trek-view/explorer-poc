@@ -7,6 +7,7 @@ describe Api::V1::PhotosController, :type => :controller do
   let!(:photos) { create_list(:photo, 2, tour: tour) }
   let(:tour_id) { tour.id }
   let(:photo_id) { photos.first.id }
+  let!(:vp_tours) { create_list(:tour, 1, :with_photos, user: user) }
 
   let(:valid_attributes) {{
       taken_at: 1.day.ago,
@@ -62,10 +63,10 @@ describe Api::V1::PhotosController, :type => :controller do
     context 'When photos exists' do
       before do
         header 'api-key', user.api_token
-        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&user_id=#{user.id}&sot_by=created_at"
+        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photo}&sot_by=created_at"
       end
 
-      it 'should return photos', focus: true do
+      it 'should return photos' do
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['photos']).not_to be_empty
@@ -154,6 +155,59 @@ describe Api::V1::PhotosController, :type => :controller do
 
     it 'returns status code 204' do
       expect(response).to have_http_status(200)
+    end
+  end
+
+  describe 'POST /api/v1/viewpoints' do
+    let(:valid_attributes) do {
+        photo_id: vp_tours.first.photos.first.id
+    }
+    end
+
+    context 'Mark viewpoint' do
+      before do
+        header 'api-key', user.api_token
+        post '/api/v1/viewpoints', viewpoint: valid_attributes
+      end
+
+      it 'should return updated viewpoint with 1' do
+        expect(json).not_to be_empty
+        expect(json['viewpoint']).not_to be_empty
+        expect(json['viewpoint']['viewpoint']).to equal(1)
+      end
+    end
+
+    context 'Unmark viewpoint' do
+      before do
+        photo = vp_tours.first.photos.first
+        user.favorite(photo)
+        header 'api-key', user.api_token
+        post '/api/v1/viewpoints', viewpoint: valid_attributes
+      end
+
+      it 'should return updated viewpoint with 0' do
+        expect(json).not_to be_empty
+        expect(json['viewpoint']).not_to be_empty
+        expect(json['viewpoint']['viewpoint']).to equal(0)
+      end
+    end
+  end
+
+  describe 'GET /api/v1/viewpoints?photo_ids[]=&user_ids[]=' do
+    before do
+      photo = vp_tours.first.photos.first
+      user.favorite(photo)
+      header 'api-key', user.api_token
+      get "/api/v1/viewpoints?photo_ids[]=#{photo.id}&user_ids[]=#{user.id}"
+    end
+
+    it 'should return viewpoints', focus:true do
+      expect(json).not_to be_empty
+      expect(json['_metadata']).not_to be_empty
+      expect(json['viewpoints']).not_to be_empty
+      json['viewpoints'].each do |viewpoint|
+        expect(viewpoint.keys).to contain_exactly('viewpoint', 'user_ids')
+      end
     end
   end
 

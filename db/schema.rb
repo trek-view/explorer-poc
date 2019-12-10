@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_02_171052) do
+ActiveRecord::Schema.define(version: 2019_12_09_040625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -97,7 +97,10 @@ ActiveRecord::Schema.define(version: 2019_12_02_171052) do
     t.hstore "tourer"
     t.text "favoritable_score"
     t.text "favoritable_total"
+    t.string "tourer_connection_photo"
+    t.index ["streetview"], name: "index_photos_on_streetview", using: :gin
     t.index ["tour_id"], name: "index_photos_on_tour_id"
+    t.index ["tourer"], name: "index_photos_on_tourer", using: :gin
   end
 
   create_table "subscriptions", force: :cascade do |t|
