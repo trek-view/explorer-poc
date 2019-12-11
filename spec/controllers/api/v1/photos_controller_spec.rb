@@ -67,7 +67,6 @@ describe Api::V1::PhotosController, :type => :controller do
       end
 
       it 'should return photos' do
-        p json
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['photos']).not_to be_empty
@@ -141,7 +140,6 @@ describe Api::V1::PhotosController, :type => :controller do
       end
 
       it 'should return status code unprocessable_entity' do
-        p json
         expect(json).not_to be_empty
         expect(json['message']).not_to be_empty
         expect(json['status']).to eq('unprocessable_entity')

@@ -7,9 +7,9 @@ class CreateTourCountries < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    Tour.find_each do |tour|
-      TourCountry.create(tour_id: tour.id, country_id: tour.country_id)
-    end
+    # Tour.find_each do |tour|
+    #   TourCountry.create(tour_id: tour.id, country_id: tour.country_id)
+    # end
   end
 
   def down
