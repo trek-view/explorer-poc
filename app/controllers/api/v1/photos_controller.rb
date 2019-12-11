@@ -94,11 +94,6 @@ module Api::V1
     def get_viewpoints
       query = search_viewpoint_params
 
-      if query[:photo_ids].blank? && query[:user_ids].blank?
-        render json: {viewpoints: []}, status: :ok
-        return
-      end
-
       photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
       photos = photos.where(id: query[:photo_ids]) if query[:photo_ids].present?
 

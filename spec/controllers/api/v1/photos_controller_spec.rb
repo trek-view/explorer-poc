@@ -132,7 +132,7 @@ describe Api::V1::PhotosController, :type => :controller do
       end
     end
 
-    context 'When the request is invalid(image is empty)', focus:true do
+    context 'When the request is invalid(image is empty)' do
       let (:invalid_attrs) { valid_attributes.except(:image) }
 
       before do

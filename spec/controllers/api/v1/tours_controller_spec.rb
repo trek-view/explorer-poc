@@ -43,7 +43,7 @@ describe Api::V1::ToursController, :type => :controller do
       it_behaves_like "respond to empty", '/api/v1/tours?countries[]=xx'
       it_behaves_like "respond to empty", '/api/v1/tours?tags[]=xxx'
       it_behaves_like "respond to empty", '/api/v1/tours?tour_types[]=xxx'
-      # it_behaves_like "respond to empty", '/api/v1/tours?transport_types[]=xxx'
+      it_behaves_like "respond to empty", '/api/v1/tours?transport_types[]=xxx'
       it_behaves_like "respond to empty", '/api/v1/tours?ids[]=-1'
       it_behaves_like "respond to empty", '/api/v1/tours?user_ids[]=-1'
     end
