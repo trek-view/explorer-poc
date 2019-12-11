@@ -1,4 +1,5 @@
 <%= form_tag(root_path, method: :get, class: 'index-search-form page-item-search clearfix') do %>
+  <input type="hidden" id="tab" name="tab" value="<%= @tab %>">
   <div class="search-text clearfix">
     <div class="search-input mt-3">
       <%= text_field_tag 'search_text', @search_text, class: 'search-text-input with-img form-control',

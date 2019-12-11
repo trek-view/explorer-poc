@@ -17,7 +17,10 @@ class Tourbook < ApplicationRecord
                   against: [
                       :name,
                       :description
-                  ]
+                  ],
+                  :using => {
+                      :tsearch => {:prefix => true}
+                  }
   friendly_id :name, use: :slugged
 
   # Use default slug, but upper case and with underscores

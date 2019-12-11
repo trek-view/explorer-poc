@@ -18,7 +18,17 @@ function setSortParm(collection, value) {
     var url = new URL(location.href);
     var uri = window.decodeURI(location.href);
 
+    const tabDom = document.getElementById('tab');
+    if (tabDom) {
+        if (uri.indexOf('tab') === -1) {
+            url.searchParams.append('tab', tabDom.value);
+        } else {
+            url.searchParams.set('tab', tabDom.value);
+        }
+    }
+
     var prm = "sort[" + collection + "]";
+
     if (uri.indexOf(prm) === -1) {
         url.searchParams.append(prm, value);
         return location.href = url.href;
@@ -27,3 +37,4 @@ function setSortParm(collection, value) {
     url.searchParams.set(prm, value);
     location.href = url.href;
 }
+

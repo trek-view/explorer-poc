@@ -17,7 +17,7 @@
       <% end %>
     </div>
 
-    <div id="tours-content">
+    <div id="tours-content" style="<%= @tab == 'tours' ? '' : 'display: none;' %>">
 
       <div class="sort-wrapper">
         <%= render(SortComponent, collection_name: :tours, value: @sort.try(:[], :tours)) %>
@@ -26,10 +26,10 @@
       <div class="row tours-container">
         <%= render partial: 'tours/tour', collection: @tours %>
       </div>
-      <%= paginate @tours %>
+      <%= paginate @tours, param_name: :tour_pagina, :params => {:tab => "tours"} %>
     </div>
 
-    <div id="tourbooks-content" style="display: none;">
+    <div id="tourbooks-content" style="<%= @tab == 'tourbooks' ? '' : 'display: none;' %>">
 
       <div class="sort-wrapper">
         <%= render(SortComponent, collection_name: :tourbooks, value: @sort.try(:[], :tourbooks)) %>
@@ -43,7 +43,7 @@
         </div>
 
       </div>
-      <%= paginate @tourbooks %>
+      <%= paginate @tourbooks, param_name: :tourbook_pagina, :params => {:tab => "tourbooks"} %>
     </div>
 
   </div>
@@ -53,15 +53,17 @@
   $('.new-tour-book-btn').hide();
 
   $('#option-tour').change(function() {
-  $('#tourbooks-content').hide();
-  $('#tours-content').show();
-  $('.new-tour-book-btn').hide();
+    $('#tourbooks-content').hide();
+    $('#tours-content').show();
+    $('.new-tour-book-btn').hide();
+    $('#tab').val('tours');
   });
 
   $('#option-tourbooks').change(function() {
-  $('#tours-content').hide();
-  $('#tourbooks-content').show();
-  $('.new-tour-book-btn').show();
+    $('#tours-content').hide();
+    $('#tourbooks-content').show();
+    $('.new-tour-book-btn').show();
+    $('#tab').val('tourbooks');
   });
 
 <% end %>

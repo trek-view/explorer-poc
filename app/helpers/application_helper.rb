@@ -32,7 +32,6 @@ module ApplicationHelper
   end
 
   def handle_custom_flash(flash)
-    # binding.pry
     msg = flash[:danger] || flash[:alert] || flash[:error]
 
     if msg.include?('You have to confirm your email address')

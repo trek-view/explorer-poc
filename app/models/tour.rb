@@ -41,6 +41,9 @@ class Tour < ApplicationRecord
                   ],
                   associated_against: {
                       tags: [:name],
+                  },
+                  :using => {
+                      :tsearch => {:prefix => true}
                   }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tours]
