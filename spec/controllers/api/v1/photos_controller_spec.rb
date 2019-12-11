@@ -66,7 +66,8 @@ describe Api::V1::PhotosController, :type => :controller do
         get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photo}&sot_by=created_at"
       end
 
-      it 'should return photos' do
+      it 'should return photos', focus:true do
+        p json
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['photos']).not_to be_empty
@@ -85,6 +86,7 @@ describe Api::V1::PhotosController, :type => :controller do
                                                 'address',
                                                 'google',
                                                 'streetview',
+                                                'filename',
                                                 'tourer')
         end
       end
@@ -147,7 +149,7 @@ describe Api::V1::PhotosController, :type => :controller do
     end
   end
 
-  describe 'PATCH /api/v1/tours/:tour_id/photos/:id', focus:true do
+  describe 'PATCH /api/v1/tours/:tour_id/photos/:id' do
     let(:v_attrs) {{
         camera_make: '500'
     }}
