@@ -66,7 +66,7 @@ describe Api::V1::PhotosController, :type => :controller do
         get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photo}&sot_by=created_at"
       end
 
-      it 'should return photos', focus:true do
+      it 'should return photos' do
         p json
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
@@ -129,6 +129,22 @@ describe Api::V1::PhotosController, :type => :controller do
 
       it 'should return status code 200' do
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'When the request is invalid(image is empty)', focus:true do
+      let (:invalid_attrs) { valid_attributes.except(:image) }
+
+      before do
+        header 'api-key', user.api_token
+        post "/api/v1/tours/#{tour_id}/photos", invalid_attrs
+      end
+
+      it 'should return status code unprocessable_entity' do
+        p json
+        expect(json).not_to be_empty
+        expect(json['message']).not_to be_empty
+        expect(json['status']).to eq('unprocessable_entity')
       end
     end
   end
