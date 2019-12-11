@@ -8,7 +8,7 @@
 
 <div class="row">
   <% photos.each do |photo| %>
-    <div class="col-md-4 photo-container">
+    <div class="col-lg-4 col-md-6 mb-4 photo-container">
       <%= render partial: 'photos/photo', locals: { photo: photo } %>
     </div>
   <% end %>
