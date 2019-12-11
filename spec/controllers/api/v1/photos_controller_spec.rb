@@ -147,6 +147,25 @@ describe Api::V1::PhotosController, :type => :controller do
     end
   end
 
+  describe 'PATCH /api/v1/tours/:tour_id/photos/:id', focus:true do
+    let(:v_attrs) {{
+        camera_make: '500'
+    }}
+    before do
+      header 'api-key', user.api_token
+      put "/api/v1/tours/#{tour_id}/photos/#{photo_id}", v_attrs
+    end
+
+    it 'should update the photo' do
+      expect(json).not_to be_empty
+      expect(json['photo']).not_to be_empty
+    end
+
+    it 'should return status code 200' do
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe 'DELETE /api/v1/tours/:tour_id/photos/:id' do
     before do
       header 'api-key', user.api_token
@@ -164,7 +183,7 @@ describe Api::V1::PhotosController, :type => :controller do
     }
     end
 
-    context 'Mark viewpoint', focus:true do
+    context 'Mark viewpoint' do
       before do
         header 'api-key', user.api_token
         post '/api/v1/viewpoints', viewpoint: valid_attributes

@@ -133,9 +133,9 @@ module Api::V1
 
       def photo_params
         prms = params.permit(*permitted_photo_params)
-        prms[:country] = prms[:address][:country_code]
-        prms[:tourer_photo_id] = prms[:tourer][:photo_id]
-        prms[:tourer_connection_photo] = prms[:tourer][:connection_photo]
+        prms[:country] = prms[:address][:country_code] if prms[:address].present? && prms[:address][:country_code].present?
+        prms[:tourer_photo_id] = prms[:tourer][:photo_id] if prms[:tourer].present? && prms[:tourer][:photo_id].present?
+        prms[:tourer_connection_photo] = prms[:tourer][:connection_photo] if prms[:tourer].present? && prms[:tourer][:connection_photo].present?
         prms
       end
 
