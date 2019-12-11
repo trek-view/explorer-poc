@@ -73,7 +73,7 @@ module Api::V1
       photo = Photo.find_by(id: prms[:photo_id])
 
       unless photo.present?
-        render json: {errors: 'The photo does not exist'}, status: :unprocessable_entity
+        render json: {message: 'The photo does not exist', status: :unprocessable_entity}, status: :unprocessable_entity
         return
       end
 
@@ -160,7 +160,7 @@ module Api::V1
 
       def authorize_tour
         unless api_user.tours.include?(@tour)
-          render json: {errors: {authorization: 'You cannot perform this action.'}}, status: :forbidden
+          render json: {message: 'You cannot perform this action.', status: :forbidden}, status: :forbidden
         end
       end
 
