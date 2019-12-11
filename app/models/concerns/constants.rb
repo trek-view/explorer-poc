@@ -7,6 +7,12 @@ module Constants
       photos: 50
   }
 
+  WEB_ITEMS_PER_PAGE = {
+      tours: 15,
+      tourbooks: 15,
+      photos: 15
+  }
+
   TOUR_TYPES = {
       land: 0,
       water: 1,

@@ -7,8 +7,8 @@ class ToursFinder
   def search
     find_tours
     find_tourbooks
-    @tours = @tours.page(@params[:page])
-    @tourbooks = @tourbooks.page(@params[:page])
+    @tours = @tours.page(@params[:page]).per(Constants::WEB_ITEMS_PER_PAGE[:tours])
+    @tourbooks = @tourbooks.page(@params[:page]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
     {
         tours: @tours,
         tourbooks: @tourbooks,

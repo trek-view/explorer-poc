@@ -8,7 +8,13 @@ class PhotosController < ApplicationController
 
   def index
     find_photos
-    @photos = @photos.page(params[:page])   
+    @photos = @photos.page(params[:page]).per(Constants::WEB_ITEMS_PER_PAGE[:photos])
+    photo_og_meta_tag(@photos.first) unless @photos.empty?
+  end
+
+  def viewpoints
+    find_viewpoints
+    @photos = @photos.page(params[:page]).per(Constants::WEB_ITEMS_PER_PAGE[:photos])
     photo_og_meta_tag(@photos.first) unless @photos.empty?
   end
 
@@ -25,7 +31,19 @@ class PhotosController < ApplicationController
       @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
     end
 
-    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
+    @photos = @photos.order('substring(favoritable_score from 15)::integer DESC')
+  end
+
+  def find_viewpoints
+    set_sort_params
+
+    @photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
+
+    if @sort.present?
+      @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
+    end
+
+    @photos = @photos.order('substring(favoritable_score from 15)::integer DESC')
   end
 
   private

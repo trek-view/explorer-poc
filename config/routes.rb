@@ -41,7 +41,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :photos, only: %i[index show]
+  resources :photos, only: %i[index show] do
+    collection do
+      get 'viewpoints'
+    end
+  end
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'

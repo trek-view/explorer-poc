@@ -95,7 +95,7 @@ class TourbooksController < ApplicationController
 
   def user_tourbooks
     @tourbooks = @user.tourbooks.includes(tours: [:photos])
-    @tourbooks = @tourbooks.page(params[:page])
+    @tourbooks = @tourbooks.page(params[:page]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
     render 'index'
   end
 

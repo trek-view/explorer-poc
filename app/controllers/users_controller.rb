@@ -2,7 +2,7 @@
 class UsersController < ApplicationController
   include MetaTagsHelper
 
-  before_action :authenticate_user!, except: [:tours]
+  before_action :authenticate_user!, except: [:tours, :show]
   before_action :set_user
 
   def show

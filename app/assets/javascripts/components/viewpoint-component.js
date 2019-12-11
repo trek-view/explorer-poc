@@ -3,6 +3,12 @@ $(function(){
        var target = event.target || event.srcElement;
        var photoId = e.target.id.replace('photo-', '');
 
+       var apiKey = localStorage.getItem('api_token');
+
+       if (!apiKey || apiKey === '') {
+           return alert('Please sign in/sign up to mark viewpoint');
+       }
+
        $.ajax({
            type: 'POST',
            url: '/api/v1/viewpoints',
