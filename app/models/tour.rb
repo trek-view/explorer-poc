@@ -30,7 +30,7 @@ class Tour < ApplicationRecord
   validate :tags_length
   validate :tour_type_should_be_valid
   validate :transport_type_should_be_valid
-  validate :types_dependency
+  # validate :types_dependency
 
   friendly_id :name, use: :slugged
 

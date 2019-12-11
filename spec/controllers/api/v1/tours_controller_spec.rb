@@ -34,12 +34,12 @@ describe Api::V1::ToursController, :type => :controller do
         end
       end
 
-      it 'should return status code 200', focus: true do
+      it 'should return status code 200' do
         expect(response).to have_http_status(:ok)
       end
     end
 
-    context 'when tours do not exist', focus:true do
+    context 'when tours do not exist' do
       it_behaves_like "respond to empty", '/api/v1/tours?countries[]=xx'
       it_behaves_like "respond to empty", '/api/v1/tours?tags[]=xxx'
       it_behaves_like "respond to empty", '/api/v1/tours?tour_types[]=xxx'
@@ -86,7 +86,7 @@ describe Api::V1::ToursController, :type => :controller do
         post '/api/v1/tours', tour: valid_attributes
       end
 
-      it 'should create a tour' do
+      it 'should create a tour', focus: true do
         expect(json).not_to be_empty
         expect(json['tour']).not_to be_empty
       end
@@ -97,7 +97,7 @@ describe Api::V1::ToursController, :type => :controller do
     end
   end
 
-  describe 'PUT /api/v1/tours/:tour_id', focus:true do
+  describe 'PUT /api/v1/tours/:tour_id' do
     let(:valid_attributes) do
       {
           description: "I did not meet the queen",
