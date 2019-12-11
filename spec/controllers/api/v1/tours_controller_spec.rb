@@ -86,7 +86,7 @@ describe Api::V1::ToursController, :type => :controller do
         post '/api/v1/tours', tour: valid_attributes
       end
 
-      it 'should create a tour', focus: true do
+      it 'should create a tour' do
         expect(json).not_to be_empty
         expect(json['tour']).not_to be_empty
       end
@@ -122,6 +122,23 @@ describe Api::V1::ToursController, :type => :controller do
 
       it 'should return status code 200' do
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'when the request is invalid', focus: true do
+      let (:invalid_attrs) do
+        valid_attributes[:name] = 'test'
+        valid_attributes
+      end
+
+      before do
+        header 'api-key', user.api_token
+        put "/api/v1/tours/#{tour_id}", tour: invalid_attrs
+      end
+
+      it 'should update the tour' do
+        expect(json).not_to be_empty
+        expect(json['message']).to eq('you cannot update the name of a tour')
       end
     end
   end

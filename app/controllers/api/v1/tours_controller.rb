@@ -35,6 +35,14 @@ module Api::V1
 
     # PATCH/PUT /api/v1/tours/:id
     def update
+      if tour_params[:name].present?
+        render json: {
+            status: :unprocessable_entity,
+            message: 'you cannot update the name of a tour'
+        }, status: :unprocessable_entity
+        return
+      end
+
       if api_user.tours.include?(@tour)
         begin
           if @tour.update(tour_params)
