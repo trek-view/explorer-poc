@@ -36,7 +36,7 @@ module ApplicationHelper
 
     if msg.include?('You have to confirm your email address')
       confirm_url = new_confirmation_path(:user)
-      raw "#{msg} <a href='#{confirm_url}'>click here</a>"
+      raw "#{msg} <a href='#{confirm_url}'>Click here to resend the confirmation email</a>."
     else
       raw msg
     end
