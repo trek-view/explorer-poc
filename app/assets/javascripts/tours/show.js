@@ -105,7 +105,7 @@ function showThumbModal(photo) {
         && photo.image.thumb
         && photo.streetview) {
         $('#imageContainer').empty();
-        $('#imageContainer').prepend('<a href="' + photo.streetview.share_link + '" target="_blank"><img id="photoImg" src="' + photo.image.thumb.url + '" style="width: 100%" /></a>');
+        $('#imageContainer').prepend('<a href="<%= photo_path(photo.id) %>"><img id="photoImg" src="' + photo.image.thumb.url + '" style="width: 100%" /></a>');
         $('#showPhotoModal').modal('show');
     }
     return;
