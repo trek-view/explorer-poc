@@ -29,7 +29,7 @@ class TourbooksController < ApplicationController
     respond_to do |format|
       if @tourbook.save
         add_item
-        flash[:success] = 'You TourBook was created!'
+        flash[:success] = 'You Tourbook was created!'
         format.html { redirect_to user_tourbooks_path }
         format.js
       else
@@ -47,7 +47,7 @@ class TourbooksController < ApplicationController
     authorize @tourbook
 
     if @tourbook.update(tourbook_params)
-      flash[:success] = 'You TourBook was updated!'
+      flash[:success] = 'You Tourbook was updated!'
       redirect_to user_tourbook_path(@tourbook.user, @tourbook)
     else
       flash[:error] = @tourbook.errors.full_messages.to_sentence
@@ -60,7 +60,7 @@ class TourbooksController < ApplicationController
 
     @tourbook.destroy
 
-    flash[:success] = "TourBook #{@tourbook.name} was destroyed"
+    flash[:success] = "Tourbook #{@tourbook.name} was destroyed"
     redirect_to user_tourbooks_path(current_user)
   end
 
@@ -72,7 +72,7 @@ class TourbooksController < ApplicationController
 
       begin
         @tourbook.tours << @tour
-        flash.now[:notice] = "Tour was added to your TourBook #{@tourbook.name}"
+        flash.now[:notice] = "Tour was added to your Tourbook #{@tourbook.name}"
       rescue ActiveRecord::RecordInvalid => e
         flash.now[:error] = e.message
       end
@@ -86,7 +86,7 @@ class TourbooksController < ApplicationController
       @tour = Tour.find(params[:item_id])
       begin
         @tourbook.tours.delete(@tour)
-        flash[:success] = "Tour \"#{@tour.name}\" was removed from this TourBook"
+        flash[:success] = "Tour \"#{@tour.name}\" was removed from this Tourbook"
       rescue => e
         flash[:error] = e.message
       end
