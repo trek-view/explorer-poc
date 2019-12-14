@@ -8,7 +8,7 @@
 
     <div class="search_country mt-3">
       <%= select_tag 'query[country_id]',
-                      options_from_collection_for_select(Country.all,
+                      options_from_collection_for_select(Country.all.order(name: :asc),
                                                         'id',
                                                         'name',
                                                         @query.try(:[], :country_id) ),

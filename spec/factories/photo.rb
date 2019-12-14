@@ -50,6 +50,7 @@ FactoryBot.define do
     tourer_photo_id { Faker::Lorem.characters(number:10) }
     tourer_connection_photo { Faker::Lorem.characters(number:10) }
     country { Faker::Address.country_code }
+    filename { Faker::Lorem.characters(number:10) }
     tour
   end
 end
