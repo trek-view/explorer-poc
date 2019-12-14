@@ -174,6 +174,7 @@ describe Api::V1::PhotosController, :type => :controller do
     it 'should update the photo' do
       expect(json).not_to be_empty
       expect(json['photo']).not_to be_empty
+      expect(json['photo']['camera_make']).to eq('500')
     end
 
     it 'should return status code 200' do
@@ -227,7 +228,7 @@ describe Api::V1::PhotosController, :type => :controller do
     end
   end
 
-  describe 'GET /api/v1/viewpoints?photo_ids[]=&user_ids[]=' do
+  describe 'GET /api/v1/viewpoints?photo_ids[]=&user_ids[]=', focus: true do
     before do
       photo = vp_tours.first.photos.first
       user.favorite(photo)
@@ -236,6 +237,7 @@ describe Api::V1::PhotosController, :type => :controller do
     end
 
     it 'should return viewpoints' do
+      p json
       expect(json).not_to be_empty
       expect(json['_metadata']).not_to be_empty
       expect(json['viewpoints']).not_to be_empty

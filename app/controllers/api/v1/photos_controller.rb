@@ -110,7 +110,7 @@ module Api::V1
       photos.each do |photo|
         viewpoints << {
             viewpoint: photo.favoritable_score[:favorite],
-            user_ids: photo.user_favoritors(&:id)
+            user_ids: photo.user_favoritors.map {|u| u.id}
         }
       end
 

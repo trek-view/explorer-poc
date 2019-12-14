@@ -4,7 +4,7 @@
   <a class="photo-card-link" href="<%= photo_path(photo.id) %>">
     <img class="card-img-top" src="<%= photo_thumb_url(photo) %>" alt="">
     <div class="card-body">
-      <p class="card-text">Filename: <%= photo.filename.presence || '' %></p>
+      <p class="card-text">Filename: <%= photo.filename %></p>
       <p class="card-text">Latitude: <%= photo.latitude %></p>
       <p class="card-text">Longitude: <%= photo.longitude %></p>
       <p class="card-text">Photo elevation: <%= photo.elevation_meters %>m</p>
