@@ -11,7 +11,6 @@ class PhotoSerializer < ActiveModel::Serializer
                  latitude
                  longitude
                  elevation_meters
-                 country
                  address
                  google
                  streetview

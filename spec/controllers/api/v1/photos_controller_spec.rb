@@ -81,7 +81,6 @@ describe Api::V1::PhotosController, :type => :controller do
                                                 'latitude',
                                                 'longitude',
                                                 'elevation_meters',
-                                                'country',
                                                 'address',
                                                 'google',
                                                 'streetview',
