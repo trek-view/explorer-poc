@@ -95,6 +95,22 @@ describe Api::V1::ToursController, :type => :controller do
         expect(response).to have_http_status(:ok)
       end
     end
+
+    context 'when the request is invalid', focus: true do
+      before do
+        valid_attributes[:tour_type] = 'null'
+        valid_attributes[:transport_type] = 'null'
+        header 'api-key', user.api_token
+        post '/api/v1/tours', tour: valid_attributes
+      end
+
+      it 'should return unprocessable_entity' do
+        p json
+        expect(json).not_to be_empty
+        expect(json['message']).not_to be_empty
+        expect(json['status']).to eq('unprocessable_entity')
+      end
+    end
   end
 
   describe 'PUT /api/v1/tours/:tour_id' do
