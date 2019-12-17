@@ -145,7 +145,7 @@ describe Api::V1::PhotosController, :type => :controller do
       end
     end
 
-    context 'When the request is invalid (tourer_photo_id is duplicated)', focus: true do
+    context 'When the request is invalid (tourer_photo_id is duplicated)' do
       let (:invalid_attrs) do
         valid_attributes[:tourer][:photo_id] = photos.first.tourer_photo_id
         valid_attributes
@@ -157,6 +157,25 @@ describe Api::V1::PhotosController, :type => :controller do
       end
 
       it 'should return status code unprocessable_entity' do
+        expect(json).not_to be_empty
+        expect(json['message']).not_to be_empty
+        expect(json['status']).to eq('unprocessable_entity')
+      end
+    end
+
+    context 'When the request is invalid (country is empty)', focus: true do
+      let (:invalid_attrs) do
+        valid_attributes[:address][:country_code] = ''
+        valid_attributes
+      end
+
+      before do
+        header 'api-key', user.api_token
+        post "/api/v1/tours/#{tour_id}/photos", invalid_attrs
+      end
+
+      it 'should return status code unprocessable_entity' do
+        p json
         expect(json).not_to be_empty
         expect(json['message']).not_to be_empty
         expect(json['status']).to eq('unprocessable_entity')
