@@ -166,8 +166,8 @@ module Api::V1
       @tours = Tour.includes(:countries, :tags, :user)
 
       if @query.present?
-        @tours = @tours.joins(:countries).where(countries: { code: @query[:countries] }).distinct if @query[:countries].present?
-        @tours = @tours.joins(:tags).where(tags: { name: @query[:tags] }) if @query[:tags].present?
+        @tours = @tours.left_joins(:countries).where(countries: { code: @query[:countries] }).distinct if @query[:countries].present?
+        @tours = @tours.left_joins(:tags).where(tags: { name: @query[:tags] }) if @query[:tags].present?
         @tours = @tours.where(id: @query[:ids]) if @query[:ids].present?
         @tours = @tours.where(user_id: @query[:user_ids]) if @query[:user_ids].present?
 

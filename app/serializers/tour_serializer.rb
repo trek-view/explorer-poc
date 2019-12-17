@@ -21,7 +21,7 @@ class TourSerializer < ActiveModel::Serializer
   end
 
   def tags
-    object.tag_names
+    object.tags.any? ? object.tags.map(&:name).uniq : []
   end
 
 end
