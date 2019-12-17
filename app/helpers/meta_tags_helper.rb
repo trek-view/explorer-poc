@@ -18,13 +18,13 @@ module MetaTagsHelper
   end
 
   def photo_og_meta_tag(photo)
-      if Rails.env.production?
+      if Rails.env.staging?
         set_meta_tags og: {image_src: photo.image.thumb.url } if photo.present?
       end
   end
 
   def tour_og_meta_tag(tour)
-      if Rails.env.production?
+      if Rails.env.staging?
         if tour.present? && tour.photos.present?
             photo = tour.photos.first
             set_meta_tags og: {image_src: photo.image.thumb.url } if photo.present?
