@@ -10,7 +10,12 @@ class ToursController < ApplicationController
     @tourbooks = @tour.tourbooks
 
     if @sort.present?
-      @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
+      if @sort[:photos] == 'taken_at'
+        @photos = @photos.order(taken_at: :desc)
+      elsif @sort[:photos] == 'filename'
+        @photos = @photos.order(filename: :asc)
+      end
+
       @tourbooks = @tourbooks.order(name: :desc) if @sort[:tourbooks] == 'name'
       @tourbooks = @tourbooks.order('tourbooks.tours_count DESC') if @sort[:tourbooks] == 'tours_count'
     end

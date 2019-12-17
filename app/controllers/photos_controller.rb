@@ -29,6 +29,7 @@ class PhotosController < ApplicationController
 
     if @sort.present?
       @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
+      @photos = @photos.order(filename: :asc) if @sort[:photos] == 'filename'
     end
 
     @photos = @photos.order('substring(favoritable_score from 15)::integer DESC')
@@ -41,6 +42,7 @@ class PhotosController < ApplicationController
 
     if @sort.present?
       @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
+      @photos = @photos.order(filename: :desc) if @sort[:photos] == 'filename'
     end
 
     @photos = @photos.order('substring(favoritable_score from 15)::integer DESC')

@@ -21,7 +21,8 @@
   <%= select_tag 'sort_by',
                  options_for_select([
                                         ['Capture date', 'taken_at'],
-                                        ['count of view points', 'count_of_viewpoints']
+                                        ['Count of view points', 'count_of_viewpoints'],
+                                        %w(name filename)
                                     ], value),
                  class: 'select-sort-by sort-photos form-control',
                  include_blank: 'Sort by'%>
