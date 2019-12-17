@@ -30,6 +30,14 @@ module Api::V1
 
     # POST /api/v1/tours/:tour_id/photos
     def create
+      unless validate_uniqueness_tourer_photo_id
+        render json: {
+            status: :unprocessable_entity,
+            message: "tourer_photo_id should be unique to user_id"
+        }, status: :unprocessable_entity
+        return
+      end
+
       photo = @tour.photos.build(photo_params)
       photo.image = params[:image]
 
@@ -45,6 +53,14 @@ module Api::V1
 
     # PATCH/PUT /api/v1/tours/:tour_id/photos/:id
     def update
+      unless validate_uniqueness_tourer_photo_id
+        render json: {
+            status: :unprocessable_entity,
+            message: "tourer_photo_id should be unique to user_id"
+        }, status: :unprocessable_entity
+        return
+      end
+
       photo = @tour.photos.find_by(id: params[:id])
 
       if photo.update(photo_params)
@@ -202,6 +218,20 @@ module Api::V1
 
       def search_viewpoint_params
         params.permit(photo_ids: [], user_ids: [])
+      end
+
+      def validate_uniqueness_tourer_photo_id
+        unless photo_params[:tourer_photo_id].present?
+          return true
+        end
+
+        photos = Tour.joins(:photos).where(photos: { tourer_photo_id: photo_params[:tourer_photo_id] })
+        photos = photos.where(tours: { user_id: api_user.id })
+        if photos.any?
+          false
+        else
+          true
+        end
       end
   end
 

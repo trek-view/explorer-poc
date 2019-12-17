@@ -8,7 +8,7 @@
       <p class="card-text">Latitude: <%= photo.latitude %></p>
       <p class="card-text">Longitude: <%= photo.longitude %></p>
       <p class="card-text">Photo elevation: <%= photo.elevation_meters %>m</p>
-      <p class="card-text">Capture date / time: <%= photo.taken_at.to_formatted_s(:short) %></p>
+      <p class="card-text">Capture date / time: <%= photo.taken_at.to_formatted_s(:db) %></p>
       <p class="card-text" style="margin-top: 15px;"><%= link_to('Photo information', photo_path(photo.id)) %></p>
       <p class="card-text"><%= photo.streetview['share_link'] ? link_to('Start Street View tour here', photo.streetview['share_link'], target: '_blank') : '' %></p>
     </div>
