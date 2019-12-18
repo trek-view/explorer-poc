@@ -44,7 +44,7 @@ describe Api::V1::TourbooksController, :type => :controller do
       {
           name: "Investigation of the world part 2",
           description: "my favourite tours and trips 2",
-          tag_ids: [
+          tour_ids: [
               tours.first.id,
               tours.second.id
           ]
@@ -58,7 +58,6 @@ describe Api::V1::TourbooksController, :type => :controller do
       end
 
       it 'should create a tourbook' do
-        p json
         expect(json).not_to be_empty
         expect(json['tourbook']).not_to be_empty
       end
