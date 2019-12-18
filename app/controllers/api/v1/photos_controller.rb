@@ -148,7 +148,9 @@ module Api::V1
         prms[:filename] = prms[:image].original_filename if prms[:image].present?
         prms[:country] = prms[:address][:country_code] if prms[:address].present? && prms[:address][:country_code].present?
         prms[:tourer_photo_id] = prms[:tourer][:photo_id] if prms[:tourer].present? && prms[:tourer][:photo_id].present?
-        prms[:tourer_connection_photo] = prms[:tourer][:connection_photo] if prms[:tourer].present? && prms[:tourer][:connection_photo].present?
+        if prms[:tourer].present? && prms[:tourer][:connections]
+          prms[:tourer_connection_photos] = prms[:tourer][:connections].map { |c| c[:photo_id] }
+        end
         prms
       end
 
@@ -167,7 +169,7 @@ module Api::V1
          address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code],
          google: [:plus_code_global_code, :plus_code_compound_code],
          streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [:photo_id, :connection_photo, :connection_method, :connection_distance_meters, :heading],
+         tourer: [:photo_id, connections: [ :photo_id, :distance_meters, :heading, :elevation_meters ]],
          opentrailview: [:photo_id]
         ]
       end
@@ -187,7 +189,7 @@ module Api::V1
           @photos = @photos.joins(:country).where(countries: { code: @query[:countries] }) if @query[:countries].present?
           @photos = @photos.where(photos: {id: @query[:ids]}) if @query[:ids].present?
           @photos = @photos.where("photos.streetview @> hstore(:key, :value)", key: "connections", value: @query[:streetview_connections]) if @query[:streetview_connections].present?
-          @photos = @photos.where("photos.tourer_connection_photo IN (?)", @query[:tourer_connection_photos]) if @query[:tourer_connection_photos].present?
+          @photos = @photos.where("photos.tourer_connection_photos @> ARRAY[?]::text[]", @query[:tourer_connection_photos]) if @query[:tourer_connection_photos].present?
 
           @photos = @photos.order("photos.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         end

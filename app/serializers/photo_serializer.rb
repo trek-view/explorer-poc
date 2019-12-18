@@ -66,10 +66,7 @@ class PhotoSerializer < ActiveModel::Serializer
   def tourer
     {
         photo_id: object.tourer['photo_id'],
-        connection_photo: object.tourer['connection_photo'],
-        connection_method: object.tourer['connection_method'],
-        connection_distance_meters: object.tourer['connection_distance_meters'],
-        heading: object.tourer['heading'],
+        connections: object.tourer['connections'],
     }
   end
 
