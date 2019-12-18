@@ -7,8 +7,11 @@ module Api::V1
 
     # GET /api/v1/tourbooks
     def index
-      @tourbooks = Tourbook.includes(:tours)
-      render json: @tourbooks, status: :ok
+      find_tourbooks
+      @tourbooks = @tourbooks.page(params[:page] ? params[:page].to_i : 1)
+      tourbooks_json = ActiveModelSerializers::SerializableResource.new(@tourbooks).as_json
+      tourbooks_json['_metadata'] = pagination_meta(@tourbooks)
+      render json: tourbooks_json, status: :ok
     end
 
     # GET /api/v1/tourbooks/:id
@@ -122,11 +125,12 @@ module Api::V1
       def find_tourbooks
         set_tourbooks_search_params
 
-        @tourbooks = api_user.tourbooks.includes(:tours)
+        @tourbooks = Tourbook.includes(:tours)
 
         if @query.present?
           @tourbooks = @tourbooks.joins(:tours).where(tours: { id: @query[:tour_ids] }).distinct if @query[:tour_ids].present?
           @tourbooks = @tourbooks.where(tourbooks: { id: @query[:ids] }) if @query[:ids].present?
+          @tourbooks = @tourbooks.where(tourbooks: { user_id: @query[:user_ids] }) if @query[:user_ids].present?
 
           if @query[:sort_by].present?
             if @query[:sort_by] == "name"
@@ -145,7 +149,7 @@ module Api::V1
       end
 
       def tourbook_search_params
-        params.permit(:sort_by, tour_ids: [], ids: [])
+        params.permit(:sort_by, tour_ids: [], ids: [], user_ids: [])
       end
 
       def pagination_meta(object)

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
-  it "signs user in and out", focus: true do
+  it "signs user in and out" do
     user = create(:confirmed_user)
     sign_in user
     get root_path

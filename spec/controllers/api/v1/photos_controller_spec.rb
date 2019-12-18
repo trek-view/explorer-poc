@@ -124,7 +124,7 @@ describe Api::V1::PhotosController, :type => :controller do
         post "/api/v1/tours/#{tour_id}/photos", valid_attributes
       end
 
-      it 'should create a photo', focus: true do
+      it 'should create a photo' do
         expect(json).not_to be_empty
         expect(json['photo']).not_to be_empty
       end

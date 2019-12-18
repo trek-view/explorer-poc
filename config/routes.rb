@@ -10,10 +10,9 @@ Rails.application.routes.draw do
         resources :photos, only: %i[index show create update destroy]
       end
 
-      resources :tourbooks, only: %i[show create update destroy]
+      resources :tourbooks
 
       resources :users, only: %i[show] do
-        get 'tourbooks', to: 'tourbooks#get_tourbooks'
         collection do
           get 'current_account'
         end

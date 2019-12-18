@@ -14,10 +14,10 @@ describe Api::V1::TourbooksController, :type => :controller do
       before do
         header 'api-key', user.api_token
         tours = tourbooks.first.tours
-        get "/api/v1/users/#{user.id}/tourbooks?tour_ids[]=#{tours.first.id}&ids[]=#{tourbooks.first.id}&sort_by=name"
+        get "/api/v1/tourbooks?tour_ids[]=#{tours.first.id}&ids[]=#{tourbooks.first.id}&user_ids[]=#{user.id}&sort_by=name"
       end
 
-      it 'should return json with metadata', focus: true do
+      it 'should return json with metadata' do
         expect(json).not_to be_empty
         expect(json['tourbooks']).not_to be_empty
         expect(json['_metadata']).not_to be_empty
@@ -58,6 +58,7 @@ describe Api::V1::TourbooksController, :type => :controller do
       end
 
       it 'should create a tourbook' do
+        p json
         expect(json).not_to be_empty
         expect(json['tourbook']).not_to be_empty
       end
