@@ -247,7 +247,7 @@ describe Api::V1::PhotosController, :type => :controller do
       it 'should return updated viewpoint with 1' do
         expect(json).not_to be_empty
         expect(json['viewpoint']).not_to be_empty
-        expect(json['viewpoint']['point']).to equal(1)
+        expect(json['viewpoint']['count']).to equal(1)
       end
     end
 
@@ -262,7 +262,7 @@ describe Api::V1::PhotosController, :type => :controller do
       it 'should return updated viewpoint with 0' do
         expect(json).not_to be_empty
         expect(json['viewpoint']).not_to be_empty
-        expect(json['viewpoint']['point']).to equal(0)
+        expect(json['viewpoint']['count']).to equal(0)
       end
     end
   end
@@ -280,7 +280,7 @@ describe Api::V1::PhotosController, :type => :controller do
       expect(json['_metadata']).not_to be_empty
       expect(json['viewpoints']).not_to be_empty
       json['viewpoints'].each do |viewpoint|
-        expect(viewpoint.keys).to contain_exactly('point', 'user_ids', 'photo_id')
+        expect(viewpoint.keys).to contain_exactly('count', 'user_ids', 'photo_id')
       end
     end
   end

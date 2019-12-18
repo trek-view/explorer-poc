@@ -28,7 +28,7 @@ $(function(){
            },
            success: function(data){
                 if (data.viewpoint && typeof data.viewpoint === 'object') {
-                    target.innerHTML = data.viewpoint.viewpoint
+                    target.innerHTML = data.viewpoint.count
                 }
             },
            failure: function(errMsg) {
