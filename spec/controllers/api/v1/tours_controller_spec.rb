@@ -74,8 +74,10 @@ describe Api::V1::ToursController, :type => :controller do
         tags: "royal, castle, history",
         tour_type: "land",
         transport_type: "bike",
-        tourer_tour_id: "TR00399",
-        tourer_version: "1.0"
+        tourer: {
+            tour_id: "TR00399",
+            version: "1.0"
+        }
       }
     end
 
@@ -85,7 +87,8 @@ describe Api::V1::ToursController, :type => :controller do
         post '/api/v1/tours', tour: valid_attributes
       end
 
-      it 'should create a tour' do
+      it 'should create a tour', focus: true do
+        p json
         expect(json).not_to be_empty
         expect(json['tour']).not_to be_empty
       end

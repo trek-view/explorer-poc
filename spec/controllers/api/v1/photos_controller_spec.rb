@@ -197,7 +197,7 @@ describe Api::V1::PhotosController, :type => :controller do
       put "/api/v1/tours/#{tour_id}/photos/#{photo_id}", new_attrs
     end
 
-    it 'should update the photo', focus: true do
+    it 'should update the photo' do
       p json
       expect(json).not_to be_empty
       expect(json['photo']).not_to be_empty

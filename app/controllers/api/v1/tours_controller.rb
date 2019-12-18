@@ -114,7 +114,9 @@ module Api::V1
     def tour_params
       parameters = params.require(:tour).permit(*permitted_params)
       parameters[:tag_names] = parameters[:tags] if parameters[:tags]
-      parameters.except(:tags)
+      parameters[:tourer_tour_id] = parameters[:tourer][:tour_id] if parameters[:tourer]
+      parameters[:tourer_version] = parameters[:tourer][:version] if parameters[:tourer]
+      parameters.except(:tags, :tourer)
     end
 
     def set_user
@@ -129,7 +131,8 @@ module Api::V1
           :tourer_version,
           :tour_type,
           :transport_type,
-          :tags
+          :tags,
+          tourer: [:tour_id, :version]
       ]
     end
 
