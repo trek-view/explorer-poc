@@ -21,13 +21,6 @@ describe Api::V1::PhotosController, :type => :controller do
           plus_code_compound_code: "CWC8+R9, Mountain View, CA, USA"
       },
       address: {
-          cafe: '',
-          road: '',
-          suburb: '',
-          county: '',
-          region: '',
-          state: '',
-          postcode: '',
           country: "France",
           country_code: "FR"
       },
@@ -124,7 +117,7 @@ describe Api::V1::PhotosController, :type => :controller do
         post "/api/v1/tours/#{tour_id}/photos", valid_attributes
       end
 
-      it 'should create a photo' do
+      it 'should create a photo', focus: true do
         expect(json).not_to be_empty
         expect(json['photo']).not_to be_empty
       end
@@ -254,7 +247,7 @@ describe Api::V1::PhotosController, :type => :controller do
       it 'should return updated viewpoint with 1' do
         expect(json).not_to be_empty
         expect(json['viewpoint']).not_to be_empty
-        expect(json['viewpoint']['viewpoint']).to equal(1)
+        expect(json['viewpoint']['point']).to equal(1)
       end
     end
 
@@ -269,7 +262,7 @@ describe Api::V1::PhotosController, :type => :controller do
       it 'should return updated viewpoint with 0' do
         expect(json).not_to be_empty
         expect(json['viewpoint']).not_to be_empty
-        expect(json['viewpoint']['viewpoint']).to equal(0)
+        expect(json['viewpoint']['point']).to equal(0)
       end
     end
   end
@@ -282,7 +275,7 @@ describe Api::V1::PhotosController, :type => :controller do
       get "/api/v1/viewpoints?photo_ids[]=#{photo.id}&user_ids[]=#{user.id}"
     end
 
-    it 'should return viewpoints', focus: true do
+    it 'should return viewpoints' do
       expect(json).not_to be_empty
       expect(json['_metadata']).not_to be_empty
       expect(json['viewpoints']).not_to be_empty
