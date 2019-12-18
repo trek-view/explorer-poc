@@ -51,10 +51,13 @@ describe Api::V1::PhotosController, :type => :controller do
       },
       tourer: {
           photo_id: "tkKjChLHbE",
-          connection_photo: "fkujChLJJJ",
+          connection_photo: ["fkujChLJJJ", "fkujChLJJK"],
           connection_method: "time",
           connection_distance_meters: "4",
           heading: "90"
+      },
+      opentrailview: {
+          photo_id: "tkKjChLHbE"
       },
       image: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg')
   }}
@@ -120,7 +123,8 @@ describe Api::V1::PhotosController, :type => :controller do
         post "/api/v1/tours/#{tour_id}/photos", valid_attributes
       end
 
-      it 'should create a photo' do
+      it 'should create a photo', focus: true do
+        p json
         expect(json).not_to be_empty
         expect(json['photo']).not_to be_empty
       end
@@ -163,7 +167,7 @@ describe Api::V1::PhotosController, :type => :controller do
       end
     end
 
-    context 'When the request is invalid (country is empty)', focus: true do
+    context 'When the request is invalid (country is empty)' do
       let (:invalid_attrs) do
         valid_attributes[:address][:country_code] = ''
         valid_attributes
@@ -175,7 +179,6 @@ describe Api::V1::PhotosController, :type => :controller do
       end
 
       it 'should return status code unprocessable_entity' do
-        p json
         expect(json).not_to be_empty
         expect(json['message']).not_to be_empty
         expect(json['status']).to eq('unprocessable_entity')

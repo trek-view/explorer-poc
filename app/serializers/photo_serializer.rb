@@ -15,6 +15,7 @@ class PhotoSerializer < ActiveModel::Serializer
                  google
                  streetview
                  tourer
+                 opentrailview
                  created_at
                  updated_at
                ]

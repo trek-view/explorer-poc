@@ -166,7 +166,8 @@ module Api::V1
          address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code],
          google: [:plus_code_global_code, :plus_code_compound_code],
          streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [:photo_id, :connection_photo, :connection_method, :connection_distance_meters, :heading]
+         tourer: [:photo_id, :connection_photo, :connection_method, :connection_distance_meters, :heading],
+         opentrailview: [:photo_id]
         ]
       end
 

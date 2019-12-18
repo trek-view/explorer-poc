@@ -11,7 +11,8 @@ class Photo < ApplicationRecord
   store_accessor :address, :cafe, :road, :suburb, :county, :region, :state, :postcode, :country_code
   store_accessor :google, :plus_code_global_code, :plus_code_compound_code
   store_accessor :streetview,  :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections
-  store_accessor :tourer, :photo_id, :connection_method, :connection_photo, :connection_distance_meters
+  store_accessor :tourer, :connection_method, :connection_photo, :connection_distance_meters
+  store_accessor :opentrailview, :photo_id
 
   validates :image, file_size: { less_than: 30.megabytes }, presence: true
   validates :filename, presence: true
@@ -30,9 +31,10 @@ class Photo < ApplicationRecord
   validates :heading, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }
   validates :pitch, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
   validates :roll, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }
-  validates :photo_id, allow_blank: true, length: { maximum: 10 }
+  validates :photo_id, allow_blank: true, length: { maximum: 20 }
   validates :connection_distance_meters, numericality: true
   validates :tourer_photo_id, allow_blank: true, length: { maximum: 10 }
+
   validates_uniqueness_of :tourer_photo_id, :scope => :tour_id
 
   validates_associated :country

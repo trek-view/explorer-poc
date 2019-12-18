@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_14_020131) do
+ActiveRecord::Schema.define(version: 2019_12_18_134706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 2019_12_14_020131) do
     t.text "favoritable_total"
     t.string "tourer_connection_photo"
     t.string "filename"
+    t.hstore "opentrailview"
     t.index ["streetview"], name: "index_photos_on_streetview", using: :gin
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer"], name: "index_photos_on_tourer", using: :gin
