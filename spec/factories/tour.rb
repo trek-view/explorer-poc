@@ -6,6 +6,7 @@ FactoryBot.define do
     tour_type { Constants::TOUR_TYPES[Constants::TOUR_TYPES.keys.sample] }
     transport_type { Constants::TRANSPORT_TYPES[Constants::TRANSPORT_TYPES.keys.sample] }
     tourer_tour_id { Faker::Lorem.characters(number:10) }
+    tourer_version { Faker::Lorem.characters(number:5) }
     user
 
     trait :with_photos do

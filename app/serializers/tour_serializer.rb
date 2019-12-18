@@ -9,8 +9,7 @@ class TourSerializer < ActiveModel::Serializer
                 tags
                 tour_type
                 transport_type
-                tourer_version
-                tourer_tour_id
+                tourer
                 created_at
                 updated_at
                 user_id
@@ -22,6 +21,13 @@ class TourSerializer < ActiveModel::Serializer
 
   def tags
     object.tags.any? ? object.tags.map(&:name).uniq : []
+  end
+
+  def tourer
+    {
+        tour_id: object.tourer_tour_id,
+        version: object.tourer_version
+    }
   end
 
 end

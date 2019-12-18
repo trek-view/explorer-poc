@@ -14,7 +14,8 @@ describe Api::V1::ToursController, :type => :controller do
         get "/api/v1/tours?tags[]=#{tours.first.tags[0].name}&user_ids[]=#{user.id}&ids[]=#{tours.first.id}&countries[]=#{tours.first.photos.first.country.code}&tour_types[]=#{tours.first.tour_type}&sort_by=name"
       end
 
-      it 'should return tours' do
+      it 'should return tours', focus: true do
+        p json
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['tours']).not_to be_empty
@@ -26,8 +27,7 @@ describe Api::V1::ToursController, :type => :controller do
                                           'tour_type',
                                           'transport_type',
                                           'tags',
-                                          'tourer_version',
-                                          'tourer_tour_id',
+                                          'tourer',
                                           'created_at',
                                           'updated_at',
                                           'user_id')
@@ -87,6 +87,7 @@ describe Api::V1::ToursController, :type => :controller do
       end
 
       it 'should create a tour' do
+        p json
         expect(json).not_to be_empty
         expect(json['tour']).not_to be_empty
       end
@@ -96,7 +97,7 @@ describe Api::V1::ToursController, :type => :controller do
       end
     end
 
-    context 'when the request is invalid', focus: true do
+    context 'when the request is invalid' do
       before do
         valid_attributes[:tour_type] = 'null'
         valid_attributes[:transport_type] = 'null'
@@ -141,7 +142,7 @@ describe Api::V1::ToursController, :type => :controller do
       end
     end
 
-    context 'when the request is invalid', focus: true do
+    context 'when the request is invalid' do
       let (:invalid_attrs) do
         valid_attributes[:name] = 'test'
         valid_attributes
