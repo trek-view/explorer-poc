@@ -88,7 +88,6 @@ describe Api::V1::ToursController, :type => :controller do
       end
 
       it 'should create a tour', focus: true do
-        p json
         expect(json).not_to be_empty
         expect(json['tour']).not_to be_empty
       end

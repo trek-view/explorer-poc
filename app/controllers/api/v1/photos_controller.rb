@@ -101,8 +101,8 @@ module Api::V1
 
       render json: {
           viewpoint: {
-              viewpoint: photo.favoritable_score[:favorite].presence || 0,
-              updated_at: DateTime.now.rfc3339
+              point: photo.favoritable_score[:favorite].presence || 0,
+              updated_at: DateTime.now.rfc3339,
           }
       }, status: :ok
     end
@@ -125,8 +125,9 @@ module Api::V1
       viewpoints = []
       photos.each do |photo|
         viewpoints << {
-            viewpoint: photo.favoritable_score[:favorite],
-            user_ids: photo.user_favoritors.map {|u| u.id}
+            point: photo.favoritable_score[:favorite],
+            user_ids: photo.user_favoritors.map {|u| u.id},
+            photo_id: photo.id
         }
       end
 

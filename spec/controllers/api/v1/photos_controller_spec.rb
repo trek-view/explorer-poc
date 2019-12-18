@@ -198,7 +198,6 @@ describe Api::V1::PhotosController, :type => :controller do
     end
 
     it 'should update the photo' do
-      p json
       expect(json).not_to be_empty
       expect(json['photo']).not_to be_empty
       expect(json['photo']['camera_make']).to eq('x')
@@ -283,12 +282,12 @@ describe Api::V1::PhotosController, :type => :controller do
       get "/api/v1/viewpoints?photo_ids[]=#{photo.id}&user_ids[]=#{user.id}"
     end
 
-    it 'should return viewpoints' do
+    it 'should return viewpoints', focus: true do
       expect(json).not_to be_empty
       expect(json['_metadata']).not_to be_empty
       expect(json['viewpoints']).not_to be_empty
       json['viewpoints'].each do |viewpoint|
-        expect(viewpoint.keys).to contain_exactly('viewpoint', 'user_ids')
+        expect(viewpoint.keys).to contain_exactly('point', 'user_ids', 'photo_id')
       end
     end
   end
