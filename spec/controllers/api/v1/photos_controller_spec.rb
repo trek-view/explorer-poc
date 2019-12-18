@@ -88,7 +88,8 @@ describe Api::V1::PhotosController, :type => :controller do
                                                 'google',
                                                 'streetview',
                                                 'filename',
-                                                'tourer')
+                                                'tourer',
+                                                'opentrailview')
         end
       end
 
@@ -124,7 +125,6 @@ describe Api::V1::PhotosController, :type => :controller do
       end
 
       it 'should create a photo', focus: true do
-        p json
         expect(json).not_to be_empty
         expect(json['photo']).not_to be_empty
       end
@@ -277,7 +277,6 @@ describe Api::V1::PhotosController, :type => :controller do
     end
 
     it 'should return viewpoints' do
-      p json
       expect(json).not_to be_empty
       expect(json['_metadata']).not_to be_empty
       expect(json['viewpoints']).not_to be_empty

@@ -9,7 +9,7 @@ class Tourbook < ApplicationRecord
   has_many :tour_tourbooks, dependent: :destroy
   has_many :tours, through: :tour_tourbooks, inverse_of: :tourbooks
 
-  validates :name, presence: true, uniqueness: {scope: :user}, length: { maximum: 70 }
+  validates :name, presence: true, uniqueness: {scope: :user_id}, length: { maximum: 70 }
   validates :description, presence: true, length: { maximum: 240 }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tourbooks]

@@ -15,7 +15,6 @@ describe Api::V1::ToursController, :type => :controller do
       end
 
       it 'should return tours', focus: true do
-        p json
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['tours']).not_to be_empty
@@ -87,7 +86,6 @@ describe Api::V1::ToursController, :type => :controller do
       end
 
       it 'should create a tour' do
-        p json
         expect(json).not_to be_empty
         expect(json['tour']).not_to be_empty
       end
@@ -106,7 +104,6 @@ describe Api::V1::ToursController, :type => :controller do
       end
 
       it 'should return unprocessable_entity' do
-        p json
         expect(json).not_to be_empty
         expect(json['message']).not_to be_empty
         expect(json['status']).to eq('unprocessable_entity')
