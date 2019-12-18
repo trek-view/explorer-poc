@@ -187,14 +187,21 @@ describe Api::V1::PhotosController, :type => :controller do
   end
 
   describe 'PUT /api/v1/tours/:tour_id/photos/:id' do
-    before do
-      header 'api-key', user.api_token
-      put "/api/v1/tours/#{tour_id}/photos/#{photo_id}", valid_attributes
+    let (:new_attrs) do
+      valid_attributes[:camera_make] = 'x'
+      valid_attributes
     end
 
-    it 'should update the photo' do
+    before do
+      header 'api-key', user.api_token
+      put "/api/v1/tours/#{tour_id}/photos/#{photo_id}", new_attrs
+    end
+
+    it 'should update the photo', focus: true do
+      p json
       expect(json).not_to be_empty
       expect(json['photo']).not_to be_empty
+      expect(json['photo']['camera_make']).to eq('x')
     end
 
     it 'should return status code 200' do
