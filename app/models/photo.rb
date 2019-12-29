@@ -32,7 +32,6 @@ class Photo < ApplicationRecord
   validates :pitch, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
   validates :roll, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }
   validates :photo_id, allow_blank: true, length: { maximum: 20 }
-  validates :connection_distance_meters, numericality: true
   validates :tourer_photo_id, allow_blank: true, length: { maximum: 10 }
 
   validates_uniqueness_of :tourer_photo_id, :scope => :tour_id
