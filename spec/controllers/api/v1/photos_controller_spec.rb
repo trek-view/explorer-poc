@@ -44,21 +44,10 @@ describe Api::V1::PhotosController, :type => :controller do
       },
       tourer: {
           photo_id: "tkKjChLHbE",
-          connections: [
-              {
-                  photo_id: "fkujChLJJJ",
-                  distance_meters: "4",
-                  heading: "90",
-                  elevation_meters: "4"
-              },
-              {
-
-                  photo_id: "fkujChLJJK",
-                  distance_meters: "4",
-                  heading: "90",
-                  elevation_meters: "4"
-              }
-          ]
+          connection_photo: ["fkujChLJJJ", "fkujChLJJK"],
+          connection_method: "time",
+          connection_distance_meters: "4",
+          heading: "90"
       },
       opentrailview: {
           photo_id: "tkKjChLHbE"
@@ -70,10 +59,10 @@ describe Api::V1::PhotosController, :type => :controller do
     context 'When photos exists' do
       before do
         header 'api-key', user.api_token
-        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photos[0]}&sot_by=created_at"
+        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photo}&sot_by=created_at"
       end
 
-      it 'should return photos', focus: true do
+      it 'should return photos' do
         expect(json).not_to be_empty
         expect(json['_metadata']).not_to be_empty
         expect(json['photos']).not_to be_empty
@@ -128,7 +117,7 @@ describe Api::V1::PhotosController, :type => :controller do
         post "/api/v1/tours/#{tour_id}/photos", valid_attributes
       end
 
-      it 'should create a photo' do
+      it 'should create a photo', focus: true do
         expect(json).not_to be_empty
         expect(json['photo']).not_to be_empty
       end
