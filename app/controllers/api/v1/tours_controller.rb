@@ -112,7 +112,7 @@ module Api::V1
     end
 
     def tour_params
-      parameters = params.require(:tour).permit(*permitted_params)
+      parameters = params.permit(*permitted_params)
       parameters[:tag_names] = parameters[:tags] if parameters[:tags]
       parameters[:tourer_tour_id] = parameters[:tourer][:tour_id] if parameters[:tourer]
       parameters[:tourer_version] = parameters[:tourer][:version] if parameters[:tourer]
