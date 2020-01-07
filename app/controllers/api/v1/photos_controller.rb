@@ -64,7 +64,7 @@ module Api::V1
       photo = @tour.photos.find_by(id: params[:id])
 
       if photo.update(photo_params)
-        render json: { photo: photo } , status: :ok
+        render json: { photo: photo.reload } , status: :ok
       else
         render json: {
             status: :unprocessable_entity,
