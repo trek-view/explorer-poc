@@ -64,15 +64,23 @@ class PhotoSerializer < ActiveModel::Serializer
   end
 
   def tourer
+    return {} unless object.tourer
+
+    if object.tourer['connections']
+      connections = JSON.parse(object.tourer['connections'])
+    else
+      connections = {}
+    end
+
     {
         photo_id: object.tourer['photo_id'],
-        connections: JSON.parse(object.tourer['connections'])
+        connections: connections
     }
   end
 
   def opentrailview
     {
-        photo_id: object.opentrailview['photo_id']
+        photo_id: object.opentrailview && object.opentrailview['photo_id']
     }
   end
 
