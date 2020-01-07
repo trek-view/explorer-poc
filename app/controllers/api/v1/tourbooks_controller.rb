@@ -107,7 +107,7 @@ module Api::V1
       end
 
       def tourbook_params
-        params.require(:tourbook).permit(*permitted_params)
+        params.permit(*permitted_params)
       end
 
       def set_user
