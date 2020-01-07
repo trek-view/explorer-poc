@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_18_134706) do
+ActiveRecord::Schema.define(version: 2020_01_07_181255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -97,12 +98,13 @@ ActiveRecord::Schema.define(version: 2019_12_18_134706) do
     t.hstore "tourer"
     t.text "favoritable_score"
     t.text "favoritable_total"
-    t.string "tourer_connection_photo"
     t.string "filename"
     t.hstore "opentrailview"
+    t.text "tourer_connection_photos", default: [], array: true
     t.index ["streetview"], name: "index_photos_on_streetview", using: :gin
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer"], name: "index_photos_on_tourer", using: :gin
+    t.index ["tourer_connection_photos"], name: "index_photos_on_tourer_connection_photos", using: :gin
   end
 
   create_table "subscriptions", force: :cascade do |t|

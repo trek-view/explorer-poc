@@ -40,11 +40,16 @@ FactoryBot.define do
         ]
     }}
     tourer {{
-      photo_id: Faker::Lorem.characters(number:10),
-      connection_photo: Faker::Lorem.characters(number:10),
-      connection_method: "time",
-      connection_distance_meters: rand(1...10),
-      heading: rand(1...359)
+        photo_id: Faker::Lorem.characters(number:10),
+        connections: (1..10).map do |n|
+        {
+            photo_id: Faker::Lorem.characters(number:10),
+            distance_meters: rand(1...10),
+            heading: rand(1...359),
+            elevation_meters: rand(1...10)
+        }
+      end
+
     }}
     opentrailview {{ photo_id: Faker::Lorem.characters(number:20) }}
     image { Rack::Test::UploadedFile.new(Rails.root.join(Rails.env.test? ? 'spec/support/images/sample.jpeg' : "spec/support/images/#{rand(5)}.jpg"), 'image/jpeg') }
