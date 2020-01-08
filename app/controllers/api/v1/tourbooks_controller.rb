@@ -3,7 +3,7 @@ module Api::V1
   class TourbooksController < BaseController
 
     before_action :set_tourbook, only: %i[show update destroy]
-    before_action :set_user, only: %i[get_tourbooks]
+    before_action :set_user
 
     # GET /api/v1/tourbooks
     def index
@@ -125,7 +125,11 @@ module Api::V1
       def find_tourbooks
         set_tourbooks_search_params
 
-        @tourbooks = Tourbook.includes(:tours)
+        if @user
+          @tourbooks = @user.tourbooks.includes(:tours)
+        else
+          @tourbooks = Tourbook.includes(:tours)
+        end
 
         if @query.present?
           @tourbooks = @tourbooks.joins(:tours).where(tours: { id: @query[:tour_ids] }).distinct if @query[:tour_ids].present?

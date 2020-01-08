@@ -5,6 +5,7 @@ class TourbookSerializer < ActiveModel::Serializer
                 name
                 description
                 created_at
+                updated_at
                 user_id
                 tour_ids
               ]
