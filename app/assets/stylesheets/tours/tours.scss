@@ -4,3 +4,18 @@
   max-width: 800px;
   margin: 0 auto;
 }
+
+#showPhotoModal {
+  a {
+    text-decoration: none;
+    color: black;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    iframe {
+      width: 100%;
+    }
+  }
+}

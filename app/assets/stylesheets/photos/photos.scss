@@ -4,6 +4,10 @@
 .photo-container {
   padding-bottom: 10px;
 
+  iframe {
+    width: 100%;
+  }
+
   .photo-card-link {
     text-decoration: none;
     color: black;
@@ -35,4 +39,3 @@
     cursor: pointer;
   }
 }
-

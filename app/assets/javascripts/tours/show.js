@@ -105,7 +105,8 @@ function showThumbModal(photo) {
         && photo.image.thumb
         && photo.streetview) {
         $('#imageContainer').empty();
-        $('#imageContainer').prepend('<a href="<%= photo_path(photo.id) %>"><img id="photoImg" src="' + photo.image.thumb.url + '" style="width: 100%" /></a>');
+        $('.modal-title').prepend(photo.filename);
+        $('#imageContainer').prepend('<a href="<%= photo_path(photo.id) %>"><iframe allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url + '&amp;autoLoad=true"></iframe><div class="card-body"><p class="card-text">Latitude: ' + photo.latitude + '</p><p class="card-text">Longitude: ' + photo.longitude + '</p><p class="card-text">Photo elevation: ' + photo.elevation_meters + '</p><p class="card-text">Capture time: ' + photo.taken_at + '</p></div></a>');
         $('#showPhotoModal').modal('show');
     }
     return;
