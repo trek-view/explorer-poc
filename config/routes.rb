@@ -16,6 +16,8 @@ Rails.application.routes.draw do
         collection do
           get 'current_account'
         end
+
+        resources :tourbooks, only: %i[index]
       end
 
       post '/viewpoints', to: 'photos#set_viewpoints'
