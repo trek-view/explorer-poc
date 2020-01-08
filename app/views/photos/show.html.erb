@@ -18,7 +18,7 @@
             </tr>
             <tr>
               <td>Connected photos</td>
-              <td>TODO, TODO</td>
+              <td><%= @photo.tourer_connection_photos %></td>
             </tr>
             <tr>
               <td>Filename</td>
@@ -42,7 +42,7 @@
             </tr>
             <tr>
               <td>Photo Country</td>
-              <td></td>
+              <td><%= @photo.address['country_code'] %></td>
             </tr>
             <tr>
               <td>Google Plus Code</td>
@@ -66,7 +66,7 @@
             </tr>
             <tr>
               <td>View on OpenTrailView</td>
-              <td>TODO</td>
+              <td><%= link_to @photo.opentrailview['photo_id'], @photo.opentrailview['photo_id'], target: "_blank" %></td>
             </tr>
           </tbody>
         </table>
