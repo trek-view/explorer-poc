@@ -19,7 +19,7 @@ module MetaTagsHelper
 
   def photo_og_meta_tag(photo)
       if Rails.env.staging?
-        set_meta_tags og: {image_src: photo.image.thumb.url } if photo.present?
+        set_meta_tags og: {image: photo.image.url } if photo.present?
       end
   end
 
@@ -27,7 +27,7 @@ module MetaTagsHelper
       if Rails.env.staging?
         if tour.present? && tour.photos.present?
             photo = tour.photos.first
-            set_meta_tags og: {image_src: photo.image.thumb.url } if photo.present?
+            set_meta_tags og: {image: photo.image.url } if photo.present?
         end
       end
   end
