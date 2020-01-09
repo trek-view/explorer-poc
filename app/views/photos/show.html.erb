@@ -17,10 +17,6 @@
               <td><%= link_to @photo.tour.name, user_tour_path(@photo.tour.user, @photo.tour) %></td>
             </tr>
             <tr>
-              <td>Connected photos</td>
-              <td><%= @photo.tourer_connection_photos %></td>
-            </tr>
-            <tr>
               <td>Filename</td>
               <td><%= "#{@photo.filename}" %></td>
             </tr>
@@ -61,12 +57,16 @@
               <td><%= @photo['tourer']['photo_id'] %></td>
             </tr>
             <tr>
+              <td>Tourer Connected photos</td>
+              <td><%= @photo.tourer_connection_photos %></td>
+            </tr>
+            <tr>
               <td>View on Google Street View</td>
               <td><%= link_to @photo['streetview']['share_link'], @photo['streetview']['share_link'], target: "_blank" %></td>
             </tr>
             <tr>
-              <td>View on OpenTrailView</td>
-              <td><%= link_to @photo.opentrailview['photo_id'], @photo.opentrailview['photo_id'], target: "_blank" %></td>
+              <td>OpenTrailView photo id</td>
+              <td><%= @photo.opentrailview['photo_id'] %></td>
             </tr>
           </tbody>
         </table>
