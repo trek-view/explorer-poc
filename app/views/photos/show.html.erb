@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header">
         <%= render(ViewpointComponent, viewpoint: @photo.favoritable_score.present? ? @photo.favoritable_score[:favorite] : 0, photo_id: @photo.id) %>
-        <iframe allowfullscreen src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=<%= @photo.image.url %>&amp;autoLoad=true"></iframe>
+        <iframe allowfullscreen width="600" height="400" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=<%= @photo.image.url %>&amp;autoLoad=true"></iframe>
       </div>
       <div class="card-body">
 

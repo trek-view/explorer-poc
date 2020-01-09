@@ -60,6 +60,7 @@ Rails.application.configure do
   #   policy.style_src   :self, :https, :unsafe_inline
   #   policy.connect_src :self
   #   policy.report_uri  ""
+  #   policy.img-src     :self, :https, 'https://backpack-staging-explorer-trekview-org.s3.amazonaws.com'
   # end
   #
   # config.action_dispatch.default_headers = {
@@ -67,7 +68,7 @@ Rails.application.configure do
   #     'X-Content-Type-Options' => 'nosniff',
   #     'X-Frame-Options' => 'SAMEORIGIN',
   #     'X-XSS-Protection' => '1; mode=block',
-  #     'Content-Security-Policy' => "default-src 'self'; script-src 'self' https://maps.googleapis.com; img-src 'self' https://backpack-staging-explorer-trekview-org.s3.amazonaws.com/*;"
+  #     'Content-Security-Policy' => "default-src 'self'; script-src 'self' https://maps.googleapis.com; img-src 'self' https://backpack-staging-explorer-trekview-org.s3.amazonaws.com;"
   # }
 
   # Use the lowest log level to ensure availability of diagnostic information
