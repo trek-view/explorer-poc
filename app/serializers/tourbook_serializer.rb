@@ -11,7 +11,7 @@ class TourbookSerializer < ActiveModel::Serializer
               ]
 
   def tour_ids
-    object.tours.any? ? object.tours.map(&:id) : []
+    object.tours.reload.any? ? object.tours.map(&:id) : []
   end
 
   # has_many :tours

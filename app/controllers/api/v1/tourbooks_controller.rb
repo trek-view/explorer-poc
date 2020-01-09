@@ -39,7 +39,7 @@ module Api::V1
     def update
       if api_user.tourbooks.include?(@tourbook)
 
-        tours = Tour.where(id: params[:tourbook][:tour_ids])
+        tours = Tour.where(id: params[:tour_ids])
         @tourbook.tours = tours if tours.present?
 
         if @tourbook.update(tourbook_params)
