@@ -17,6 +17,10 @@
               <td><%= link_to @photo.tour.name, user_tour_path(@photo.tour.user, @photo.tour) %></td>
             </tr>
             <tr>
+              <td>Explorer Photo ID</td>
+              <td><%= @photo.id %></td>
+            </tr>
+            <tr>
               <td>Filename</td>
               <td><%= "#{@photo.filename}" %></td>
             </tr>
