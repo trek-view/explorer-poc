@@ -2,7 +2,7 @@
 module Api::V1
   class PhotosController < BaseController
 
-    before_action :set_tour
+    before_action :set_tour, except: %i[set_viewpoints]
     before_action :set_photo, only: %i[show
                                         update
                                         destroy]
@@ -93,7 +93,7 @@ module Api::V1
     end
 
     def set_viewpoints
-      prms = params.require(:viewpoint).permit(*viewpoint_permitted_params)
+      prms = params.permit(*viewpoint_permitted_params)
       photo = Photo.find_by(id: prms[:photo_id])
 
       unless photo.present?
@@ -109,8 +109,8 @@ module Api::V1
 
       render json: {
           viewpoint: {
-              count: photo.favoritable_score[:favorite].presence || 0,
-              updated_at: DateTime.now.rfc3339,
+              id: api_user.id,
+              status: photo.favorited_by?(api_user)
           }
       }, status: :ok
     end
