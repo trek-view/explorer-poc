@@ -53,6 +53,14 @@ module Api::V1
 
     # PATCH/PUT /api/v1/tours/:tour_id/photos/:id
     def update
+      if photo_params.include?(:image)
+        render json: {
+            status: :unprocessable_entity,
+            message: "image can't be updated"
+        }, status: :unprocessable_entity
+        return
+      end
+
       unless validate_uniqueness_tourer_photo_id
         render json: {
             status: :unprocessable_entity,
@@ -182,7 +190,7 @@ module Api::V1
          address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code],
          google: [:plus_code_global_code, :plus_code_compound_code],
          streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [:photo_id, connections: [ :photo_id, :distance_meters, :heading_degrees, :elevation_meters ]],
+         tourer: [:photo_id, :version, connections: [ :photo_id, :distance_meters, :heading_degrees, :elevation_meters ]],
          opentrailview: [:photo_id]
         ]
       end

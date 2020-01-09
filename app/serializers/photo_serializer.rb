@@ -16,6 +16,7 @@ class PhotoSerializer < ActiveModel::Serializer
                  streetview
                  tourer
                  opentrailview
+                 favoritable_score
                  created_at
                  updated_at
                ]
@@ -74,6 +75,7 @@ class PhotoSerializer < ActiveModel::Serializer
 
     {
         photo_id: object.tourer['photo_id'],
+        version: object.tourer['version'],
         connections: connections
     }
   end
@@ -82,6 +84,10 @@ class PhotoSerializer < ActiveModel::Serializer
     {
         photo_id: object.opentrailview && object.opentrailview['photo_id']
     }
+  end
+
+  def favoritable_score
+    object.favoritable_score[:favorite]
   end
 
 end
