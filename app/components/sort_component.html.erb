@@ -3,7 +3,7 @@
   <%= select_tag 'sort_by',
                  options_for_select([
                                         ['created at', 'created_at'],
-                                        ['count of tour books', 'tourbooks_count'],
+                                        ['count of tourbooks', 'tourbooks_count'],
                                         %w(name name)
                                     ], value),
                  class: 'select-sort-by sort-tours form-control',
@@ -21,7 +21,7 @@
   <%= select_tag 'sort_by',
                  options_for_select([
                                         ['Capture date', 'taken_at'],
-                                        ['Count of view points', 'count_of_viewpoints'],
+                                        ['Count of viewpoints', 'count_of_viewpoints'],
                                         %w(name filename)
                                     ], value),
                  class: 'select-sort-by sort-photos form-control',
