@@ -202,7 +202,8 @@ module Api::V1
           @photos = @photos.joins(:country).where(countries: { code: @query[:countries] }) if @query[:countries].present?
           @photos = @photos.where(photos: {id: @query[:ids]}) if @query[:ids].present?
           @photos = @photos.where("photos.streetview @> hstore(:key, :value)", key: "connections", value: @query[:streetview_connections]) if @query[:streetview_connections].present?
-          @photos = @photos.where("photos.tourer_connection_photos @> ARRAY[?]::text[]", @query[:tourer_connection_photos]) if @query[:tourer_connection_photos].present?
+          @photos = @photos.where("photos.tourer_connection_photos @> ARRAY[?]::text[]", @query[:tourer_connection_photo_ids]) if @query[:tourer_connection_photo_ids].present?
+          @photos = @photos.where(photos: {tourer_photo_id: @query[:tourer_photo_ids]}) if @query[:tourer_photo_ids].present?
 
           @photos = @photos.order("photos.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         end
@@ -215,7 +216,7 @@ module Api::V1
       end
 
       def photo_search_params
-        params.permit(:streetview_connections, :sort_by, countries: [], ids: [], tourer_connection_photos: [])
+        params.permit(:streetview_connections, :sort_by, countries: [], ids: [], tourer_connection_photo_ids: [], tourer_photo_ids: [])
       end
 
       def pagination_meta(object)
