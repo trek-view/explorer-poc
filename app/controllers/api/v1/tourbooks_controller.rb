@@ -21,9 +21,9 @@ module Api::V1
 
     # POST /api/v1/tourbooks
     def create
-      @tourbook = api_user.tourbooks.build(tourbook_params)
+      validate_tour_ids and return
 
-      @tourbook.build_tour_tourbooks(tour_id: params[:tourbook][:tour_ids])
+      @tourbook = api_user.tourbooks.build(tourbook_params)
 
       if @tourbook.save
         render json: @tourbook, status: :created
@@ -37,6 +37,9 @@ module Api::V1
 
     # PATCH/PUT /api/v1/tourbooks/:id
     def update
+      validate_name and return
+      validate_tour_ids and return
+
       if api_user.tourbooks.include?(@tourbook)
 
         tours = Tour.where(id: params[:tour_ids])
@@ -107,7 +110,14 @@ module Api::V1
       end
 
       def tourbook_params
-        params.permit(*permitted_params)
+        parameters = params.permit(*permitted_params)
+        tour_ids = parameters[:tour_ids]
+        parameters[:tour_ids] = []
+        tour_ids.each do |tour_id|
+          parameters[:tour_ids] << tour_id if Tour.find_by(id: tour_id)
+        end
+        parameters
+        # parameters[:tag_names] = parameters[:tags] if parameters[:tags]
       end
 
       def set_user
@@ -167,6 +177,22 @@ module Api::V1
         }
       end
 
-  end
+      def validate_name
+        if tourbook_params[:name].present?
+          render json: {
+              status: :unprocessable_entity,
+              message: 'you cannot update the name of a tourbook'
+          }, status: :unprocessable_entity
+        end
+      end
 
+      def validate_tour_ids
+        if params[:tour_ids].present? && tourbook_params[:tour_ids].empty?
+          render json: {
+              status: :unprocessable_entity,
+              message: 'Tour IDs are all invalid'
+          }, status: :unprocessable_entity
+        end
+      end
+  end
 end

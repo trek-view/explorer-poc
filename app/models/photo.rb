@@ -26,11 +26,11 @@ class Photo < ApplicationRecord
   validates :country_code, presence: true
   validates :plus_code_global_code, length: { maximum: 255 }
   validates :plus_code_compound_code, length: { maximum: 255 }
-  validates :lat, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }, length: { maximum: 20 }
-  validates :lon, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, length: { maximum: 20 }
-  validates :heading, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }
-  validates :pitch, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }
-  validates :roll, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }
+  validates :lat, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }, length: { maximum: 20 }, allow_blank: true
+  validates :lon, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, length: { maximum: 20 }, allow_blank: true
+  validates :heading, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }, allow_blank: true
+  validates :pitch, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }, allow_blank: true
+  validates :roll, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }, allow_blank: true
   validates :photo_id, allow_blank: true, length: { maximum: 20 }
   validates :tourer_photo_id, allow_blank: true, length: { maximum: 10 }
   # validates :connections, presence: true

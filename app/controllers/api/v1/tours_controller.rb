@@ -46,7 +46,7 @@ module Api::V1
       if api_user.tours.include?(@tour)
         begin
           if @tour.update(tour_params)
-            render json: @tour, status: :ok
+            render json: @tour.reload, status: :ok
           else
             render json: {
                 status: :unprocessable_entity,
