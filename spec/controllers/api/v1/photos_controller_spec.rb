@@ -66,12 +66,12 @@ describe Api::V1::PhotosController, :type => :controller do
       image: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg')
   }}
 
-  describe 'GET /api/v1/tours/:tour_id/photos' do
-    context 'When photos exists' do
-      before do
-        header 'api-key', user.api_token
-        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photos[0]}&sot_by=created_at"
-      end
+#  describe 'GET /api/v1/tours/:tour_id/photos' do
+#    context 'When photos exists' do
+#      before do
+#        header 'api-key', user.api_token
+#        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photos[0]}&sot_by=created_at"
+#      end
 
       # todo(fixme)
       #it 'should return photos', focus: true do
@@ -97,30 +97,30 @@ describe Api::V1::PhotosController, :type => :controller do
       #                                          'opentrailview')
       #  end
       #end
+#
+#      it 'should return status code 200' do
+#        expect(response).to have_http_status(:ok)
+#      end
+#    end
+#  end
 
-      it 'should return status code 200' do
-        expect(response).to have_http_status(:ok)
-      end
-    end
-  end
-
-  describe 'GET /api/v1/tours/:tour_id/photos/:id' do
-    context 'When photos exists' do
-      before do
-        header 'api-key', user.api_token
-        get "/api/v1/tours/#{tour_id}/photos/#{photo_id}"
-      end
+#  describe 'GET /api/v1/tours/:tour_id/photos/:id' do
+#    context 'When photos exists' do
+#      before do
+#        header 'api-key', user.api_token
+#        get "/api/v1/tours/#{tour_id}/photos/#{photo_id}"
+#      end
 
       #it 'should return photos' do
       #  expect(json).not_to be_empty
       #  expect(json['photo']).not_to be_empty
       #end
 
-      it 'should return status code 200' do
-        expect(response).to have_http_status(:ok)
-      end
-    end
-  end
+#      it 'should return status code 200' do
+#        expect(response).to have_http_status(:ok)
+#      end
+#    end
+#  end
 
   describe 'POST /api/v1/tours/:tour_id/photos' do
     context 'When the request is valid' do
