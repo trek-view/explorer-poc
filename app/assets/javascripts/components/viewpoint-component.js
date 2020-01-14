@@ -13,9 +13,7 @@ $(function(){
            type: 'POST',
            url: '/api/v1/viewpoints',
            data: {
-               viewpoint: {
                    photo_id: photoId
-               }
            },
            dataType: "json",
            headers: {
