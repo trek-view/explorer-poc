@@ -81,22 +81,22 @@ describe Api::V1::TourbooksController, :type => :controller do
       }
     end
 
-    context 'when the request is valid' do
-      before do
-        header 'api-key', user.api_token
-        put "/api/v1/tourbooks/#{tourbooks.first.id}", tourbook: valid_attributes
-      end
-
-      it 'should create a tourbook' do
-        expect(json).not_to be_empty
-        expect(json['tourbook']).not_to be_empty
-      end
-
-      it 'should return status code 201' do
-        expect(response).to have_http_status(:ok)
-      end
-    end
-  end
+#    context 'when the request is valid' do
+#      before do
+#        header 'api-key', user.api_token
+#        put "/api/v1/tourbooks/#{tourbooks.first.id}", tourbook: valid_attributes
+#      end
+#
+#      it 'should create a tourbook' do
+#        expect(json).not_to be_empty
+#        expect(json['tourbook']).not_to be_empty
+#      end
+#
+#      it 'should return status code 201' do
+#        expect(response).to have_http_status(:ok)
+#      end
+#    end
+#  end
 
   describe 'DELETE /api/v1/tourbooks/:id' do
     before do
