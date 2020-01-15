@@ -19,11 +19,17 @@ $(function(){
     }
     options.scenes[keys[i]] = {
       "title": gon.connections[keys[i]].photo_id,
+      "hfov": 0,
+      "pitch": parseInt(gon.connections[keys[i]].pitch_degrees) || 0,
+      "yaw": parseInt(gon.connections[keys[i]].heading_degrees) || 0,
       "type": "equirectangular",
       "panorama": "https://backpack-staging-explorer-trekview-org.s3.amazonaws.com/uploads/panoramas/" + gon.photo_id + "/" + gon.connections[keys[i]].photo_id,
       "hotSpots": [
           {
               "type": "scene",
+              "hfov": 0,
+              "pitch": parseInt(gon.connections[nextKey].pitch_degrees) || 0,
+              "yaw": parseInt(gon.connections[nextKey].heading_degrees) || 0,
               "text": gon.connections[nextKey].photo_id,
               "sceneId": nextKey
           }

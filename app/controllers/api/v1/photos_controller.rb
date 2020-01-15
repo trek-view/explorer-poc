@@ -168,7 +168,7 @@ module Api::V1
 
           prms[:tourer][:connections].each do |c|
             prms[:tourer_connection_photos] << c.last[:photo_id]
-            connections_h[c.first] = c.last.slice(:photo_id, :distance_meters, :heading_degrees, :elevation_meters).to_h
+            connections_h[c.first] = c.last.slice(:photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters).to_h
           end
 
           prms[:tourer][:connections] = connections_h.to_json
@@ -191,7 +191,7 @@ module Api::V1
          address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code],
          google: [:plus_code_global_code, :plus_code_compound_code],
          streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [:photo_id, :version, connections: [ :photo_id, :distance_meters, :heading_degrees, :elevation_meters ]],
+         tourer: [:photo_id, :version, connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters ]],
          opentrailview: [:photo_id]
         ]
       end
