@@ -113,7 +113,7 @@ module Api::V1
         parameters = params.permit(*permitted_params)
         tour_ids = parameters[:tour_ids]
         parameters[:tour_ids] = []
-        tour_ids.each do |tour_id|
+        tour_ids&.each do |tour_id|
           parameters[:tour_ids] << tour_id if Tour.find_by(id: tour_id)
         end
         parameters
