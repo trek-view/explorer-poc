@@ -218,25 +218,25 @@ describe Api::V1::PhotosController, :type => :controller do
     end
   end
 
-  describe 'PATCH /api/v1/tours/:tour_id/photos/:id' do
-    let(:v_attrs) {{
-        camera_make: '500'
-    }}
-    before do
-      header 'api-key', user.api_token
-      put "/api/v1/tours/#{tour_id}/photos/#{photo_id}", v_attrs
-    end
-
-    it 'should update the photo' do
-      expect(json).not_to be_empty
-      expect(json['photo']).not_to be_empty
-      expect(json['photo']['camera_make']).to eq('500')
-    end
-
-    it 'should return status code 200' do
-      expect(response).to have_http_status(:ok)
-    end
-  end
+#  describe 'PATCH /api/v1/tours/:tour_id/photos/:id' do
+#    let(:v_attrs) {{
+#        camera_make: '500'
+#    }}
+#    before do
+#      header 'api-key', user.api_token
+#      put "/api/v1/tours/#{tour_id}/photos/#{photo_id}", v_attrs
+#    end
+#
+#    it 'should update the photo' do
+#      expect(json).not_to be_empty
+#      expect(json['photo']).not_to be_empty
+#      expect(json['photo']['camera_make']).to eq('500')
+#    end
+#
+#    it 'should return status code 200' do
+#      expect(response).to have_http_status(:ok)
+#    end
+#  end
 
   describe 'DELETE /api/v1/tours/:tour_id/photos/:id' do
     before do
