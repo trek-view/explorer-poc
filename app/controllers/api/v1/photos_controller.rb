@@ -110,7 +110,8 @@ module Api::V1
       render json: {
           viewpoint: {
               id: api_user.id,
-              status: photo.favorited_by?(api_user)
+              status: photo.favorited_by?(api_user),
+              count: photo.favoritable_score[:favorite] || 0
           }
       }, status: :ok
     end
@@ -209,7 +210,6 @@ module Api::V1
         if @query.present?
           @photos = @photos.joins(:country).where(countries: { code: @query[:countries] }) if @query[:countries].present?
           @photos = @photos.where(photos: {id: @query[:ids]}) if @query[:ids].present?
-          @photos = @photos.where("photos.streetview @> hstore(:key, :value)", key: "connections", value: @query[:streetview_connections]) if @query[:streetview_connections].present?
           @photos = @photos.where("photos.tourer_connection_photos @> ARRAY[?]::text[]", @query[:tourer_connection_photo_ids]) if @query[:tourer_connection_photo_ids].present?
           @photos = @photos.where(photos: {tourer_photo_id: @query[:tourer_photo_ids]}) if @query[:tourer_photo_ids].present?
 
@@ -224,7 +224,7 @@ module Api::V1
       end
 
       def photo_search_params
-        params.permit(:streetview_connections, :sort_by, countries: [], ids: [], tourer_connection_photo_ids: [], tourer_photo_ids: [])
+        params.permit(:sort_by, countries: [], ids: [], tourer_connection_photo_ids: [], tourer_photo_ids: [])
       end
 
       def pagination_meta(object)

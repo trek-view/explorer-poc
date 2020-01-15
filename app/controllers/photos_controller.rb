@@ -20,6 +20,8 @@ class PhotosController < ApplicationController
 
   def show
     photo_og_meta_tag(@photo)
+    gon.photo_id = @photo.id
+    gon.connections = JSON.parse(@photo.tourer['connections'])
   end
 
   def find_photos
