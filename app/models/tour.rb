@@ -36,7 +36,7 @@ class Tour < ApplicationRecord
   validate :transport_type_should_be_valid
   # validate :types_dependency
 
-  friendly_id :name, use: :slugged
+  friendly_id :name, :use => :scoped, :scope => :user
 
   pg_search_scope :search,
                   against: [
