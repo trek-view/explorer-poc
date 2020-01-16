@@ -20,7 +20,7 @@ class PhotosController < ApplicationController
 
   def show
     photo_og_meta_tag(@photo)
-    @s3_bucket_url = "https://#{ENV['AWS_S3_BUCKET']}.s3.amazonaws.com/uploads/panoramas"
+    @s3_bucket_url = "https://#{ENV['AWS_S3_BUCKET']}.s3.amazonaws.com/uploads/panoramas/#{@photo.tour.id}/"
     gon.photo_id = @photo.id
     gon.connections = JSON.parse(@photo.tourer['connections'])
     gon.s3_bucket_url = @s3_bucket_url

@@ -23,7 +23,7 @@ $(function(){
       "pitch": parseInt(gon.connections[keys[i]].pitch_degrees) || 0,
       "yaw": parseInt(gon.connections[keys[i]].heading_degrees) || 0,
       "type": "equirectangular",
-      "panorama": gon.s3_bucket_url + "/" + gon.photo_id + "/" + gon.connections[keys[i]].photo_id,
+      "panorama": gon.s3_bucket_url + gon.connections[keys[i]].photo_id,
       "hotSpots": [
           {
               "type": "scene",
