@@ -15,9 +15,7 @@
           <%= link_to tourbook.name, user_tourbook_path(tourbook.user, tourbook) %>
         </h4>
 
-        <!--
-        <p class="card-text"><%= truncate(tourbook.description, length: 77, separator: ' ') %></p>
-        -->
+        <p class="card-text"><%= truncate(tourbook.description, length: 120, separator: ' ') %></p>
       </div>
 
       <div class="card-footer">

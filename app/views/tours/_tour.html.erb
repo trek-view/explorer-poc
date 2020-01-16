@@ -24,7 +24,7 @@
         <%= link_to tour.name, user_tour_path(tour.user, tour) %>
       </h4>
 
-      <p class="card-text"><%= truncate(tour.description, length: 77, separator: ' ') %></p>
+      <p class="card-text"><%= truncate(tour.description, length: 120, separator: ' ') %></p>
 
       <div class="tags">
         <% tour.tags.each do |tag| %>
