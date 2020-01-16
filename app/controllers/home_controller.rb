@@ -16,4 +16,8 @@ class HomeController < ApplicationController
   def about
     render 'about/index'
   end
+
+  def upload
+    render 'upload/index'
+  end
 end

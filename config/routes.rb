@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   get '/sitemap.xml', to: 'application#sitemap'
   get '/robots.txt' => 'robots_txts#show'
   get '/about', to: 'home#about'
+  get '/upload', to: 'home#upload'
 
   root to: 'home#index'
 
