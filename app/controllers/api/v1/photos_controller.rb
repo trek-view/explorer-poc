@@ -30,6 +30,14 @@ module Api::V1
 
     # POST /api/v1/tours/:tour_id/photos
     def create
+      unless validate_uniqueness_tourer_photo_id
+        render json: {
+            status: :unprocessable_entity,
+            message: "tourer_photo_id should be unique to user_id"
+        }, status: :unprocessable_entity
+        return
+      end
+
       photo = @tour.photos.build(photo_params)
       photo.image = params[:image]
 
@@ -49,6 +57,14 @@ module Api::V1
         render json: {
             status: :unprocessable_entity,
             message: "image can't be updated"
+        }, status: :unprocessable_entity
+        return
+      end
+
+      unless validate_uniqueness_tourer_photo_id
+        render json: {
+            status: :unprocessable_entity,
+            message: "tourer_photo_id should be unique to user_id"
         }, status: :unprocessable_entity
         return
       end
@@ -145,6 +161,7 @@ module Api::V1
         prms[:streetview][:heading] = prms[:streetview][:heading].to_f if prms[:streetview] && prms[:streetview][:heading]
         prms[:streetview][:pitch] = prms[:streetview][:pitch].to_f if prms[:streetview] && prms[:streetview][:pitch]
         prms[:streetview][:roll] = prms[:streetview][:roll].to_f if prms[:streetview] && prms[:streetview][:roll]
+        prms[:tourer_photo_id] = prms[:tourer][:photo_id] if prms[:tourer].present? && prms[:tourer][:photo_id].present?
         if prms[:tourer].present? && prms[:tourer][:connections]
           prms[:tourer_connection_photos] = []
           connections_h = {}
@@ -174,7 +191,7 @@ module Api::V1
          address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code],
          google: [:plus_code_global_code, :plus_code_compound_code],
          streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [:version, connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters ]],
+         tourer: [:photo_id, :version, connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters ]],
          opentrailview: [:photo_id]
         ]
       end
@@ -194,6 +211,7 @@ module Api::V1
           @photos = @photos.joins(:country).where(countries: { code: @query[:countries] }) if @query[:countries].present?
           @photos = @photos.where(photos: {id: @query[:ids]}) if @query[:ids].present?
           @photos = @photos.where("photos.tourer_connection_photos @> ARRAY[?]::text[]", @query[:tourer_connection_photo_ids]) if @query[:tourer_connection_photo_ids].present?
+          @photos = @photos.where(photos: {tourer_photo_id: @query[:tourer_photo_ids]}) if @query[:tourer_photo_ids].present?
 
           @photos = @photos.order("photos.#{@query[:sort_by]} DESC") if @query[:sort_by].present?
         end
@@ -206,7 +224,7 @@ module Api::V1
       end
 
       def photo_search_params
-        params.permit(:sort_by, countries: [], ids: [], tourer_connection_photo_ids: [])
+        params.permit(:sort_by, countries: [], ids: [], tourer_connection_photo_ids: [], tourer_photo_ids: [])
       end
 
       def pagination_meta(object)
@@ -226,6 +244,20 @@ module Api::V1
 
       def search_viewpoint_params
         params.permit(photo_ids: [], user_ids: [])
+      end
+
+      def validate_uniqueness_tourer_photo_id
+        unless photo_params[:tourer_photo_id].present?
+          return true
+        end
+
+        photos = Tour.joins(:photos).where(photos: { tourer_photo_id: photo_params[:tourer_photo_id] })
+        photos = photos.where(tours: { user_id: api_user.id })
+        if photos.any?
+          false
+        else
+          true
+        end
       end
   end
 

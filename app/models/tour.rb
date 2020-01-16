@@ -82,6 +82,11 @@ class Tour < ApplicationRecord
     end
   end
 
+  # validates_uniqueness :photos, { attribute: :tourer_photo_id,
+  #                                 case_sensitive: false,
+  #                                 allow_blank: true,
+  #                                 message: "Photo's tourer_photo_id should be unique per tour" }
+
   # Use default slug, but upper case and with underscores
   def normalize_friendly_id(string)
     super.gsub('-', '_')
