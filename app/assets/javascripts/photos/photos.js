@@ -9,6 +9,10 @@ $(function(){
       "scenes": {}
   }
 
+  if(typeof gon.connections == 'undefined') {
+    return false
+  }
+
   keys = Object.keys(gon.connections);
 
   for(i=0,l=keys.length;i<l;i++){

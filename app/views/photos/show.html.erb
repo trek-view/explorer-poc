@@ -59,11 +59,13 @@
             </tr>
             <tr>
               <td>Tourer Connected photos</td>
-              <td>
-                <% @photo.tourer_connection_photos.each do |photo_id| %>
-                  <%= link_to photo_id, "#{@s3_bucket_url}#{photo_id}", target: "_blank" %>
-                <% end %>
-              </td>
+              <% if @photo.tourer_connection_photos.present? %>
+                <td>
+                  <% @photo.tourer_connection_photos.each do |photo_id| %>
+                    <%= link_to photo_id, "#{@s3_bucket_url}#{photo_id}", target: "_blank" %>
+                  <% end %>
+                </td>
+              <% end %>
             </tr>
             <tr>
               <td>View on Google Street View</td>
