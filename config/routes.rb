@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'
   get '/robots.txt' => 'robots_txts#show'
+  get '/about', to: 'home#about'
 
   root to: 'home#index'
 

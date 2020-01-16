@@ -12,4 +12,8 @@ class HomeController < ApplicationController
 
     tour_og_meta_tag(@tours.first) unless @tours.empty?
   end
+
+  def about
+    render 'about/index'
+  end
 end
