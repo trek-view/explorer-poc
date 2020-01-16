@@ -9,6 +9,10 @@ module ToursHelper
     Tour.tour_types.map {|k , v| [k, v] }
   end
 
+  def transport_types_for_select
+    Tour.transport_types.map {|k , v| [k, v] }
+  end
+
   def tour_countries(countries)
     countries.uniq { |c| c.id }
   end

@@ -23,6 +23,13 @@
                       include_blank: 'Tour type' %>
     </div>
 
+    <div class="search_transport_type mt-3">
+      <%= select_tag 'query[transport_type]',
+                      options_for_select(transport_types_for_select, @query.try(:[], :transport_type)),
+                      class: 'select-transport-type form-control',
+                      include_blank: 'Transport type' %>
+    </div>
+
     <button class="btn btn-primary mt-3">filter</button>
 
   </div>

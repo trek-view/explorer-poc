@@ -36,6 +36,7 @@ class Finder
     if @query.present?
       @tours = @tours.where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
       @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
+      @tours = @tours.where(transport_type: @query['transport_type']) if @query['transport_type'].present?
     end
     @tours = @tours.search(@search_text) if @search_text.present?
 
@@ -108,7 +109,7 @@ class Finder
   end
 
   def search_params
-    @params.permit(:search_text, :tab, query: [:country_id, :tour_type])
+    @params.permit(:search_text, :tab, query: [:country_id, :tour_type, :transport_type])
   end
 
   def set_sort_params
