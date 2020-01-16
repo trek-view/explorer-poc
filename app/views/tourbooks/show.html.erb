@@ -39,7 +39,7 @@
 
         <% if @tourbook.description.present? %>
           <div class="form-group row">
-            <label class="col-sm-2 col-form-label">Desciption</label>
+            <label class="col-sm-2 col-form-label">Description</label>
             <div class="col-sm-10 mt-2">
               <p><%= @tourbook.description %></p>
             </div>
@@ -51,6 +51,19 @@
             </div>
           </div>
         <% end %>
+
+        <h3 class="card-title">Tourbook sponsors</h3>
+
+        <div class="form-group row">
+
+          <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+            <div class="card-header"><h5 class="card-title">Your name here</h5></div>
+            <div class="card-body">
+              <p class="card-text">Is your small business nearby? Are you a local organisation? For a small donation you can be listed as a sponsor of this tourbook whilst supporting our work to protect the natural world. <a href="https://www.trekview.org/contact/" target="_blank">Contact us for more information</a>.</p>
+            </div>
+          </div>
+
+        </div>
 
         <% if @tours.any? %>
           <h4>Added Tours</h4>
