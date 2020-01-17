@@ -7,6 +7,8 @@ class PhotoSerializer < ActiveModel::Serializer
                  tour_id
                  image
                  filename
+                 camera_make
+                 camera_model
                  taken_at
                  latitude
                  longitude

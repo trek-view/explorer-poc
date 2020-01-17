@@ -251,12 +251,13 @@ module Api::V1
           return true
         end
 
-        photos = Tour.joins(:photos).where(photos: { tourer_photo_id: photo_params[:tourer_photo_id] })
-        photos = photos.where(tours: { user_id: api_user.id })
-        if photos.any?
-          false
-        else
+        tours = Tour.joins(:photos).where(photos: { tourer_photo_id: photo_params[:tourer_photo_id] })
+        tours = tours.where(tours: { user_id: api_user.id })
+
+        if @photo&.tourer_photo_id == photo_params[:tourer_photo_id]
           true
+        else
+          tours.empty?
         end
       end
   end
