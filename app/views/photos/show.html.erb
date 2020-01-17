@@ -15,7 +15,7 @@
           <tbody>
             <tr>
               <td>Tour</td>
-              <td><%= link_to @photo.tour.name, user_tour_path(@photo.tour.user, @photo.tour) %></td>
+              <td><%= link_to @tour.name, user_tour_path(@tour.user, @tour) %></td>
             </tr>
             <tr>
               <td>Explorer Photo ID</td>
@@ -59,13 +59,11 @@
             </tr>
             <tr>
               <td>Tourer Connected photos</td>
-              <% if @photo.tourer_connection_photos.present? %>
-                <td>
-                  <% @photo.tourer_connection_photos.each do |photo_id| %>
-                    <%= link_to photo_id, "#{@s3_bucket_url}#{photo_id}", target: "_blank" %>
-                  <% end %>
-                </td>
-              <% end %>
+              <td>
+                <% @connected_photos.each do |photo| %>
+                  <%= link_to photo.tourer_photo_id, photo.image.url, target: "_blank" %>
+                <% end %>
+              </td>
             </tr>
             <tr>
               <td>View on Google Street View</td>

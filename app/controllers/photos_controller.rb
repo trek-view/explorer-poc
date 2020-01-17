@@ -20,10 +20,20 @@ class PhotosController < ApplicationController
 
   def show
     photo_og_meta_tag(@photo)
-    @s3_bucket_url = "https://#{ENV['AWS_S3_BUCKET']}.s3.amazonaws.com/uploads/panoramas/#{@photo.tour.id}/"
-    gon.photo_id = @photo.id
-    gon.connections = JSON.parse(@photo.tourer['connections']) if @photo.tourer['connections']
-    gon.s3_bucket_url = @s3_bucket_url
+    @tour = @photo.tour
+    @connected_photos = []
+
+    connections = JSON.parse(@photo.tourer['connections']) if @photo.tourer['connections']
+
+    connections&.keys&.each do |key|
+      photo = @tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
+      if photo
+        @connected_photos << photo
+        connections[key]["url"] = photo.image.url
+      end
+    end
+
+    gon.connections = connections
   end
 
   def find_photos

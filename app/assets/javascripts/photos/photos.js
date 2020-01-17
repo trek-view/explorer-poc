@@ -24,16 +24,16 @@ $(function(){
     options.scenes[keys[i]] = {
       "title": gon.connections[keys[i]].photo_id,
       "hfov": 0,
-      "pitch": parseInt(gon.connections[keys[i]].pitch_degrees) || 0,
-      "yaw": parseInt(gon.connections[keys[i]].heading_degrees) || 0,
+      "pitch": parseFloat(gon.connections[keys[i]].pitch_degrees) || 0,
+      "yaw": parseFloat(gon.connections[keys[i]].heading_degrees) || 0,
       "type": "equirectangular",
-      "panorama": gon.s3_bucket_url + gon.connections[keys[i]].photo_id,
+      "panorama": gon.connections[keys[i]].url,
       "hotSpots": [
           {
               "type": "scene",
               "hfov": 0,
-              "pitch": parseInt(gon.connections[nextKey].pitch_degrees) || 0,
-              "yaw": parseInt(gon.connections[nextKey].heading_degrees) || 0,
+              "pitch": parseFloat(gon.connections[nextKey].pitch_degrees) || 0,
+              "yaw": parseFloat(gon.connections[nextKey].heading_degrees) || 0,
               "text": gon.connections[nextKey].photo_id,
               "sceneId": nextKey
           }
