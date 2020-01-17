@@ -3,7 +3,7 @@ $(function(){
     "autoLoad": true,
       "default": {
           "firstScene": "0",
-          "author": "Matthew Petroff",
+          "author": "Trek View",
           "sceneFadeDuration": 1000
       },
       "scenes": {}
@@ -23,9 +23,6 @@ $(function(){
     }
     options.scenes[keys[i]] = {
       "title": gon.connections[keys[i]].photo_id,
-      "hfov": 0,
-      "pitch": parseFloat(gon.connections[keys[i]].pitch_degrees) || 0,
-      "yaw": parseFloat(gon.connections[keys[i]].heading_degrees) || 0,
       "type": "equirectangular",
       "panorama": gon.connections[keys[i]].url,
       "hotSpots": [
