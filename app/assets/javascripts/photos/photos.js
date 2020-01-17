@@ -41,5 +41,7 @@ $(function(){
     }
   }
 
+  console.log(options)
+
   pannellum.viewer('panorama', options);
 });
