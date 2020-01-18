@@ -29,11 +29,10 @@ class PhotosController < ApplicationController
       photo = @tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
       if photo
         @connected_photos << photo
-        connections[key]["url"] = photo.image.url
       end
     end
 
-    gon.connections = connections
+    gon.pannellum_config = pannellum_config
   end
 
   def find_photos
@@ -74,5 +73,69 @@ class PhotosController < ApplicationController
 
   def sort_params
     params.permit(sort: [:photos])
+  end
+
+  def pannellum_config
+    photos = []
+    node_stack = [@photo]
+
+    loop do
+      break if node_stack.empty?
+
+      curr_node = node_stack.pop
+      photos << curr_node
+
+      next unless curr_node
+      next unless curr_node.tourer["connections"].present?
+
+      connections = JSON.parse(curr_node.tourer["connections"])
+
+      connections&.keys&.each do |key|
+        photo = @photo.tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
+        if photo && photo != @photo
+          node_stack << photo
+        end
+      end
+    end
+
+    options = {
+      "autoLoad": true,
+        "default": {
+            "firstScene": @photo.tourer_photo_id,
+            "author": "Trek View",
+            "sceneFadeDuration": 1000
+        },
+        "scenes": {}
+    }
+
+    photos.each do |photo|
+      connections = JSON.parse(photo.tourer["connections"])
+
+      hot_spots = []
+
+      connections&.keys&.each do |key|
+        hot_photo = photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
+
+        if hot_photo
+          hot_spots << {
+              "type": "scene",
+              "hfov": 0,
+              "pitch": connections[key]["pitch_degrees"].to_f,
+              "yaw": connections[key]["heading_degrees"].to_f,
+              "text": hot_photo.tourer_photo_id,
+              "sceneId": hot_photo.tourer_photo_id
+          }
+        end
+      end
+
+      options[:scenes][photo.tourer["photo_id"]] = {
+        "title": photo.tourer["photo_id"],
+        "type": "equirectangular",
+        "panorama": photo.image.url,
+        "hotSpots": hot_spots
+      }
+    end
+
+    options
   end
 end

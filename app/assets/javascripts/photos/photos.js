@@ -1,44 +1,6 @@
 $(function(){
-  options = {
-    "autoLoad": true,
-      "default": {
-          "firstScene": "0",
-          "author": "Trek View",
-          "sceneFadeDuration": 1000
-      },
-      "scenes": {}
-  }
 
-  if(typeof gon.connections == 'undefined') {
-    return false
-  }
+  console.log(gon.pannellum_config)
 
-  keys = Object.keys(gon.connections);
-
-  for(i=0,l=keys.length;i<l;i++){
-    if (i == keys.length - 1) {
-      nextKey = keys[0]
-    } else {
-      nextKey = keys[i+1]
-    }
-    options.scenes[keys[i]] = {
-      "title": gon.connections[keys[i]].photo_id,
-      "type": "equirectangular",
-      "panorama": gon.connections[keys[i]].url,
-      "hotSpots": [
-          {
-              "type": "scene",
-              "hfov": 0,
-              "pitch": parseFloat(gon.connections[nextKey].pitch_degrees) || 0,
-              "yaw": parseFloat(gon.connections[nextKey].heading_degrees) || 0,
-              "text": gon.connections[nextKey].photo_id,
-              "sceneId": nextKey
-          }
-      ]
-    }
-  }
-
-  console.log(options)
-
-  pannellum.viewer('panorama', options);
+  pannellum.viewer('panorama', gon.pannellum_config);
 });
