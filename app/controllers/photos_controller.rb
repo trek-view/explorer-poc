@@ -79,11 +79,15 @@ class PhotosController < ApplicationController
     photos = []
     node_stack = [@photo]
 
+    max_limit = 10000
+    loop_count = 0
+
     loop do
+      break if loop_count > max_limit
       break if node_stack.empty?
 
       curr_node = node_stack.pop
-      photos << curr_node
+      photos << curr_node unless photos.include?(curr_node)
 
       next unless curr_node
       next unless curr_node.tourer["connections"].present?
@@ -92,10 +96,13 @@ class PhotosController < ApplicationController
 
       connections&.keys&.each do |key|
         photo = @photo.tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
-        if photo && photo != @photo
+
+        if photo && !photos.include?(photo)
           node_stack << photo
         end
       end
+
+      loop_count += 1
     end
 
     options = {
