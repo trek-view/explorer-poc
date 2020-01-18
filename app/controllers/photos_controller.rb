@@ -126,7 +126,6 @@ class PhotosController < ApplicationController
         if hot_photo
           hot_spots << {
               "type": "scene",
-              "hfov": 0,
               "pitch": connections[key]["pitch_degrees"].to_f,
               "yaw": connections[key]["heading_degrees"].to_f,
               "text": hot_photo.tourer_photo_id,
@@ -138,7 +137,7 @@ class PhotosController < ApplicationController
       options[:scenes][photo.tourer["photo_id"]] = {
         "title": photo.tourer["photo_id"],
         "type": "equirectangular",
-        "panorama": photo.image.url,
+        "panorama": photo.image.url(:med),
         "hotSpots": hot_spots
       }
     end

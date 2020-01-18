@@ -81,3 +81,9 @@
     </div>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  console.log(gon.pannellum_config)
+
+  pannellum.viewer('panorama', gon.pannellum_config);
+<% end %>
