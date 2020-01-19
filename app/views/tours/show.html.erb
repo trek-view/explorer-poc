@@ -146,7 +146,7 @@
             </div>
           </div>
 
-        <% if @tour.photos.any? %>
+        <% if @photos.any? %>
 
           <h3 class="card-title">Map</h3>
 
@@ -159,7 +159,7 @@
           </div>
 
           <%= render partial: 'photos/photos_display', locals: { photos: @photos } %>
-
+          <%= paginate @photos, param_name: :photo_pagina %>
         <% else %>
 
           <h3 class="card-title">Photos</h3>
@@ -175,7 +175,8 @@
           </div>
 
           <div class="row">
-                <%= render partial: 'tourbooks/tourbooks_display' %>
+            <%= render partial: 'tourbooks/tourbooks_display' %>
+            <%= paginate @tourbooks, param_name: :tourbook_pagina %>
           </div>
         <% else %>
           <p>None exist</p>

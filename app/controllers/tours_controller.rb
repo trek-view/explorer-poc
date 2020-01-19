@@ -22,6 +22,9 @@ class ToursController < ApplicationController
     @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
     @tourbooks = @tourbooks.order(created_at: :desc)
 
+    @photos = @photos.page(params[:photo_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tours])
+    @tourbooks = @tourbooks.page(params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
+
     tour_og_meta_tag(@tour)
   end
 
