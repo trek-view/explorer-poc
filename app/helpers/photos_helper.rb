@@ -40,12 +40,12 @@ module PhotosHelper
       if thumb_url.present?
         return thumb_url
       end
-    end    
+    end
   end
 
   def photo_thumb_url(photo)
     if photo.present?
-      photo.image.thumb.url  
+      photo.image.thumb.url
     end
   end
 
@@ -59,6 +59,10 @@ module PhotosHelper
     buffer << ", #{address['postcode']}" if address['postcode'].present?
     buffer.sub! '  ,', ''
     buffer
+  end
+
+  def pannellum_iframe(photo)
+    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url(:med) + '"></iframe>'
   end
 
 end

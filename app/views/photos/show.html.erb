@@ -61,7 +61,7 @@
               <td>Tourer Connected photos</td>
               <td>
                 <% @connected_photos.each do |photo| %>
-                  <%= link_to photo.tourer_photo_id, photo.image.url, target: "_blank" %>
+                  <%= link_to photo.tourer_photo_id, photo_path(photo), target: "_blank" %>
                 <% end %>
               </td>
             </tr>
@@ -74,6 +74,10 @@
             <tr>
               <td>OpenTrailView photo id</td>
               <td><%= @photo.opentrailview['photo_id'] %></td>
+            </tr>
+            <tr>
+              <td>Iframe</td>
+              <td><%= pannellum_iframe(@photo) %></td>
             </tr>
           </tbody>
         </table>
