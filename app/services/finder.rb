@@ -8,11 +8,7 @@ class Finder
     set_search_params
     set_sort_params
 
-    if @tab == 'tours'
-      search_tours
-    else
-      search_tourbooks
-    end
+    search_tours_and_tourbooks
 
     @tours = @tours.page(@params[:tour_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tours])
     @tourbooks = @tourbooks.page(@params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
@@ -29,27 +25,37 @@ class Finder
 
   private
 
-  def search_tours
+  def search_tours_and_tourbooks
     # look for tours
     find_all_tours
+    find_alll_tourbooks
 
     if @query.present?
-      @tours = @tours.where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
+      if @query['country_id'].present?
+        tour_ids = Photo.where(country_id: @query['country_id']).pluck(:tour_id).uniq
+        @tours = @tours.where(id: tour_ids)
+      end
       @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
       @tours = @tours.where(transport_type: @query['transport_type']) if @query['transport_type'].present?
     end
-    @tours = @tours.search(@search_text) if @search_text.present?
+
+    tourbook_ids = []
+
+    if @search_text.present?
+      @tours = @tours.search(@search_text)
+      tourbook_ids = @tourbooks.search(@search_text).pluck(:id).uniq
+    end
 
     sort_tours
 
     # look for tourbooks including tours
-    find_alll_tourbooks
-
     tour_ids = @tours.present? ? @tours.map(&:id) : []
-    @tourbooks = @tourbooks.includes(:user, :tour_tourbooks, tours: :photos)
-                     .references(:tours)
-                     .where(tours: { id: tour_ids })
-                     .distinct
+    if tour_ids.present?
+      tourbook_ids += TourTourbook.where(tour_id: tour_ids).pluck(:tourbook_id).uniq
+    end
+
+    @tourbooks = Tourbook.where(id: tourbook_ids.uniq)
+
     sort_tourbooks
   end
 
@@ -62,9 +68,10 @@ class Finder
     # look for tours belongs to tourbooks
     find_all_tours
     tourbook_ids = @tourbooks.present? ? @tourbooks.map(&:id) : []
-    @tours = @tours.joins(:tourbooks)
-                   .where(tourbooks: { id: tourbook_ids })
-                   .distinct
+    if tourbook_ids.present?
+      tour_ids = TourTourbook.where(tourbook_id: tourbook_ids).pluck(:tour_id).uniq
+      @tours = Tour.where(id: tour_ids)
+    end
     sort_tours
   end
 
@@ -74,7 +81,6 @@ class Finder
     else
       @tours = Tour.all
     end
-    @tours = @tours.includes(:countries, :taggings, :tags, :user, photos: :country).references(:countries)
   end
 
   def find_alll_tourbooks
@@ -83,7 +89,6 @@ class Finder
     else
       @tourbooks = Tourbook.all
     end
-    @tourbooks = @tourbooks.includes(:user, :tour_tourbooks, tours: :photos)
   end
 
   def sort_tours
