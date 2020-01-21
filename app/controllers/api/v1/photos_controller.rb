@@ -159,8 +159,8 @@ module Api::V1
         prms[:latitude] = prms[:latitude].to_f if prms[:latitude]
         prms[:longitude] = prms[:longitude].to_f if prms[:longitude]
         prms[:streetview][:heading] = prms[:streetview][:heading].to_f if prms[:streetview] && prms[:streetview][:heading]
-        prms[:streetview][:pitch] = prms[:streetview][:pitch].to_f if prms[:streetview] && prms[:streetview][:pitch]
-        prms[:streetview][:roll] = prms[:streetview][:roll].to_f if prms[:streetview] && prms[:streetview][:roll]
+        prms[:streetview][:pitch] = prms[:streetview][:pitch].to_f if prms[:streetview] && prms[:streetview][:pitch].present?
+        prms[:streetview][:roll] = prms[:streetview][:roll].to_f if prms[:streetview] && prms[:streetview][:roll].present?
         prms[:tourer_photo_id] = prms[:tourer][:photo_id] if prms[:tourer].present? && prms[:tourer][:photo_id].present?
         if prms[:tourer].present? && prms[:tourer][:connections]
           prms[:tourer_connection_photos] = []
