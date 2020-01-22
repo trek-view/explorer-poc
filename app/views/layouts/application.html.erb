@@ -10,7 +10,7 @@
     <meta property="og:url" content="<%= request.original_url %>" />
     <meta property="og:description" content="<%= meta_description %>" />
 
-    <%= include_gon %>
+    <%= include_gon(:init => true) %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_link_tag    'pannellum', media: 'all', 'data-turbolinks-track': 'reload' %>

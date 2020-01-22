@@ -104,9 +104,10 @@ function showThumbModal(photo) {
         && photo.image
         && photo.image.thumb
         && photo.streetview) {
+        favorite_score = photo.favoritable_score.favorite || 0
         $('#imageContainer').empty();
         $('.modal-title').prepend(photo.filename);
-        $('#imageContainer').prepend('<a href="/photos/' + photo.id + '"><img id="photoImg" src="' + photo.image.thumb.url + '" style="width: 100%" /><div class="card-body"><p class="card-text">Latitude: ' + photo.latitude + '</p><p class="card-text">Longitude: ' + photo.longitude + '</p><p class="card-text">Photo elevation: ' + photo.elevation_meters + '</p><p class="card-text">Capture time: ' + photo.taken_at + '</p></div></a>');
+        $('#imageContainer').prepend('<span class="viewpoint" id="photo-' + photo.id + '"><i class="fa fa-star"></i><span>' + favorite_score + '</span></span><a href="/photos/' + photo.id + '"><img id="photoImg" src="' + photo.image.thumb.url + '" style="width: 100%" /><div class="card-body"><p class="card-text">Latitude: ' + photo.latitude + '</p><p class="card-text">Longitude: ' + photo.longitude + '</p><p class="card-text">Photo elevation: ' + photo.elevation_meters + '</p><p class="card-text">Capture time: ' + photo.taken_at + '</p></div></a>');
 
         $('#showPhotoModal').modal('show');
     }

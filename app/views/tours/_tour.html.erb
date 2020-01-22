@@ -1,5 +1,6 @@
 <div id="tour-<%= tour.id %>" class="col-lg-4 col-md-6 mb-4 tour-item">
   <div class="card photo-card h-100">
+    <span class="badge badge-primary badge-count" title="Added to Tourbook"><%= tour.tourbooks_count %></span>
     <% thumb_url = tour_thumb_url(tour) %>
     <% if thumb_url.present? %>
       <img class="card-img-top" src="<%= thumb_url %>" alt="">
@@ -15,10 +16,6 @@
             <span aria-hidden="true">&times;</span>
         <% end %>
       <% end %>
-
-      <div class="float-right">
-        <span class="badge badge-pill badge-success" title="Added to Tourbook"><%= tour.tourbooks_count %></span>
-      </div>
 
       <h4 class="card-title">
         <%= link_to tour.name, user_tour_path(tour.user, tour) %>

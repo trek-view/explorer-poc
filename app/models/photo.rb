@@ -5,7 +5,7 @@ class Photo < ApplicationRecord
 
   mount_uploader :image, PhotoUploader
 
-  belongs_to :tour
+  belongs_to :tour, counter_cache: true
   belongs_to :country
 
   store_accessor :address, :cafe, :road, :suburb, :county, :region, :state, :postcode, :country_code

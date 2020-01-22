@@ -19,25 +19,34 @@
     }
   }
 
-  .viewpoint {
-    background: url("/assets/heart-icon.png") no-repeat;
-    display: inline-block;
-    height: 30px;
-    width: 30px;
-    background-size: contain;
-    text-align: center;
-    color: white;
-    font-size: 12px;
-    padding-top: 5px;
-    position: absolute;
-    right: 0;
-    margin: 5px 5px 0 0;
-    cursor: pointer;
-    z-index: 100;
-  }
-
   #panorama {
     width: 100%;
     height: 400px;
+  }
+}
+
+.viewpoint {
+  display: inline-block;
+  background-size: contain;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  margin: 5px 20px 0 0;
+  cursor: pointer;
+  z-index: 100;
+
+  i.fa {
+    color: yellow;
+    font-size: 32px;
+  }
+
+  span {
+    position: absolute;
+    left: 50%;
+    color: red;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 }
