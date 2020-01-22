@@ -19,15 +19,18 @@ SitemapGenerator::Sitemap.create do
   add root_path, changefreq: 'daily'
 
   Tour.includes(:user).find_each do |tour|
-    add user_tour_path(tour.user, tour), changefreq: 'weekly', lastmod: tour.updated_at
+    add user_tour_path(tour.user, tour), changefreq: 'daily', lastmod: tour.updated_at
   end
 
   User.find_each do |user|
-    add user_path(user), changefreq: 'weekly'
+    add user_path(user), changefreq: 'daily'
 
     user.tourbooks.each do |book|
       add user_tourbook_path(user, book)
     end
   end
 
+  Photo.find_each do |photo|
+    add photo_path(photo), changefreq: 'daily'
+  end
 end
