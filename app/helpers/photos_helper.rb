@@ -62,7 +62,7 @@ module PhotosHelper
   end
 
   def pannellum_iframe(photo)
-    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url(:med) + '&amp;title=' + URI.encode(photo.tour.name) + '&amp;author=' + URI.encode(photo.tour.user.name) + '&amp;autoLoad=true"></iframe><a href="">View on Trek View Explorer</a>'
+    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url(:med) + '&amp;title=' + URI.encode(photo.tour.name) + '&amp;author=' + URI.encode(photo.tour.user.name) + '&amp;autoLoad=true"></iframe><p><a href="" target="_blank">View on Trek View Explorer</a></p>'
   end
 
 end
