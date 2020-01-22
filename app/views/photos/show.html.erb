@@ -1,9 +1,16 @@
+<% if @tour.photos.present? %>
+  <% provide :head_tags do %>
+    <meta name='turbolinks-visit-control' content='reload'>
+  <% end %>
+<% end %>
+
 <div class="photo-container row">
   <div class="py-5 col-lg-12">
     <div class="card">
       <div class="card-header">
         <%= render(ViewpointComponent, viewpoint: @photo.favoritable_score.present? ? @photo.favoritable_score[:favorite] : 0, photo_id: @photo.id) %>
         <div id="panorama"></div>
+        <div id="map" class="mb-3"></div>
       </div>
       <div class="card-body">
 
@@ -81,9 +88,3 @@
     </div>
   </div>
 </div>
-
-<%= javascript_tag do %>
-  console.log(gon.pannellum_config)
-
-  pannellum.viewer('panorama', gon.pannellum_config);
-<% end %>

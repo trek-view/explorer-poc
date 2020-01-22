@@ -33,6 +33,7 @@ class PhotosController < ApplicationController
     end
 
     gon.pannellum_config = pannellum_config
+    gon.photos = @tour.photos
   end
 
   def find_photos
@@ -116,6 +117,7 @@ class PhotosController < ApplicationController
     }
 
     photos.each do |photo|
+      next unless photo.tourer["connections"]
       connections = JSON.parse(photo.tourer["connections"])
 
       hot_spots = []
