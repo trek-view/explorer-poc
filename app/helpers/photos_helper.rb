@@ -62,7 +62,7 @@ module PhotosHelper
   end
 
   def pannellum_iframe(photo)
-    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url(:med) + '"></iframe>'
+    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url(:med) + '&amp;amp;title=ALMA%20Correlator%20Facility&amp;amp;author=Matthew%20Petroff"&amp;amp;authorURL="></iframe>'
   end
 
 end
