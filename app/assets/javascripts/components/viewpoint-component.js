@@ -1,7 +1,8 @@
 $(function(){
    $(document).on('click', '.viewpoint', function (e) {
        var target = event.target || event.srcElement;
-       var photoId = e.target.id.replace('photo-', '');
+
+       var photoId = $(this).data('photo-id')
 
        var apiKey = localStorage.getItem('api_token');
 
