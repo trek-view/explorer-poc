@@ -84,8 +84,8 @@
               <% end %>
             </tr>
             <tr>
-              <td>Iframe</td>
-              <td><%= pannellum_iframe(@photo) %></td>
+              <td>OpenTrailView photo id</td>
+              <td>https://www.opentrailview.org/pano.php?id=<%= @photo.opentrailview['photo_id'] %></td>
             </tr>
           </tbody>
         </table>
