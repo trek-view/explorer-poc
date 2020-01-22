@@ -17,6 +17,10 @@
     th:first-child {
       width: 300px;
     }
+
+    tbody {
+      word-break: break-word;
+    }
   }
 
   #panorama {
@@ -25,7 +29,7 @@
   }
 }
 
-.viewpoint {
+.viewpoint, .embed-btn {
   display: inline-block;
   background-size: contain;
   text-align: center;
@@ -41,12 +45,45 @@
     color: yellow;
     font-size: 32px;
   }
+}
 
+.viewpoint {
   span {
     position: absolute;
     left: 50%;
     color: red;
+    font-weight: bold;
     top: 50%;
     transform: translate(-50%, -50%);
+  }
+}
+
+.embed-btn {
+  margin-right: 60px;
+
+  i.fa {
+    color: white;
+    font-size: 32px;
+  }
+
+  .custom-tooltip {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    max-width: 300px;
+    padding: 8px;
+    background: black;
+    color: white;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s;
+  }
+
+  &:hover .custom-tooltip,
+  .custom-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s;
   }
 }

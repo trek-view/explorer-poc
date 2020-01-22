@@ -110,7 +110,9 @@ class PhotosController < ApplicationController
       "autoLoad": true,
         "default": {
             "firstScene": @photo.tourer_photo_id,
-            "author": "Trek View",
+            "title": @tour.name,
+            "author": @tour.user.name,
+            "authorURL": photo_path(@photo),
             "sceneFadeDuration": 1000
         },
         "scenes": {}
@@ -137,7 +139,9 @@ class PhotosController < ApplicationController
       end
 
       options[:scenes][photo.tourer["photo_id"]] = {
-        "title": photo.tourer["photo_id"],
+        "title": @tour.name,
+        "author": @tour.user.name,
+        "authorURL": photo_path(photo),
         "type": "equirectangular",
         "panorama": photo.image.url(:med),
         "hotSpots": hot_spots
