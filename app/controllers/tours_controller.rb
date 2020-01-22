@@ -1,66 +1,37 @@
 # frozen_string_literal: true
 class ToursController < ApplicationController
-
   include MetaTagsHelper
 
-  before_action :authenticate_user!, only: %i[set_photo_view_point
-                                              unset_photo_view_point]
-  before_action :set_tour, only: %i[show
-                                    set_photo_view_point
-                                    unset_photo_view_point]
-
-  def index
-    find_tours
-    @tours = @tours.page(params[:page])
-  end
+  before_action :set_tour, only: %i[show]
 
   def show
-    @photos = @tour.photos.order(created_at: :desc)
-  end
+    set_sort_params
+    @photos = @tour.photos
+    @tourbooks = @tour.tourbooks
 
-  # for ajax search
-  def search_tours
-    find_tours
-    render layout: false
-  end
+    if @sort.present?
+      if @sort[:photos] == 'taken_at'
+        @photos = @photos.order(taken_at: :desc)
+      elsif @sort[:photos] == 'filename'
+        @photos = @photos.order(filename: :asc)
+      end
 
-  def find_tours
-    set_tours_search_params
-
-    @tours = Tour.includes(:photos, :countries, :tags, :user).order(created_at: :desc)
-
-    if @query.present?
-      @tours = @tours.joins(:countries).where('countries.id =?', @query['country_id'] ) if @query['country_id'].present?
-
-      @tours = @tours.where(tour_type: @query['tour_type']) if @query['tour_type'].present?
+      @tourbooks = @tourbooks.order(name: :desc) if @sort[:tourbooks] == 'name'
+      @tourbooks = @tourbooks.order('tourbooks.tours_count DESC') if @sort[:tourbooks] == 'tours_count'
     end
-    @tours = @tours.search(@search_text) if @search_text.present?
-  end
+    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
+    @tourbooks = @tourbooks.order(created_at: :desc)
 
-  def set_photo_view_point
-    @photo = @tour.photos.find_by(id: params[:photo_id])
-    if @photo.present?
-      @photo.set_a_view_point(current_user)
-    else
-      @photo.errors.add(:base, 'Cannot viewpoint this photo.')
-    end
-    redirect_to user_tour_path(current_user, @tour)
-  end
+    @photos = @photos.page(params[:photo_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tours])
+    @tourbooks = @tourbooks.page(params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
 
-  def unset_photo_view_point
-    @photo = @tour.photos.find_by(id: params[:photo_id])
-    if @photo.present?
-      @photo.clear_view_point(current_user)
-    else
-      @photo.errors.add(:base, 'Cannot unset viewpoint for this photo.')
-    end
-    redirect_to user_tour_path(current_user, @tour)
+    tour_og_meta_tag(@tour)
   end
 
   private
 
     def set_tour
-      @tour = Tour.friendly.find(params[:id])
+      @tour = Tour.includes(:countries).friendly.find(params[:id])
     end
 
     def set_tours_search_params
@@ -72,4 +43,11 @@ class ToursController < ApplicationController
       params.permit(:search_text, query: [:country_id, :tour_type])
     end
 
+  def set_sort_params
+    @sort = sort_params[:sort]
+  end
+
+  def sort_params
+    params.permit(sort: [:photos, :tourbooks])
+  end
 end

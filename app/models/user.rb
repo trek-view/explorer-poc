@@ -9,8 +9,7 @@ class User < ApplicationRecord
 
   has_many :tours, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
-  has_many :tour_books, dependent: :destroy
-  has_many :view_points, dependent: :destroy
+  has_many :tourbooks, dependent: :destroy
 
   attr_accessor :global_subscribe
 
@@ -22,8 +21,11 @@ class User < ApplicationRecord
                       message: 'should not contain whitespaces or special characters'
   validates_acceptance_of :terms
 
+  validates :name, length: { minimum: 5, maximum: 16 }
+
   has_secure_token :api_token
   friendly_id :name, use: :slugged
+  acts_as_favoritor
 
   after_create :subscribe_to_global
 

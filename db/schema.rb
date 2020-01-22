@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_05_234129) do
+ActiveRecord::Schema.define(version: 2020_01_22_005824) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -41,20 +43,28 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "booked_tours", force: :cascade do |t|
-    t.bigint "tour_id"
-    t.bigint "tour_book_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["tour_book_id"], name: "index_booked_tours_on_tour_book_id"
-    t.index ["tour_id"], name: "index_booked_tours_on_tour_id"
-  end
-
   create_table "countries", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "code"
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.string "favoritable_type", null: false
+    t.bigint "favoritable_id", null: false
+    t.string "favoritor_type", null: false
+    t.bigint "favoritor_id", null: false
+    t.string "scope", default: "favorite", null: false
+    t.boolean "blocked", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blocked"], name: "index_favorites_on_blocked"
+    t.index ["favoritable_id", "favoritable_type"], name: "fk_favoritables"
+    t.index ["favoritable_type", "favoritable_id"], name: "index_favorites_on_favoritable_type_and_favoritable_id"
+    t.index ["favoritor_id", "favoritor_type"], name: "fk_favorites"
+    t.index ["favoritor_type", "favoritor_id"], name: "index_favorites_on_favoritor_type_and_favoritor_id"
+    t.index ["scope"], name: "index_favorites_on_scope"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -68,39 +78,33 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
-  create_table "photo_countries", force: :cascade do |t|
-    t.bigint "photo_id"
-    t.bigint "country_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country_id"], name: "index_photo_countries_on_country_id"
-    t.index ["photo_id"], name: "index_photo_countries_on_photo_id"
-  end
-
   create_table "photos", force: :cascade do |t|
     t.bigint "tour_id"
-    t.string "file_name"
-    t.datetime "taken_date_time"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.integer "elevation_meters"
-    t.float "heading"
-    t.text "street_view_url"
-    t.text "street_view_thumbnail_url"
-    t.string "connection"
-    t.float "connection_distance_km"
     t.string "tourer_photo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "country_id"
-    t.string "plus_code"
     t.string "camera_make"
     t.string "camera_model"
     t.integer "view_points_count", default: 0, null: false
-    t.boolean "main_photo", default: false, null: false
-    t.string "streetview_id"
     t.string "image"
+    t.datetime "taken_at"
+    t.hstore "address"
+    t.hstore "google"
+    t.hstore "streetview"
+    t.hstore "tourer"
+    t.text "favoritable_score"
+    t.text "favoritable_total"
+    t.string "filename"
+    t.hstore "opentrailview"
+    t.text "tourer_connection_photos", default: [], array: true
+    t.index ["streetview"], name: "index_photos_on_streetview", using: :gin
     t.index ["tour_id"], name: "index_photos_on_tour_id"
+    t.index ["tourer"], name: "index_photos_on_tourer", using: :gin
+    t.index ["tourer_connection_photos"], name: "index_photos_on_tourer_connection_photos", using: :gin
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -125,30 +129,30 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "tour_books", force: :cascade do |t|
+  create_table "tour_tourbooks", force: :cascade do |t|
+    t.bigint "tour_id"
+    t.bigint "tourbook_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tour_id"], name: "index_tour_tourbooks_on_tour_id"
+    t.index ["tourbook_id"], name: "index_tour_tourbooks_on_tourbook_id"
+  end
+
+  create_table "tourbooks", force: :cascade do |t|
     t.bigint "user_id"
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "slug"
-    t.index ["slug"], name: "index_tour_books_on_slug", unique: true
-    t.index ["user_id"], name: "index_tour_books_on_user_id"
-  end
-
-  create_table "tour_countries", force: :cascade do |t|
-    t.bigint "tour_id"
-    t.bigint "country_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["country_id"], name: "index_tour_countries_on_country_id"
-    t.index ["tour_id"], name: "index_tour_countries_on_tour_id"
+    t.integer "tours_count", default: 0, null: false
+    t.index ["slug"], name: "index_tourbooks_on_slug", unique: true
+    t.index ["user_id"], name: "index_tourbooks_on_user_id"
   end
 
   create_table "tours", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.bigint "country_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -157,9 +161,9 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.integer "transport_type"
     t.string "tourer_version"
     t.string "tourer_tour_id"
-    t.integer "tour_books_count", default: 0, null: false
-    t.index ["country_id"], name: "index_tours_on_country_id"
-    t.index ["slug"], name: "index_tours_on_slug", unique: true
+    t.integer "tourbooks_count", default: 0, null: false
+    t.integer "photos_count", default: 0
+    t.index ["slug", "user_id"], name: "index_tours_on_slug_and_user_id", unique: true
     t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_tours_on_user_id"
   end
@@ -187,33 +191,21 @@ ActiveRecord::Schema.define(version: 2019_11_05_234129) do
     t.boolean "terms"
     t.string "privilege", default: "user"
     t.integer "tours_count", default: 0
-    t.integer "tour_books_count", default: 0
+    t.integer "tourbooks_count", default: 0
+    t.text "favoritor_score"
+    t.text "favoritor_total"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
-  create_table "view_points", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "photo_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["photo_id"], name: "index_view_points_on_photo_id"
-    t.index ["user_id"], name: "index_view_points_on_user_id"
-  end
-
-  add_foreign_key "booked_tours", "tour_books"
-  add_foreign_key "booked_tours", "tours"
-  add_foreign_key "photo_countries", "countries"
-  add_foreign_key "photo_countries", "photos"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
-  add_foreign_key "tour_books", "users"
-  add_foreign_key "tour_countries", "countries"
-  add_foreign_key "tour_countries", "tours"
-  add_foreign_key "tours", "countries"
+  add_foreign_key "tour_tourbooks", "tourbooks"
+  add_foreign_key "tour_tourbooks", "tours"
+  add_foreign_key "tourbooks", "users"
   add_foreign_key "tours", "users"
 end

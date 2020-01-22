@@ -1,10 +1,16 @@
 module Api::V1
   class UsersController < BaseController
-    def account_info
+    
+    def show
+      @user = User.find(params[:id])
+      render json: @user, status: :ok
+    end
+    
+    def get_info
       resp = {
-        account_info: {
+        user: {
           id: @api_user.id,
-          name: @api_user.name,
+          username: @api_user.name,
           email: @api_user.email
         }
       }

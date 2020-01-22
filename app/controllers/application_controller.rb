@@ -15,15 +15,17 @@ class ApplicationController < ActionController::Base
   end
 
   def sitemap
-    aws_s3_url = "http://s3.#{ENV['FOG_REGION']}.amazonaws.com/#{ENV['FOG_DIRECTORY']}/sitemaps/sitemap.xml.gz"
-    redirect_to(aws_s3_url, status: 301)
+    if Rails.env.production? || Rails.env.staging?
+      aws_s3_url = "http://s3.#{ENV['FOG_REGION']}.amazonaws.com/#{ENV['FOG_DIRECTORY']}/sitemaps/sitemap.xml.gz"
+      redirect_to(aws_s3_url, status: 301)  
+    end
   end
 
   protected
 
     def configure_permitted_parameters
       devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:name, :terms, :global_subscribe, :email, :password, :password_confirmation) }
-      devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:name, :global_subscribe, :email, :password, :password_confirmation, :current_password) }
+      devise_parameter_sanitizer.permit(:account_update) { |u| u.permit(:global_subscribe, :email, :password, :password_confirmation, :current_password) }
     end
 
   private

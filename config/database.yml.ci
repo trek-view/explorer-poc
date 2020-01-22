@@ -55,8 +55,13 @@ development:
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
+
+# Using the exposed postgres service provided by Gitlab CI runner
 test:
   <<: *default
+  host: postgres
+  username: runner
+  password:
   database: explorer_test
 
 # As with config/secrets.yml, you never want to store sensitive information,

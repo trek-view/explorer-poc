@@ -6,54 +6,53 @@ Rails.application.routes.draw do
 
   namespace :api, constraints: { format: 'json' } do
     namespace :v1 do
-      resources :tours, only: %i[show create update destroy] do
-        resources :photos, only: %i[index show create update destroy] do
-          member do
-            post 'set_photo_view_point'
-            delete 'unset_photo_view_point'
-          end
+      resources :tours, only: %i[index show create update destroy] do
+        resources :photos, only: %i[index show create update destroy]
+      end
+
+      resources :tourbooks
+
+      resources :users, only: %i[show] do
+        collection do
+          get 'current_account'
         end
+
+        resources :tourbooks, only: %i[index]
       end
 
-      resources :tour_books, only: %i[show create update destroy]
+      post '/viewpoints', to: 'photos#set_viewpoints'
+      get '/viewpoints', to: 'photos#get_viewpoints'
+      get '/users', to: 'users#get_info'
 
-      get 'users/:user_id/tours', to: 'tours#get_tours'
-      get 'users/:user_id/tour_books', to: 'tour_books#get_tour_books'
-      get 'users/account_info', to: 'users#account_info'
-
-      get '*unmatched_route', to:   'base#user_not_authorized', code: 401
+      get '*unmatched_route', to: 'base#user_not_authorized', code: 401
     end
   end
 
-  resources :users, only: %i[] do
+  resources :users, only: %i[show] do
     post 'generate_new_token', to: 'users#generate_new_token'
-    get 'tours'
-    get 'tour_books', to: 'tour_books#user_tour_books'
+    get 'tourbooks', to: 'tourbooks#user_tourbooks'
 
-    resources :tours, only: %i[show] do
-      member do
-        post 'set_photo_view_point', to: 'tours#set_photo_view_point'
-        delete 'unset_photo_view_point', to: 'tours#unset_photo_view_point'
-      end
-    end
+    resources :tours, only: %i[show]
 
-    resources :tour_books, except: %i[index] do
+    resources :tourbooks, except: %i[index] do
       member do
-        post 'add_item', to: 'tour_books#add_item'
-        delete 'remove_item', to: 'tour_books#remove_item'
+        post 'add_item', to: 'tourbooks#add_item'
+        delete 'remove_item', to: 'tourbooks#remove_item'
       end
     end
   end
 
-  resources :tour_books, only: %i[index]
-
-  resources :tours, only: %i[index]
-
-  resources :photos, only: %i[index]
+  resources :photos, only: %i[index show] do
+    collection do
+      get 'viewpoints'
+    end
+  end
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'
   get '/robots.txt' => 'robots_txts#show'
+  get '/about', to: 'home#about'
+  get '/upload', to: 'home#upload'
 
   root to: 'home#index'
 

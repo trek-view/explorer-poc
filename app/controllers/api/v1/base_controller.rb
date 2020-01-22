@@ -4,12 +4,14 @@ module Api::V1
 
     respond_to :json
 
+    include Error::ErrorHandler
+
     before_action :authorize_request, except: [:user_not_authorized]
 
     attr_reader :api_user
 
     def user_not_authorized
-      render json: {errors: {authorization: 'Unauthorized'}}, status: :unauthorized
+      render json: { status: :unauthorized, message: 'Unauthorized'}, status: :unauthorized
     end
 
     # for update methods
@@ -31,7 +33,7 @@ module Api::V1
         User.current = result[:user]
         @api_user = result[:user]        
 
-        render json: {errors: result[:messages]}, status: 401 unless @api_user
+        render json: { status: 401, message: result[:messages]}, status: 401 unless @api_user
       end
 
   end

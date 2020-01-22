@@ -23,11 +23,13 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  # config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = Uglifier.new(harmony: true)
   # config.assets.css_compressor = :sass
 
+  config.serve_static_assets = true
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -58,6 +60,7 @@ Rails.application.configure do
   #   policy.style_src   :self, :https, :unsafe_inline
   #   policy.connect_src :self
   #   policy.report_uri  ""
+  #   policy.img-src     :self, :https, 'https://backpack-staging-explorer-trekview-org.s3.amazonaws.com'
   # end
   #
   # config.action_dispatch.default_headers = {
@@ -65,7 +68,7 @@ Rails.application.configure do
   #     'X-Content-Type-Options' => 'nosniff',
   #     'X-Frame-Options' => 'SAMEORIGIN',
   #     'X-XSS-Protection' => '1; mode=block',
-  #     'Content-Security-Policy' => "default-src 'self'; script-src 'self' https://maps.googleapis.com;"
+  #     'Content-Security-Policy' => "default-src 'self'; script-src 'self' https://maps.googleapis.com; img-src 'self' https://backpack-staging-explorer-trekview-org.s3.amazonaws.com/*;"
   # }
 
   # Use the lowest log level to ensure availability of diagnostic information

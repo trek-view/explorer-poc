@@ -1,46 +1,42 @@
 ActiveAdmin.register User do
+  config.per_page = 50
 
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
-  permit_params :name, :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, :api_token, :slug, :terms, :privilege, :tours_count
-  
+  permit_params :name, :email, :password, :password_confirmation
+
   before_action :only => [:show, :edit, :update, :destroy] do
     @user = User.find_by_slug(params[:id])
   end
-  # or
-  
-  # permit_params do
-  #   permitted = [:name, :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, :api_token, :slug, :terms, :privilege]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
-  
+
+  controller do
+    def update
+      if user_params[:password].blank?
+        @user.update_without_password(user_params)
+      else
+        @user.update_attributes(user_params)
+      end
+      if @user.errors.blank?
+        redirect_to admin_users_path, :notice => "User updated successfully."
+      else
+        render :edit
+      end
+    end
+
+    private
+
+    def user_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+  end
+
+
   index do
     selectable_column
     column :email
     column :name
-    column :reset_password_token
-    column :reset_password_sent_at
-    column :remember_created_at
-    column :sign_in_count
-    column :current_sign_in_at
-    column :current_sign_in_at
+    column :created_at
     column :last_sign_in_at
-    column :current_sign_in_ip
-    column :last_sign_in_ip
-    column :confirmation_token
-    column :confirmed_at
-    column :confirmation_sent_at
-    column :unconfirmed_email
-    column :api_token
-    column :slug
-    column :terms
-    column :privilege
     column :tours_count
-    column :tour_books_count
+    column :tourbooks_count
 
     actions defaults: false do |user|
       item "View", admin_user_path(user), class: 'member_link'
@@ -48,4 +44,20 @@ ActiveAdmin.register User do
     end
   end
 
+  show do
+    attributes_table do
+      row :email
+      row :name
+      row :created_at
+      row :last_sign_in_at
+      row :tours_count
+      row :tourbooks_count
+    end
+  end
+
+  form do |f|
+    f.semantic_errors
+    inputs :email, :name, :password, :password_confirmation
+    f.actions
+  end
 end

@@ -40,10 +40,15 @@ gem 'mini_magick', '~> 4.8'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-group :development, :test do
+group :development, :test, :staging do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'pry-byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.8'
+  gem 'capybara'
+  gem 'factory_bot_rails'
+  gem 'database_cleaner'
+  gem 'faker'
+  gem 'rails-controller-testing'
 end
 
 group :development do
@@ -55,7 +60,6 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'letter_opener'
   gem 'bullet', group: 'development'
-  gem 'pry'
 end
 
 
@@ -70,6 +74,7 @@ gem 'friendly_id', '~> 5.2.4'
 gem 'bootstrap', '~> 4.3.1'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.5'
 gem 'kaminari', '~> 1.1', '>= 1.1.1'
+gem 'api-pagination'
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'pundit', '~> 2.0', '>= 2.0.1'
 gem 'pg_search'
@@ -84,5 +89,15 @@ gem 'fog-aws'
 gem 'chartkick'
 gem 'font-awesome-rails'
 gem 'aws-sdk', '~> 3'
+# Classier solution for file uploads for Rails, Sinatra and other Ruby web frameworks
 gem 'carrierwave', '~> 2.0'
+# Adds file validators to ActiveModel.
 gem 'file_validators'
+# A Rubygem to add Favorite, Follow, Vote, etc. functionality to ActiveRecord models
+gem 'acts_as_favoritor'
+# framework for building view components in Rails.
+gem 'actionview-component'
+# The simplest way to group by: day, week, hour of day, and more
+gem 'groupdate'
+gem 'highcharts-rails'
+gem 'gon'

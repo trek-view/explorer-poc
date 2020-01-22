@@ -3,25 +3,31 @@ class TourSerializer < ActiveModel::Serializer
 
   attributes %i[
                 id
-                tourer_tour_id
                 name
                 description
                 countries
+                tags
                 tour_type
                 transport_type
-                tags
+                tourer
+                created_at
+                updated_at
+                user_id
               ]
 
   def countries
-    object.countries.any? ? object.countries.pluck(:name) : []
+    object.countries.any? ? object.countries.map(&:code).uniq : []
   end
 
   def tags
-    object.tag_names
+    object.tags.any? ? object.tags.map(&:name).uniq : []
   end
 
-  has_many :photos
-
-  has_many :countries
+  def tourer
+    {
+        tour_id: object.tourer_tour_id,
+        version: object.tourer_version
+    }
+  end
 
 end

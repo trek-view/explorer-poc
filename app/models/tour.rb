@@ -9,20 +9,23 @@ class Tour < ApplicationRecord
 
   belongs_to :user, :counter_cache => true
 
-  has_many :tour_countries, dependent: :destroy
-  has_many :countries, through: :tour_countries
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
   has_many :photos, dependent: :destroy
-  has_many :booked_tours, dependent: :destroy
-  has_many :tour_books, -> { distinct }, through: :booked_tours, inverse_of: :tours
+  has_many :countries, through: :photos
+  has_many :tour_tourbooks, dependent: :destroy
+  has_many :tourbooks, -> { distinct }, through: :tour_tourbooks, inverse_of: :tours
 
-  accepts_nested_attributes_for :photos
+  # accepts_nested_attributes_for :photos
 
   validates :name, presence: true, uniqueness: { scope: :user_id }, length: { maximum: 70 }
   validates :description, length: { maximum: 16777215 }
-  validates :tourer_tour_id, uniqueness: true, allow_blank: true, length: { maximum: 10 }
+  validates :tourer_tour_id, allow_blank: true, length: { maximum: 10 }
   validates :tourer_version, length: { maximum: 5 }
+  validates :tour_type, presence: true
+  validates :transport_type, presence: true
+
+  validates_uniqueness_of :tourer_tour_id, :scope => :user_id, allow_blank: true
 
   validates_associated :tags
   validates_associated :countries
@@ -31,9 +34,9 @@ class Tour < ApplicationRecord
   validate :tags_length
   validate :tour_type_should_be_valid
   validate :transport_type_should_be_valid
-  validate :types_dependency
+  # validate :types_dependency
 
-  friendly_id :name, use: :slugged
+  friendly_id :name, :use => :scoped, :scope => :user
 
   pg_search_scope :search,
                   against: [
@@ -41,7 +44,10 @@ class Tour < ApplicationRecord
                       :description
                   ],
                   associated_against: {
-                      tags: [:name]
+                      tags: [:name],
+                  },
+                  :using => {
+                      :tsearch => {:prefix => true}
                   }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tours]
@@ -76,10 +82,10 @@ class Tour < ApplicationRecord
     end
   end
 
-  validates_uniqueness :photos, { attribute: :tourer_photo_id,
-                                  case_sensitive: false,
-                                  allow_blank: true,
-                                  message: "Photo's tourer_photo_id should be unique per tour" }
+  # validates_uniqueness :photos, { attribute: :tourer_photo_id,
+  #                                 case_sensitive: false,
+  #                                 allow_blank: true,
+  #                                 message: "Photo's tourer_photo_id should be unique per tour" }
 
   # Use default slug, but upper case and with underscores
   def normalize_friendly_id(string)
