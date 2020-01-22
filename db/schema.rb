@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_16_010316) do
+ActiveRecord::Schema.define(version: 2020_01_22_005824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 2020_01_16_010316) do
     t.string "tourer_version"
     t.string "tourer_tour_id"
     t.integer "tourbooks_count", default: 0, null: false
+    t.integer "photos_count", default: 0
     t.index ["slug", "user_id"], name: "index_tours_on_slug_and_user_id", unique: true
     t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_tours_on_user_id"

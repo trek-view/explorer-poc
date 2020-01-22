@@ -95,6 +95,7 @@ class Finder
     if @sort.present?
       @tours = @tours.order(:name) if @sort[:tours] == 'name'
       @tours = @tours.order("tours.tourbooks_count DESC") if @sort[:tours] == 'tourbooks_count'
+      @tours = @tours.order("tours.photos_count DESC") if @sort[:tours] == 'photos_count'
     end
     @tours = @tours.order(created_at: :desc)
   end
