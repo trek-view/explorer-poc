@@ -1,6 +1,6 @@
 $(function(){
    $(document).on('click', '.viewpoint', function (e) {
-       var target = event.target || event.srcElement;
+       target = $(this)
 
        var photoId = $(this).data('photo-id')
 
@@ -27,7 +27,7 @@ $(function(){
            },
            success: function(data){
                 if (data.viewpoint && typeof data.viewpoint === 'object') {
-                    target.innerHTML = data.viewpoint.count
+                    target.find('span').text(data.viewpoint.count)
                 }
             },
            failure: function(errMsg) {

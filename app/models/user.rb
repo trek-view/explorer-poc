@@ -17,11 +17,11 @@ class User < ApplicationRecord
   validates_uniqueness_of :name,
                           case_sensitive: false
   validates_format_of :name,
-                      with: /\A[a-zA-Z0-9]*\z/,
+                      with: /\A[a-zA-Z0-9_]*\z/,
                       message: 'should not contain whitespaces or special characters'
   validates_acceptance_of :terms
 
-  validates :name, length: { minimum: 5, maximum: 16 }
+  validates :name, length: { minimum: 5, maximum: 25 }
 
   has_secure_token :api_token
   friendly_id :name, use: :slugged
