@@ -44,13 +44,11 @@ document.addEventListener("DOMContentLoaded", function(){
   currentMarker.setAnimation(google.maps.Animation.BOUNCE)
 
   viewer.on('scenechange', function (){
-/* old hotspot yaw calculation. now exists in tourer record.
     hotSpot = gon.pannellum_config.scenes[currentScene].hotSpots.find(obj => obj.sceneId == viewer.getScene())
 
     if (hotSpot) {
       viewer.setYaw(hotSpot.yaw)
     }
-*/
 
     prevMarker = markers.find(obj => obj.tourer_photo_id == currentScene)
 
