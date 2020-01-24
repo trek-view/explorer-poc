@@ -6,7 +6,7 @@ module ApplicationHelper
   end
 
   def app_description
-    "Application to see tour's descriptions and photos posted by other users"
+    "Unleash your inner explorer and travel the globe without leaving home."
   end
 
   def app_image

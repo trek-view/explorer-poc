@@ -131,7 +131,7 @@ class PhotosController < ApplicationController
           hot_spots << {
               "type": "scene",
               "pitch": connections[key]["pitch_degrees"].to_f,
-              "yaw": connections[key]["heading_degrees"].to_f,
+              "yaw": connections[key]["adjusted_heading_degrees"].to_f,
               "text": hot_photo.tourer_photo_id,
               "sceneId": hot_photo.tourer_photo_id
           }
