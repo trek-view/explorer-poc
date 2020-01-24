@@ -144,6 +144,7 @@ class PhotosController < ApplicationController
         "authorURL": photo_path(photo),
         "type": "equirectangular",
         "panorama": photo.image.url(:med),
+        "yaw": ,
         "hotSpots": hot_spots
       }
     end
