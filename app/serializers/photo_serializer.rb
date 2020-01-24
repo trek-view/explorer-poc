@@ -79,6 +79,7 @@ class PhotoSerializer < ActiveModel::Serializer
     {
         photo_id: object.tourer['photo_id'],
         version: object.tourer['version'],
+        heading_degrees: object.tourer['heading_degrees'],
         connections: connections
     }
   end
