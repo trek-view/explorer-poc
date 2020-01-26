@@ -30,13 +30,11 @@ class PhotoSerializer < ActiveModel::Serializer
 
   def address
     {
-        cafe: object.address['cafe'],
-        road: object.address['road'],
-        suburb: object.address['suburb'],
-        county: object.address['county'],
-        region: object.address['region'],
-        state: object.address['state'],
-        postcode: object.address['postcode'],
+        locality: object.address['locality'],
+        administrative_area_level_3: object.address['administrative_area_level_3'],
+        administrative_area_level_2: object.address['administrative_area_level_2'],
+        administrative_area_level_1: object.address['administrative_area_level_1'],
+        postal_code: object.address['postal_code'],
         country: object.address['country'],
         country_code: object.address['country_code'],
         place_id: object.google['plus_code_compound_code'],
