@@ -188,8 +188,7 @@ module Api::V1
          :elevation_meters,
          :camera_make,
          :camera_model,
-         address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code],
-         google: [:plus_code_global_code, :plus_code_compound_code],
+         address: [:cafe, :road, :suburb, :county, :region, :state, :postcode, :country, :country_code, :place_id, :plus_code_global_code, :plus_code_compound_code],
          streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
          tourer: [:photo_id, :version, :heading_degrees, connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters, :heading_degrees, :adjusted_heading_degrees ]],
          opentrailview: [:photo_id]

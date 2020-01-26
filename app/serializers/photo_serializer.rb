@@ -38,12 +38,8 @@ class PhotoSerializer < ActiveModel::Serializer
         state: object.address['state'],
         postcode: object.address['postcode'],
         country: object.address['country'],
-        country_code: object.address['country_code']
-    }
-  end
-
-  def google
-    {
+        country_code: object.address['country_code'],
+        place_id: object.google['plus_code_compound_code'],
         plus_code_global_code: object.google['plus_code_global_code'],
         plus_code_compound_code: object.google['plus_code_compound_code']
     }
