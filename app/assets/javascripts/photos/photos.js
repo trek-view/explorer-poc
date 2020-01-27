@@ -45,6 +45,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
   viewer.on('scenechange', function (){
     hotSpot = gon.pannellum_config.scenes[currentScene].hotSpots.find(obj => obj.sceneId == viewer.getScene())
+    photo = gon.photos.find(obj => obj.tourer_photo_id == viewer.getScene())
+
+    iframe_url = '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.med.url + '&amp;title=' + encodeURIComponent(gon.tour_name) + '&amp;author=' + encodeURIComponent(gon.author_name) + '&amp;autoLoad=true"></iframe><p><a href="' + gon.root_url + 'photos/' + photo.id + '" target="_blank">View on Trek View Explorer</a></p>'
+
+    $('.custom-tooltip').text(iframe_url)
 
     if (hotSpot) {
       viewer.setYaw(hotSpot.yaw)
