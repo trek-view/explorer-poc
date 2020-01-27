@@ -34,6 +34,9 @@ class PhotosController < ApplicationController
 
     gon.pannellum_config = pannellum_config
     gon.photos = @tour.photos
+    gon.tour_name = @tour.name
+    gon.author_name = @tour.user.name
+    gon.root_url = root_url
   end
 
   def find_photos
