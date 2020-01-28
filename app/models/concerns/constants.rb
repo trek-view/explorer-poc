@@ -35,16 +35,16 @@ module Constants
           sail
           kayak
           raft
-          standup_paddle_board
-          other_water
+          standuppaddleboard
+          otherwater
       ),
       air: %w(
           drone
-          hang_glide
+          hangglide
           parachute
           windsuit
           plane
-          other_air
+          otherair
       )
   }.with_indifferent_access
 
@@ -61,14 +61,14 @@ module Constants
       sail: 10,
       kayak: 11,
       raft: 12,
-      standup_paddle_board: 13,
-      other_water: 14,
+      standuppaddleboard: 13,
+      otherwater: 14,
       drone: 15,
-      hang_glide: 16,
+      hangglide: 16,
       parachute: 17,
       windsuit: 18,
       plane: 19,
-      other_air: 20,
+      otherair: 20,
   }
 
   SUBSCRIPTION_TYPES = {
