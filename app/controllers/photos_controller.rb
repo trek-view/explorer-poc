@@ -80,34 +80,34 @@ class PhotosController < ApplicationController
   end
 
   def pannellum_config
-    photos = []
-    node_stack = [@photo]
+    # photos = []
+    # node_stack = [@photo]
 
-    max_limit = 10000
-    loop_count = 0
+    # max_limit = 10000
+    # loop_count = 0
 
-    loop do
-      break if loop_count > max_limit
-      break if node_stack.empty?
+    # loop do
+    #   break if loop_count > max_limit
+    #   break if node_stack.empty?
 
-      curr_node = node_stack.pop
-      photos << curr_node unless photos.include?(curr_node)
+    #   curr_node = node_stack.pop
+    #   photos << curr_node unless photos.include?(curr_node)
 
-      next unless curr_node
-      next unless curr_node.tourer["connections"].present?
+    #   next unless curr_node
+    #   next unless curr_node.tourer["connections"].present?
 
-      connections = JSON.parse(curr_node.tourer["connections"])
+    #   connections = JSON.parse(curr_node.tourer["connections"])
 
-      connections&.keys&.each do |key|
-        photo = @photo.tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
+    #   connections&.keys&.each do |key|
+    #     photo = @photo.tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
 
-        if photo && !photos.include?(photo)
-          node_stack << photo
-        end
-      end
+    #     if photo && !photos.include?(photo)
+    #       node_stack << photo
+    #     end
+    #   end
 
-      loop_count += 1
-    end
+    #   loop_count += 1
+    # end
 
     options = {
       "autoLoad": true,
@@ -121,14 +121,14 @@ class PhotosController < ApplicationController
         "scenes": {}
     }
 
-    photos.each do |photo|
+    @tour.photos.each do |photo|
       next unless photo.tourer["connections"]
       connections = JSON.parse(photo.tourer["connections"])
 
       hot_spots = []
 
       connections&.keys&.each do |key|
-        hot_photo = photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
+        hot_photo = @tour.photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
 
         if hot_photo
           hot_spots << {
