@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_22_005824) do
+ActiveRecord::Schema.define(version: 2020_01_31_220956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
-  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -41,6 +40,12 @@ ActiveRecord::Schema.define(version: 2020_01_22_005824) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "countries", force: :cascade do |t|
@@ -76,6 +81,17 @@ ActiveRecord::Schema.define(version: 2020_01_22_005824) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "guidebooks", force: :cascade do |t|
+    t.string "name", limit: 70
+    t.string "description", limit: 250
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "category_id"
+    t.bigint "user_id"
+    t.index ["category_id"], name: "index_guidebooks_on_category_id"
+    t.index ["user_id"], name: "index_guidebooks_on_user_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -200,6 +216,8 @@ ActiveRecord::Schema.define(version: 2020_01_22_005824) do
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 
+  add_foreign_key "guidebooks", "categories"
+  add_foreign_key "guidebooks", "users"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
