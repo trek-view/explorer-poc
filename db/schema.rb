@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_31_220956) do
+ActiveRecord::Schema.define(version: 2020_02_01_023825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -92,6 +92,15 @@ ActiveRecord::Schema.define(version: 2020_01_31_220956) do
     t.bigint "user_id"
     t.index ["category_id"], name: "index_guidebooks_on_category_id"
     t.index ["user_id"], name: "index_guidebooks_on_user_id"
+  end
+
+  create_table "guidebooks_photos", force: :cascade do |t|
+    t.bigint "photo_id"
+    t.bigint "guidebook_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["guidebook_id"], name: "index_guidebooks_photos_on_guidebook_id"
+    t.index ["photo_id"], name: "index_guidebooks_photos_on_photo_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -218,6 +227,8 @@ ActiveRecord::Schema.define(version: 2020_01_31_220956) do
 
   add_foreign_key "guidebooks", "categories"
   add_foreign_key "guidebooks", "users"
+  add_foreign_key "guidebooks_photos", "guidebooks"
+  add_foreign_key "guidebooks_photos", "photos"
   add_foreign_key "photos", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
