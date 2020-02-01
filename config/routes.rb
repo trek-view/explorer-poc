@@ -1,18 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'categories/show'
-  get 'categories/new'
-  get 'categories/create'
-  get 'categories/edit'
-  get 'categories/update'
-  get 'categories/destroy'
-  get 'categories/new'
-  get 'category/new'
-  get 'categories/create'
-  get 'categories/show'
-  get 'categories/index'
-  get 'categories/update'
-  get 'categories/destroy'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users, controllers: { registrations: 'users/registrations' }
@@ -51,6 +38,13 @@ Rails.application.routes.draw do
       member do
         post 'add_item', to: 'tourbooks#add_item'
         delete 'remove_item', to: 'tourbooks#remove_item'
+      end
+    end
+
+    resources :guidebooks, except: %i[index] do
+      member do
+        post 'add_item', to: 'guidebooks#add_item'
+        delete 'remove_item', to: 'guidebooks#remove_item'
       end
     end
   end
