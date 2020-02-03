@@ -8,6 +8,7 @@ class Photo < ApplicationRecord
   belongs_to :tour, counter_cache: true
   belongs_to :country
   has_and_belongs_to_many :guidebooks
+  has_many :guidebooks_photos
 
   store_accessor :address, :cafe, :road, :suburb, :county, :region, :state, :postcode, :country_code
   store_accessor :google, :plus_code_global_code, :plus_code_compound_code

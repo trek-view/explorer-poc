@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       end
 
       resources :tourbooks
+      resources :guidebooks
 
       resources :users, only: %i[show] do
         collection do
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
       get '*unmatched_route', to: 'base#user_not_authorized', code: 401
     end
   end
+
 
   resources :users, only: %i[show] do
     post 'generate_new_token', to: 'users#generate_new_token'
