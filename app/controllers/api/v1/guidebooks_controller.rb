@@ -7,11 +7,10 @@ module Api::V1
 
     # GET /api/v1/guidebooks
     def index
-      puts "===== GET /api/v1/guidebooks: params: #{params}"
       find_guidebooks
-      puts "===== @guidebooks: #{@guidebooks.inspect}"
       @guidebooks = @guidebooks.page(params[:page] ? params[:page].to_i : 1)
-      guidebooks_json = ActiveModelSerializers::SerializableResource.new(@guidebooks).as_json
+      guidebooks_json = ActiveModelSerializers::SerializableResource
+        .new(@guidebooks).as_json
       guidebooks_json['_metadata'] = pagination_meta(@guidebooks)
       render json: guidebooks_json, status: :ok
     end
@@ -23,12 +22,24 @@ module Api::V1
 
     # POST /api/v1/guidebooks
     def create
-      validate_guidebook_ids and return
+      validate_guidebooks and return
+      @guidebook_params = guidebook_params.except(:scenes)
+      @scenes_params = guidebook_params.delete(:scenes)
 
-      @guidebook = api_user.guidebooks.build(guidebook_params)
-
+      p1 = guidebook_params.except(:scenes)
+      # Create guidebook
+      @guidebook = api_user.guidebooks.build(@guidebook_params)
+      puts "===== @guidebook: #{@guidebook.inspect}"
       if @guidebook.save
-        render json: @guidebook, status: :created
+        # Create scenes
+        @scenes_params.each do |scene_params|
+          scene = @guidebook.guidebooks_photos.build(scene_params)
+          scene.save
+        end
+
+        guidebook_json = ActiveModelSerializers::SerializableResource
+          .new(@guidebook).as_json
+        render json: guidebook_json, status: :created
       else
         render json: {
             status: :unprocessable_entity,
@@ -39,13 +50,13 @@ module Api::V1
 
     # PATCH/PUT /api/v1/guidebooks/:id
     def update
-      validate_name and return
-      validate_guidebook_ids and return
+      # validate_name and return
+      validate_guidebooks and return
 
       if api_user.guidebooks.include?(@guidebook)
 
-        tours = Tour.where(id: params[:guidebook_ids])
-        @guidebook.tours = tours if tours.present?
+        guidebooks = Guidebook.where(id: params[:scenes])
+        @guidebook.guidebooks = guidebooks if guidebooks.present?
 
         if @guidebook.update(guidebook_params)
           render json: @guidebook, status: :ok
@@ -59,7 +70,7 @@ module Api::V1
       else
         render json: {
             status: :unauthorized,
-            message: 'You cannot update this tour'
+            message: 'You cannot update this guidebook'
         }, status: :unauthorized
       end
     end
@@ -100,7 +111,7 @@ module Api::V1
       else
         render json: {
             status: :forbidden,
-            message: 'You can get only your own tours'
+            message: 'You can get only your own guidebooks'
         }, status: :forbidden
       end
     end
@@ -112,14 +123,10 @@ module Api::V1
       end
 
       def guidebook_params
-        parameters = params.permit(*permitted_params)
-        guidebook_ids = parameters[:guidebook_ids]
-        parameters[:guidebook_ids] = []
-        guidebook_ids&.each do |tour_id|
-          parameters[:guidebook_ids] << tour_id if Tour.find_by(id: tour_id)
-        end
-        parameters
-        # parameters[:tag_names] = parameters[:tags] if parameters[:tags]
+        params.require(:guidebook).permit(
+          :id, :name, :description, :category_id, :user_id,
+          scenes: [:id, :photo_id, :description, :position]
+        )
       end
 
       def set_user
@@ -128,9 +135,11 @@ module Api::V1
 
       def permitted_params
         [
-            :name,
-            :description,
-            guidebook_ids: []
+          :name,
+          :description,
+          :category_id,
+          :user_id,
+          :scenes
         ]
       end
 
@@ -144,7 +153,7 @@ module Api::V1
         end
 
         if @query.present?
-          # @guidebooks = @guidebooks.joins(:tours).where(tours: { id: @query[:guidebook_ids] }).distinct if @query[:guidebook_ids].present?
+          # @guidebooks = @guidebooks.joins(:guidebooks).where(guidebooks: { id: @query[:scenes] }).distinct if @query[:scenes].present?
           # @guidebooks = @guidebooks.where(guidebooks: { id: @query[:ids] }) if @query[:ids].present?
           # @guidebooks = @guidebooks.where(guidebooks: { user_id: @query[:user_ids] }) if @query[:user_ids].present?
 
@@ -165,7 +174,7 @@ module Api::V1
       end
 
       def guidebook_search_params
-        params.permit(:sort_by, guidebook_ids: [], ids: [], user_ids: [])
+        params.permit(:sort_by, scenes: [], ids: [], user_ids: [])
       end
 
       def pagination_meta(object)
@@ -179,20 +188,11 @@ module Api::V1
         }
       end
 
-      def validate_name
-        if guidebook_params[:name].present?
+      def validate_guidebooks
+        if params[:guidebook].present? && guidebook_params[:scenes].empty?
           render json: {
               status: :unprocessable_entity,
-              message: 'you cannot update the name of a guidebook'
-          }, status: :unprocessable_entity
-        end
-      end
-
-      def validate_guidebook_ids
-        if params[:guidebook_ids].present? && guidebook_params[:guidebook_ids].empty?
-          render json: {
-              status: :unprocessable_entity,
-              message: 'Tour IDs are all invalid'
+              message: 'Guidbook IDs are all invalid'
           }, status: :unprocessable_entity
         end
       end
