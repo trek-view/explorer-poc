@@ -14,7 +14,7 @@ class Finder
     @tourbooks = @tourbooks.page(@params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
 
     search_guidebooks
-    # @guidebooks = @guidebooks.page(@params[:guidebook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:guidebooks])
+    @guidebooks = @guidebooks.page(@params[:guidebook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:guidebooks])
     {
         tours: @tours,
         tourbooks: @tourbooks,

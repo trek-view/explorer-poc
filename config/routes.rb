@@ -49,6 +49,9 @@ Rails.application.routes.draw do
         post 'add_item', to: 'guidebooks#add_item'
         delete 'remove_item', to: 'guidebooks#remove_item'
       end
+      resources :scenes do
+        get 'guidebook_scenes', to: 'scenes#guidebook_scenes'
+      end
     end
   end
 

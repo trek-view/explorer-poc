@@ -76,20 +76,17 @@
             </div>
           </div>
 
+        <h4>Added Scenes</h4>
         <% if @scenes.any? %>
-          <h4>Added Scenes</h4>
           <div class="sort-wrapper">
             <%= render(SortComponent, collection_name: :scenes, value: @sort.try(:[], :scenes)) %>
           </div>
           <div class="row">
-            <%
-=begin%>
- <%= render partial: 'scenes/scen', collection: @scenes %> 
-<%
-=end%>
+            <%= render partial: 'scenes/scene_card', collection: @scenes %>
           </div>
+        <% else %>
+          <p class="card-text">Nothing</p>
         <% end %>
-
       </div>
     </div>
   </div>
