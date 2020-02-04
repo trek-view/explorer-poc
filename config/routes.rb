@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users, controllers: { registrations: 'users/registrations' }
@@ -43,6 +42,8 @@ Rails.application.routes.draw do
       end
     end
 
+    get 'guidebooks', to: 'guidebooks#user_guidebooks'
+
     resources :guidebooks, except: %i[index] do
       member do
         post 'add_item', to: 'guidebooks#add_item'
@@ -64,5 +65,4 @@ Rails.application.routes.draw do
   get '/upload', to: 'home#upload'
 
   root to: 'home#index'
-
 end

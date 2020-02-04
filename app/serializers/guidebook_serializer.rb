@@ -14,14 +14,14 @@ class GuidebookSerializer < ActiveModel::Serializer
   def scenes
     # New format with array
     scenes = ActiveModelSerializers::SerializableResource.new(
-      object.guidebooks_photos.order('position ASC')
-    ).as_json[:guidebooks_photos]
+      object.scenes.order('position ASC')
+    ).as_json[:scenes]
     # Old format with json
     # scenes = {}
-    # if object.guidebooks_photos.reload.any? 
-    #   object.guidebooks_photos.map{|guidebooks_photo| 
-    #     gb_p_json = ActiveModelSerializers::SerializableResource.new(guidebooks_photo).as_json
-    #     scenes[guidebooks_photo.id.to_s] = gb_p_json[:guidebooks_photo]
+    # if object.scenes.reload.any? 
+    #   object.scenes.map{|scene| 
+    #     gb_p_json = ActiveModelSerializers::SerializableResource.new(scene).as_json
+    #     scenes[scene.id.to_s] = gb_p_json[:scene]
     #   }
     # end
     # scenes

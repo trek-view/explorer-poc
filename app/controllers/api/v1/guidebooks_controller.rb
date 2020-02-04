@@ -32,7 +32,7 @@ module Api::V1
 
       # Create scenes
       @scenes_params.each do |scene_params|
-        scene = @guidebook.guidebooks_photos.build(scene_params)
+        scene = @guidebook.scenes.build(scene_params)
         return response_unprocessable(scene.errors) unless scene.save
       end
       guidebook_json = ActiveModelSerializers::SerializableResource.new(
@@ -50,7 +50,7 @@ module Api::V1
 
       if @scenes_params.size.positive?
         @scenes_params.each do |scene_params|
-          scene = @guidebook.guidebooks_photos.find(scene_params[:id])
+          scene = @guidebook.scenes.find(scene_params[:id])
           return response_unprocessable(scene.errors) unless
             scene.update(scene_params)
         end
@@ -138,11 +138,11 @@ module Api::V1
         if @query[:sort_by].present?
           order_direction = @query[:sort_by] == 'name' ? 'ASC' : 'DESC'
           @guidebooks = @guidebooks.order(
-            "guidebooks.#{@query[:sort_by]} #{order_direction}"
+            "#{@query[:sort_by]} #{order_direction}"
           )
         end
       end
-      @guidebooks = @guidebooks.order('guidebooks.updated_at DESC')
+      @guidebooks = @guidebooks.order(updated_at: :desc)
     end
 
     def set_guidebooks_search_params

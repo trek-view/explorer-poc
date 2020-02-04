@@ -22,31 +22,39 @@ module PhotosHelper
   end
 
   def tour_thumb_url(tour)
-    if tour.photos.nil?
-      return nil
-    end
+    return nil if tour.photos.nil?
 
-    photo = tour.photos.find {|photo| photo.image.thumb.url.present?}
+    photo = tour.photos.find { |p| p.image.thumb.url.present? }
     photo_thumb_url(photo)
   end
 
   def tourbook_thumb_url(tourbook)
-    if tourbook.tours.nil?
-      return nil
-    end
+    return nil if tourbook.tours.nil?
 
     tourbook.tours.each do |tour|
       thumb_url = tour_thumb_url(tour)
-      if thumb_url.present?
-        return thumb_url
-      end
+      return thumb_url if thumb_url.present?
+    end
+  end
+
+  def scene_thumb_url(scene)
+    return nil if scene.photo.nil?
+
+    # photo = position.photos.find { |p| p.image.thumb.url.present? }
+    photo_thumb_url(scene.photo)
+  end
+
+  def guidebook_thumb_url(guidebook)
+    return nil if guidebook.scenes.nil?
+
+    guidebook.scenes.each do |scene|
+      thumb_url = scene_thumb_url(scene)
+      return thumb_url if thumb_url.present?
     end
   end
 
   def photo_thumb_url(photo)
-    if photo.present?
-      photo.image.thumb.url
-    end
+    photo.image.thumb.url if photo.present?
   end
 
   def full_address(address)

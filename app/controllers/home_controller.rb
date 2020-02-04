@@ -5,6 +5,7 @@ class HomeController < ApplicationController
 
     @tours = result[:tours]
     @tourbooks = result[:tourbooks]
+    @guidebooks = result[:guidebooks]
     @sort = result[:sort]
     @query = result[:query]
     @search_text = result[:search_text]

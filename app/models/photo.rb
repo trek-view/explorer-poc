@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 class Photo < ApplicationRecord
-
   include PgSearch::Model
 
   mount_uploader :image, PhotoUploader
 
   belongs_to :tour, counter_cache: true
   belongs_to :country
-  has_and_belongs_to_many :guidebooks
-  has_many :guidebooks_photos
+  has_many :scenes
 
   store_accessor :address, :cafe, :road, :suburb, :county, :region, :state, :postcode, :country_code
   store_accessor :google, :plus_code_global_code, :plus_code_compound_code
@@ -58,4 +56,11 @@ class Photo < ApplicationRecord
     self.tour.id
   end
 
+  def guidebook_ids
+    scenes.map { |s| s.guidebook.id }
+  end
+
+  def guidebooks
+    Guidebook.where(id: guidebook_ids)
+  end
 end

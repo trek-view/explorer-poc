@@ -12,15 +12,18 @@ class Finder
 
     @tours = @tours.page(@params[:tour_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tours])
     @tourbooks = @tourbooks.page(@params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
+
+    search_guidebooks
+    # @guidebooks = @guidebooks.page(@params[:guidebook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:guidebooks])
     {
         tours: @tours,
         tourbooks: @tourbooks,
+        guidebooks: @guidebooks,
         sort: @sort,
         query: @query,
         search_text: @search_text,
         tab: @tab
     }
-
   end
 
   private
@@ -108,9 +111,45 @@ class Finder
     @tourbooks = @tourbooks.order('tourbooks.created_at DESC')
   end
 
+  ### Guidebooks
+  def find_alll_guidebooks
+    return @guidebooks = @user.guidebooks if @user.present?
+
+    @guidebooks = Guidebook.all
+  end
+
+  def find_all_scenes
+    @scenes = @guidebooks.scenes
+  end
+
+  def sort_guidebooks
+    if @sort.present?
+      @guidebooks = @guidebooks.order(name: :asc) if
+        @sort[:guidebooks] == 'name'
+      @guidebooks = @guidebooks.order('guidebooks.scenes_count DESC') if
+        @sort[:guidebooks] == 'scenes_count'
+    end
+    @guidebooks = @guidebooks.order(created_at: :desc)
+  end
+
+  def search_guidebooks
+    # look for guidebooks
+    find_alll_guidebooks
+    @guidebooks = @guidebooks.search(@search_text) if @search_text.present?
+    sort_guidebooks
+
+    # look for scenes belongs to guidebooks
+    # # find_all_scenes
+    # guidebook_ids = @guidebooks.present? ? @guidebooks.map(&:id) : []
+    # if guidebook_ids.present?
+    #   @scenes = @guidebooks.scenes.pluck(:id).uniq guidebook_ids.present?
+    # end
+    # sort_scenes
+  end
+
   def set_search_params
     @search_text = search_params[:search_text]
-    @tab = search_params[:tab] || 'tours'
+    @tab = search_params[:tab] || @tab || 'tours'
     @query = search_params[:query]
   end
 

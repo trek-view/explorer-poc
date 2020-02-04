@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :guidebooks_photo do
+  factory :scene do
     photo { "" }
     guidebook { "" }
   end

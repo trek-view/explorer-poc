@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_03_214942) do
+ActiveRecord::Schema.define(version: 2020_02_04_195916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -94,17 +94,6 @@ ActiveRecord::Schema.define(version: 2020_02_03_214942) do
     t.index ["user_id"], name: "index_guidebooks_on_user_id"
   end
 
-  create_table "guidebooks_photos", force: :cascade do |t|
-    t.bigint "photo_id"
-    t.bigint "guidebook_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "description"
-    t.integer "position"
-    t.index ["guidebook_id"], name: "index_guidebooks_photos_on_guidebook_id"
-    t.index ["photo_id"], name: "index_guidebooks_photos_on_photo_id"
-  end
-
   create_table "photos", force: :cascade do |t|
     t.bigint "tour_id"
     t.decimal "latitude", precision: 10, scale: 6
@@ -132,6 +121,17 @@ ActiveRecord::Schema.define(version: 2020_02_03_214942) do
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer"], name: "index_photos_on_tourer", using: :gin
     t.index ["tourer_connection_photos"], name: "index_photos_on_tourer_connection_photos", using: :gin
+  end
+
+  create_table "scenes", force: :cascade do |t|
+    t.bigint "photo_id"
+    t.bigint "guidebook_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "description"
+    t.integer "position"
+    t.index ["guidebook_id"], name: "index_scenes_on_guidebook_id"
+    t.index ["photo_id"], name: "index_scenes_on_photo_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -229,9 +229,9 @@ ActiveRecord::Schema.define(version: 2020_02_03_214942) do
 
   add_foreign_key "guidebooks", "categories"
   add_foreign_key "guidebooks", "users"
-  add_foreign_key "guidebooks_photos", "guidebooks"
-  add_foreign_key "guidebooks_photos", "photos"
   add_foreign_key "photos", "tours"
+  add_foreign_key "scenes", "guidebooks"
+  add_foreign_key "scenes", "photos"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"
