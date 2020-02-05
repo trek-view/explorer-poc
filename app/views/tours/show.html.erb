@@ -30,37 +30,36 @@
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <h1 class="<%= current_user ? 'col-lg-10' : 'col-lg-12' %> col-sm-12">
+          <h1 class="<%= current_user ? 'col-lg-8' : 'col-lg-12' %> col-sm-12">
             <%= title "#{@tour.name} tour" %>
           </h1>
 
           <% description @tour.description %>
 
           <% if current_user %>
-            <div class="col-lg-2 col-sm-12">
-              <div class="float-right">
+            <div class="col-lg-4 col-sm-12">
+              <div class="form-group mt-2 float-right">
+                <%= link_to 'Back', user_path(current_user), class: 'btn btn-success' %>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add to Tourbook
+                </button>
+                <div id="tourBooksList" class="dropdown-menu">
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createTourbookModal">Create new Tourbook</a>
 
-                <div class="btn-group mt-2">
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Add to Tourbook
-                  </button>
-                  <div id="tourBooksList" class="dropdown-menu">
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createTourbookModal">Create new Tourbook</a>
-
-                    <% if current_user.tourbooks.any? %>
-                      <div class="dropdown-divider"></div>
-                      <% current_user.tourbooks.each do |book| %>
-                        <%= link_to book.name,
-                                    add_item_user_tourbook_path(current_user, book, item_id: @tour.id),
-                                    class: 'dropdown-item',
-                                    remote: true,
-                                    method: :post %>
-                      <% end %>
+                  <% if current_user.tourbooks.any? %>
+                    <div class="dropdown-divider"></div>
+                    <% current_user.tourbooks.each do |book| %>
+                      <%= link_to book.name,
+                                  add_item_user_tourbook_path(current_user, book, item_id: @tour.id),
+                                  class: 'dropdown-item',
+                                  remote: true,
+                                  method: :post %>
                     <% end %>
-                  </div>
+                  <% end %>
                 </div>
-
               </div>
+              
+             
             </div>
           <% end %>
 
