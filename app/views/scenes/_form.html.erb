@@ -5,7 +5,7 @@
         user_guidebook_scene_path
     %>
 
-    <%= form_with(model: @scene, url: form_url, remote: true) do |f| %>
+    <%= form_with(model: @scene, url: form_url, local: true) do |f| %>
 
       <%= form_errors_for @scene %>
       <div class="h-divider-empty"></div>
@@ -21,7 +21,8 @@
       <div class="form-group">
         <%= f.label :guidebook_id %>
         <%= f.collection_select(
-              :guidebook_id, Guidebook.order(:name), :id, :name
+              :guidebook_id, Guidebook.order(:name), :id, :name, {},
+              { class: "form-control", disabled: "disabled" }
             )
         %>
       </div>
@@ -31,7 +32,10 @@
         <%= f.collection_select(
               :photo_id, Photo.order(:id), :id, :id, 
               { prompt: "Select a photo" },
-              onchange: "onChangePhotoId(this.value)"
+              {
+                class: "form-control",
+                onchange: "onChangePhotoId(this.value)"
+              }
             )
         %>
       </div>

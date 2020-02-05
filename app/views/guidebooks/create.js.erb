@@ -1,16 +1,16 @@
-<% if @tourbook.errors.any? %>
-  var container = $('#createTourbookModal .form-errors');
-  container.html('<%= j form_errors_for @tourbook %>');
+<% if @guidebook.errors.any? %>
+  var container = $('#createGuidebookModal .form-errors');
+  container.html('<%= j form_errors_for @guidebook %>');
 <% else %>
-  $('#createTourbookModal').modal('hide');
+  $('#createGuidebookModal').modal('hide');
   var messages = $('.flash-messages');
   messages.html('<%= j render partial: "shared/flash_messages" %>');
-  //add link to tourbooks list
-  var tourBooksList = $('#tourBooksList');
-  var link = '<%=  link_to @tourbook.name,
-                          add_item_user_tourbook_path(@tourbook.user, @tourbook, item_id: @tour.id),
+  //add link to guidebooks list
+  var guideBooksList = $('#guideBooksList');
+  var link = '<%=  link_to @guidebook.name,
+                          add_item_user_guidebook_path(@guidebook.user, @guidebook, item_id: @photo.id),
                           class: 'dropdown-item',
                           remote: true,
                           method: :post %>'
-  tourBooksList.append(link);
-<% end %>tourBooksList
+  guideBooksList.append(link);
+<% end %>guideBooksList

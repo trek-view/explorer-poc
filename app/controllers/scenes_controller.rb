@@ -3,7 +3,7 @@ class ScenesController < ApplicationController
   before_action :set_scene, only: %i[show edit update destroy]
 
   def index
-    @scenes = @guidebook.senes
+    @scenes = @guidebook.scenes
   end
 
   def show; end
@@ -13,7 +13,12 @@ class ScenesController < ApplicationController
   end
 
   def create
-    @scene = Scene.create(scene_params)
+    # @scene = Scene.create(scene_params)
+    @scene = @guidebook.scenes.build(scene_params)
+    render :new unless @guidebook.save
+
+    flash[:success] = 'Your scence was created!'
+    redirect_to edit_user_guidebook_path(id: @guidebook.id)
   end
 
   def edit; end
