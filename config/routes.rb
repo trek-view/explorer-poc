@@ -28,7 +28,6 @@ Rails.application.routes.draw do
     end
   end
 
-
   resources :users, only: %i[show] do
     post 'generate_new_token', to: 'users#generate_new_token'
     get 'tourbooks', to: 'tourbooks#user_tourbooks'
@@ -66,6 +65,7 @@ Rails.application.routes.draw do
   get '/robots.txt' => 'robots_txts#show'
   get '/about', to: 'home#about'
   get '/upload', to: 'home#upload'
+  get '/select_scene_photo' => 'scenes#select_scene_photo', as: 'select_scene_photo'
 
   root to: 'home#index'
 end

@@ -1,27 +1,19 @@
 class GuidebooksController < ApplicationController
   before_action :authenticate_user!, except: [:show]
-  before_action :set_guidebook, except: [:new, :create, :user_guidebooks, :show]
   before_action :set_user
+  before_action :set_guidebook, except: %i[new create user_guidebooks]
+  before_action :authorize_guidebook, only: %i[
+    show edit update destroy add_item remove_item
+  ]
+  before_action :set_scenes, only: %i[show edit update destroy]
+  before_action :sort_scenes, only: %i[show edit]
   before_action :set_tab, only: %i[new create user_guidebooks show index]
 
   def index
     user_guidebooks
   end
 
-  def show
-    set_sort_params
-
-    @guidebook = Guidebook.find(params[:id])
-    @scenes = @guidebook.scenes
-
-    if @sort.present?
-      @scenes = @scenes.order(:name) if @sort[:name] == 'name'
-      @scenes = @scenes.order(position: :desc) if @sort[:scenes] == 'position'
-      @scenes = @scenes.order(positions_count: :desc) if
-        @sort[:scenes] == 'scenes_count'
-    end
-    @scenes = @scenes.order(created_at: :desc)
-  end
+  def show; end
 
   def new
     @guidebook = Guidebook.new
@@ -36,23 +28,18 @@ class GuidebooksController < ApplicationController
         add_item
         flash[:success] = 'You Guidebook was created!'
         format.html { redirect_to user_guidebooks_path }
-        format.js
       else
         format.html { render :new }
-        format.js
       end
+      format.js
     end
   end
 
-  def edit
-    authorize @guidebook
-  end
+  def edit; end
 
   def update
-    authorize @guidebook
-
     if @guidebook.update(guidebook_params)
-      flash[:success] = 'You Guidebook was updated!'
+      flash[:success] = 'Your guidebook was updated!'
       redirect_to user_guidebook_path(@guidebook.user, @guidebook)
     else
       flash[:error] = @guidebook.errors.full_messages.to_sentence
@@ -61,46 +48,44 @@ class GuidebooksController < ApplicationController
   end
 
   def destroy
-    authorize @guidebook
-
     @guidebook.destroy
-
     flash[:success] = "Guidebook #{@guidebook.name} was destroyed"
     redirect_to user_guidebooks_path(current_user)
   end
 
   def add_item
-    authorize @guidebook
+    return unless params[:item_id].present?
 
-    if params[:item_id].present?
-      @tour = Tour.find(params[:item_id])
-
-      begin
-        @guidebook.tours << @tour
-        flash.now[:notice] = "Tour was added to your Guidebook #{@guidebook.name}"
-      rescue ActiveRecord::RecordInvalid => e
-        flash.now[:error] = e.message
-      end
+    @scene = Scene.find(params[:item_id])
+    begin
+      @guidebook.scenes << @scene
+      flash.now[:notice] = "
+        Scene was added to your Guidebook #{@guidebook.name}
+      "
+    rescue ActiveRecord::RecordInvalid => e
+      flash.now[:error] = e.message
     end
   end
 
   def remove_item
-    authorize @guidebook
+    return unless params[:item_id].present?
 
-    if params[:item_id].present?
-      @tour = Tour.find(params[:item_id])
-      begin
-        @guidebook.tours.delete(@tour)
-        flash[:success] = "Tour \"#{@tour.name}\" was removed from this Guidebook"
-      rescue => e
-        flash[:error] = e.message
-      end
+    @scene = Scene.find(params[:item_id])
+    begin
+      @guidebook.scenes.delete(@scene)
+      flash[:success] = "
+        Scene \"#{@scene.name}\" was removed from this Guidebook
+      "
+    rescue ActiveRecord::RecordNotDestroyed => e
+      flash[:error] = e.message
     end
   end
 
   def user_guidebooks
     @guidebooks = @user.guidebooks
-    @guidebooks = @guidebooks.page(params[:page]).per(Constants::WEB_ITEMS_PER_PAGE[:guidebooks])
+    @guidebooks = @guidebooks.page(params[:page]).per(
+      Constants::WEB_ITEMS_PER_PAGE[:guidebooks]
+    )
     render 'index'
   end
 
@@ -108,6 +93,18 @@ class GuidebooksController < ApplicationController
 
   def set_guidebook
     @guidebook = Guidebook.find(params[:id])
+  end
+
+  def set_scenes
+    @scenes = @guidebook.scenes
+  end
+
+  def set_tab
+    @tab = 'guidebooks'
+  end
+
+  def authorize_guidebook
+    authorize @guidebook
   end
 
   def guidebook_params
@@ -133,10 +130,18 @@ class GuidebooksController < ApplicationController
   end
 
   def sort_params
-    params.permit(sort: [:tours])
+    params.permit(sort: [:scenes])
   end
 
-  def set_tab
-    @tab = 'guidebooks'
+  def sort_scenes
+    set_sort_params
+
+    if @sort.present?
+      @scenes = @scenes.order(:name) if @sort[:name] == 'name'
+      @scenes = @scenes.order(:position) if @sort[:scenes] == 'position'
+      @scenes = @scenes.order(positions_count: :desc) if
+        @sort[:scenes] == 'scenes_count'
+    end
+    @scenes = @scenes.order(:position)
   end
 end

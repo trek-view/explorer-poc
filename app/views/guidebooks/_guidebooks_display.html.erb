@@ -16,7 +16,10 @@
       </div>
 
       <div class="card-footer">
-        <small class="text-muted">created by: <%= link_to guidebook.user.try(:name), user_guidebooks_path(guidebook.user) %></small>
+        <small class="text-muted">
+          created by: 
+          <%= link_to guidebook.user.try(:name), user_guidebooks_path(guidebook.user) %>
+        </small>
       </div>
 
     </div>
