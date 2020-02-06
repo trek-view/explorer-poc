@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-6">
+    <% form_url = @scene.new_record? ?
+        user_guidebook_scenes_path :
+        user_guidebook_scene_path
+    %>
+
+    <%= form_with(model: @scene, url: form_url, local: true) do |f| %>
+
+      <%= form_errors_for @scene %>
+      <div class="h-divider-empty"></div>
+      <div class="form-group float-right">
+        <%= link_to 'Back', :back, class: 'btn btn-success' %>
+        <% button_text = @scene.new_record? ? 'Create' : 'Update' %>
+        <%= f.submit button_text , class: 'btn btn-primary' %>
+      </div>
+
+      <h4><p><%= @scene.new_record? ? "New Scene" : "Scene" %></p></h4>
+      <div class="h-divider"></div>
+
+      <div class="form-group">
+        <%= f.label :guidebook_id %>
+        <%= f.collection_select(
+              :guidebook_id, Guidebook.order(:name), :id, :name, {},
+              { class: "form-control", disabled: "disabled" }
+            )
+        %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :photo_id %>
+        <%= f.collection_select(
+              :photo_id, Photo.order(:id), :id, :id, 
+              { prompt: "Select a photo" },
+              {
+                class: "form-control",
+                onchange: "onChangePhotoId(this.value)"
+              }
+            )
+        %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :position %>
+        <%= f.number_field(
+              :positon, value: @scene.position, min: 0, class: 'form-control'
+            )
+        %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description %>
+        <%= f.text_area(
+              :description, autocomplete: 'description',
+              class: 'form-control', size: '60x3', maxlength: 250
+            )
+        %>
+      </div>
+
+    <% end %>
+  </div>
+
+  <div class="col-6">
+    <div id="guidebook-scene-photo">
+      <% if @scene.photo.present? %>
+        <%= render partial: 'photos/photo', locals: { photo: @scene.photo } %>
+      <% end %>
+    </div>
+  </div>
+</div>

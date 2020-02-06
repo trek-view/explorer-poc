@@ -1,0 +1,16 @@
+<% if @scene.errors.any? %>
+  var container = $('#createSceneModal .form-errors');
+  container.html('<%= j form_errors_for @scene %>');
+<% else %>
+  $('#createSceneModal').modal('hide');
+  var messages = $('.flash-messages');
+  messages.html('<%= j render partial: "shared/flash_messages" %>');
+  //add link to scenes list
+  var scenesList = $('#scenesList');
+  var link = '<%=  link_to @scene.name,
+                          add_item_user_scene_path(@scene.user, @scene, item_id: @photo.id),
+                          class: 'dropdown-item',
+                          remote: true,
+                          method: :post %>'
+  scenesList.append(link);
+<% end %>scenesList

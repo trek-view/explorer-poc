@@ -1,0 +1,47 @@
+<% form_url = @guidebook.new_record? ? user_guidebooks_path : user_guidebook_path %>
+
+<%= form_with(model: @guidebook, url: form_url, local: true) do |f| %>
+
+  <%= form_errors_for @guidebook %>
+  <div class="h-divider-empty"></div>
+  <div class="form-group float-right">
+    <%= link_to(
+          'Back',
+          @guidebook.new_record? ? 
+            user_path(current_user) : 
+            user_guidebook_path(id: @guidebook.id),
+          class: 'btn btn-success'
+        )
+    %>
+    <% button_text = @guidebook.new_record? ? 'Create' : 'Update' %>
+    <%= f.submit button_text , class: 'btn btn-primary' %>
+  </div>
+
+  <h4><p>Guidebook Info</p></h4>
+  <div class="h-divider"></div>
+
+  <div class="form-group">
+    <%= f.label :category_id %>
+    <%= f.collection_select(
+          :category_id, Category.order(:name), :id, :name,
+          { prompt: "Select a category" },
+          { class: "form-control", include_blank: true }
+        )
+    %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :name %>
+    <%= f.text_field(
+          :name, autofocus: true, autocomplete: 'name',
+          maxlength: 70, class: 'form-control'
+        )
+    %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description %>
+    <%= f.text_area :description, autocomplete: 'description', class: 'form-control', size: '60x3', maxlength: 250 %>
+  </div>
+
+<% end %>

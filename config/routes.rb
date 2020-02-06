@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users, controllers: { registrations: 'users/registrations' }
@@ -11,6 +10,7 @@ Rails.application.routes.draw do
       end
 
       resources :tourbooks
+      resources :guidebooks
 
       resources :users, only: %i[show] do
         collection do
@@ -40,6 +40,18 @@ Rails.application.routes.draw do
         delete 'remove_item', to: 'tourbooks#remove_item'
       end
     end
+
+    get 'guidebooks', to: 'guidebooks#user_guidebooks'
+
+    resources :guidebooks, except: %i[index] do
+      member do
+        post 'add_item', to: 'guidebooks#add_item'
+        delete 'remove_item', to: 'guidebooks#remove_item'
+      end
+      resources :scenes do
+        get 'guidebook_scenes', to: 'scenes#guidebook_scenes'
+      end
+    end
   end
 
   resources :photos, only: %i[index show] do
@@ -53,7 +65,7 @@ Rails.application.routes.draw do
   get '/robots.txt' => 'robots_txts#show'
   get '/about', to: 'home#about'
   get '/upload', to: 'home#upload'
+  get '/select_scene_photo' => 'scenes#select_scene_photo', as: 'select_scene_photo'
 
   root to: 'home#index'
-
 end

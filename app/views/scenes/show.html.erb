@@ -1,0 +1,60 @@
+<% content_for :meta_title do %>
+  <% @scene.position %>
+<% end %>
+
+<% content_for :meta_description do %>
+  <% @scene.description %>
+<% end %>
+
+<div class="row">
+  <div class="py-5 col-lg-12">
+    <div class="card">
+
+      <div class="card-header">
+        <div class="row">
+
+          <h1 class="col-lg-10 col-sm-12">
+            <%= title "#{@scene.position}th scenen" %>
+          </h1>
+          <% description @scene.description %>
+
+          <% if policy(@scene).update? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Edit',
+                      edit_user_guidebook_scene_path(
+                          @user, @guidebook, @scene
+                      ),
+                      class: 'btn btn-warning mt-2'
+                %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if policy(@scene).destroy? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Delete',
+                      url_for(action: :destroy, id: @scene.id),
+                      method: :delete,
+                      data: {confirm: 'Are you sure?'},
+                      class: 'btn btn-danger mt-2'
+                %>
+              </div>
+            </div>
+          <% end %>
+
+        </div>
+      </div>
+
+      <div class="card-body">
+        <h3 class="card-title"><%= @scene.position %></h3>
+        <%= render partial: 'scenes/scene', locals: { scene: @scene } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= link_to 'Back', :back, class: 'btn btn-success' %>
+</div>

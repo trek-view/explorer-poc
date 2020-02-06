@@ -41,3 +41,17 @@ select {
   margin: auto;
   max-width: 18rem;
 }
+
+.h-divider-empty {
+  margin-top: 0px;
+  margin-bottom: 20px;
+  height: 1px;
+  width: 100%;
+}
+.h-divider {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 2px;
+  width: 100%;
+  border-top: 2px solid #80808047;
+}
