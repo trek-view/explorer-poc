@@ -1,0 +1,19 @@
+
+
+<div id="home-card-<%= home_card.id %>" class="col-xl-3 col-lg-3 col-md-6 mb-4 home-card-item">
+  <%= link_to home_card.url do%>
+    <div class="card home-card h-100">
+      <div class="card-body home-card-description">
+        <img class="card-img-top card-icon" src="<%= home_card.avatar.url(:thumb) %>" alt="">
+
+        <div class="card-title home-card-title">
+          <%= home_card.title %>
+        </div>
+
+        <div class="card-text">
+          <%= truncate(home_card.description, length: 120, separator: ' ') %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

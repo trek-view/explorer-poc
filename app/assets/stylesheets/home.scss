@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .home-content {
-  padding: 10px;
+  padding: 50px 30px 50px 30px;
 }
 
 .tours-books-toggle {
@@ -30,4 +30,24 @@
     margin: 5px 5px 0 0;
     z-index: 100;
   }
+}
+
+.card-icon {
+  width: 90px;
+  height: 90px;
+  vertical-align: middle;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.home-card-title {
+  font-weight: 700;
+  margin: 14px 0 0;
+  font-size: 18px;
+}
+
+.home-card-description {
+  margin: 10px 0 0;
+  min-height: 84px;
+  font-size: 14px;
 }
