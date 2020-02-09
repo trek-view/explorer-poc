@@ -84,8 +84,12 @@
               <% end %>
             </tr>
             <tr>
-              <td>OpenTrailView photo id</td>
-              <td>https://www.opentrailview.org/pano.php?id=<%= @photo.opentrailview['photo_id'] %></td>
+              <td>View on Open Trail View</td>
+              <td>https://www.opentrailview.org/?lat=<%= "#{@photo.latitude}" %>&lon=<%= @photo.longitude %>&zoom=10</td>
+            </tr>
+            <tr>
+              <td>View on Mapillary</td>
+              <td>https://www.mapillary.com/app/?lat=<%= "#{@photo.latitude}" %>&lon=<%= @photo.longitude %>&z=10</td>
             </tr>
           </tbody>
         </table>
