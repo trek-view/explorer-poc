@@ -149,12 +149,12 @@ class Finder
 
   def set_search_params
     @search_text = search_params[:search_text]
-    @tab = search_params[:tab] || @tab || 'tours'
+    @tab = search_params[:tab] || 'tours'
     @query = search_params[:query]
   end
 
   def search_params
-    @params.permit(:search_text, :tab, query: [:country_id, :tour_type, :transport_type])
+    @params.permit(:search_text, :tab, query: %i[country_id tour_type transport_type])
   end
 
   def set_sort_params
@@ -162,6 +162,6 @@ class Finder
   end
 
   def sort_params
-    @params.permit(sort: [:tours, :tourbooks])
+    @params.permit(sort: %i[tours tourbooks guidebooks])
   end
 end

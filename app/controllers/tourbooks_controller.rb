@@ -1,9 +1,21 @@
 # frozen_string_literal: true
 class TourbooksController < ApplicationController
-
-  before_action :authenticate_user!, except: [:show]
-  before_action :set_tourbook, except: [:new, :create, :user_tourbooks, :show]
+  before_action :authenticate_user!, except: %i[show index]
+  before_action :set_tourbook, except: %i[index new create user_tourbooks show]
   before_action :set_user
+
+  def index
+    # Global view
+    if @user.present?
+      # User view
+      @tourbooks = @user.tourbooks
+    else
+      @tourbooks = Tourbook.all.order(created_at: :desc)
+    end
+    @tourbooks = @tourbooks.page(params[:page]).per(
+      Constants::WEB_ITEMS_PER_PAGE[:tourbooks]
+    )
+  end
 
   def show
     set_sort_params
@@ -110,10 +122,7 @@ class TourbooksController < ApplicationController
   end
 
   def permitted_params
-    [
-        :name,
-        :description
-    ]
+    %i[name description]
   end
 
   def set_user

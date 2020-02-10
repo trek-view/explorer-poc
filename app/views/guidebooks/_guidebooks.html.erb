@@ -1,0 +1,28 @@
+<% @guidebooks.each do |guidebook| %>
+  <div class="col-xl-4 col-lg-4 col-md-6 mb-4">
+    <div class="card photo-card h-100">
+      <span class="badge badge-pill badge-success badge-count" title="Added to Guidebook"><%= guidebook.scenes_count %></span>
+      <% thumb_url = guidebook_thumb_url(guidebook) %>
+      <% if thumb_url.present? %>
+        <img class="card-img-top" src="<%= thumb_url %>" alt="">
+      <% end %>
+      <div class="card-body">
+
+        <h4 class="card-title">
+          <%= link_to guidebook.name, guidebook_path(guidebook) %>
+        </h4>
+
+        <p class="card-text"><%= truncate(guidebook.description, length: 120, separator: ' ') %></p>
+      </div>
+
+      <div class="card-footer">
+        <small class="text-muted">
+          created by: 
+          <%= link_to guidebook.user.try(:name), guidebooks_path(guidebook.user) %>
+        </small>
+      </div>
+
+    </div>
+
+  </div>
+<% end %>
