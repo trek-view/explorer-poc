@@ -56,7 +56,7 @@ class PhotosController < ApplicationController
     if @user.present?
       @photos = @user.photos
     else
-      @photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
+      @photos = Photo.all #Photo.where('substring(favoritable_score from 15)::integer > 0')
     end
 
     if @sort.present?
