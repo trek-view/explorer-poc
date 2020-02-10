@@ -7,7 +7,8 @@ class UsersController < ApplicationController
 
   def show
     result = Finder.new(params, @user).search
-    puts '====== result: ', result;
+    puts "====== result: #{result.inspect}"
+
     @tours = result[:tours]
     @tourbooks = result[:tourbooks]
     @guidebooks = result[:guidebooks]

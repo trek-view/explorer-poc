@@ -28,7 +28,7 @@
       <div class="row tours-container">
         <%= render partial: 'tours/tour', collection: @tours %>
       </div>
-      <%= paginate @tours, param_name: :tour_pagina, :params => {:tab => "tours"} %>
+      <%= paginate @tours, param_name: :tour_pagina, :params => {tab: :tours} %>
     </div>
 
     <div id="tourbooks-content" style="<%= @tab == 'tourbooks' ? '' : 'display: none;' %>">
@@ -39,8 +39,8 @@
 
       <div class="row">
         <div class="col-lg-12">
-          <div class="row tours-container">
-            <%= render partial: 'tourbooks/tourbooks_display' %>
+          <div class="row tourbooks-container">
+            <%= render partial: 'tourbooks/tourbook', collection: @tourbooks %>
           </div>
         </div>
 
@@ -49,21 +49,20 @@
     </div>
 
     <div id="guidebooks-content" style="<%= @tab == 'guidebooks' ? '' : 'display: none;' %>">
-
       <div class="sort-wrapper">
         <%= render(SortComponent, collection_name: :guidebooks, value: @sort.try(:[], :guidebooks)) %>
       </div>
-
       <div class="row">
         <div class="col-lg-12">
-          <div class="row tours-container">
-            <%= render partial: 'guidebooks/user_guidebooks' %>
+          <div class="row guidebooks-container">
+            <%= render partial: 'guidebooks/guidebook', collection: @guidebooks %>
           </div>
         </div>
 
       </div>
-      <%= paginate @guidebooks, param_name: :guidebook_pagina, :params => {:tab => "guidebooks"} %> 
+      <%= paginate @guidebooks, param_name: :guidebook_pagina, :params => {:tab => "guidebooks"} %>
     </div>
+    
 
   </div>
 </div>

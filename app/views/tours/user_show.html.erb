@@ -195,7 +195,7 @@
           </div>
 
           <div class="row">
-            <%= render partial: 'tourbooks/tourbooks_display' %>
+            <%= render partial: 'tourbooks/tourbook', collection: @tourbooks %>
             <%= paginate @tourbooks, param_name: :tourbook_pagina %>
           </div>
         <% else %>
@@ -215,5 +215,5 @@
 <%= render 'show_photo' %>
 
 <div class="form-group">
-  <%= link_to 'Back', user_path(current_user, tab: 'tours'), class: 'btn btn-success'%>
+  <%= link_to 'Back', user_path(current_user, tab: :tours), class: 'btn btn-success'%>
 </div>

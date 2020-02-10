@@ -8,13 +8,21 @@ class Finder
     set_search_params
     set_sort_params
 
-    search_tours_and_tourbooks
+    search_tours
+    @tours = @tours.page(@params[:tour_pagina]).per(
+      Constants::WEB_ITEMS_PER_PAGE[:tours]
+    )
 
-    @tours = @tours.page(@params[:tour_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tours])
-    @tourbooks = @tourbooks.page(@params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
+    search_tourbooks
+    @tourbooks = @tourbooks.page(@params[:tourbook_pagina]).per(
+      Constants::WEB_ITEMS_PER_PAGE[:tourbooks]
+    )
 
     search_guidebooks
-    @guidebooks = @guidebooks.page(@params[:guidebook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:guidebooks])
+    @guidebooks = @guidebooks.page(@params[:guidebook_pagina]).per(
+      Constants::WEB_ITEMS_PER_PAGE[:guidebooks]
+    )
+
     {
         tours: @tours,
         tourbooks: @tourbooks,
@@ -54,7 +62,9 @@ class Finder
     # look for tourbooks including tours
     tour_ids = @tours.present? ? @tours.map(&:id) : []
     if tour_ids.present?
-      tourbook_ids += TourTourbook.where(tour_id: tour_ids).pluck(:tourbook_id).uniq
+      tourbook_ids += TourTourbook.where(tour_id: tour_ids).pluck(
+        :tourbook_id
+      ).uniq
     end
 
     @tourbooks = Tourbook.where(id: tourbook_ids.uniq)
@@ -62,36 +72,24 @@ class Finder
     sort_tourbooks
   end
 
-  def search_tourbooks
-    # look for tourbooks
-    find_alll_tourbooks
-    @tourbooks = @tourbooks.search(@search_text) if @search_text.present?
-    sort_tourbooks
-
-    # look for tours belongs to tourbooks
+  def search_tours
     find_all_tours
-    tourbook_ids = @tourbooks.present? ? @tourbooks.map(&:id) : []
-    if tourbook_ids.present?
-      tour_ids = TourTourbook.where(tourbook_id: tourbook_ids).pluck(:tour_id).uniq
-      @tours = Tour.where(id: tour_ids)
-    end
+    @tours = @tours.search(@search_text) if @search_text.present?
     sort_tours
   end
 
+  def search_tourbooks
+    find_alll_tourbooks
+    @tourbooks = @tourbooks.search(@search_text) if @search_text.present?
+    sort_tourbooks
+  end
+
   def find_all_tours
-    if @user.present?
-      @tours = @user.tours
-    else
-      @tours = Tour.all
-    end
+    @tours = @user.present? ? @user.tours : Tour.all
   end
 
   def find_alll_tourbooks
-    if @user.present?
-      @tourbooks = @user.tourbooks
-    else
-      @tourbooks = Tourbook.all
-    end
+    @tourbooks = @user.present? ? @user.tourbooks : @tourbooks = Tourbook.all
   end
 
   def sort_tours

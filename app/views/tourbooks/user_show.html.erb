@@ -15,6 +15,29 @@
 
           <h1 class="col-lg-10 col-sm-12"><%= title "#{@tourbook.name} tourbook" %></h1>
           <% description @tourbook.description %>
+
+          <% if policy(@tourbook).update? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Edit',
+                            edit_user_tourbook_path(@tourbook.user, @tourbook),
+                            class: 'btn btn-warning mt-2' %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if policy(@tourbook).destroy? %>
+            <div class="col-lg-1 col-sm-6">
+              <div class="float-right">
+                <%= link_to 'Delete',
+                            url_for(action: :destroy, id: @tourbook.slug),
+                            method: :delete,
+                            data: {confirm: 'Are you sure?'},
+                            class: 'btn btn-danger mt-2'%>
+              </div>
+            </div>
+          <% end %>
+
         </div>
       </div>
 
@@ -63,5 +86,5 @@
 </div>
 
 <div class="form-group">
-  <%= link_to 'Back', tourbooks_path(), class: 'btn btn-success' %>
+  <%= link_to 'Back', user_path(current_user, tab: :tourbooks), class: 'btn btn-success' %>
 </div>
