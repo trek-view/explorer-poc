@@ -1,22 +1,20 @@
 <div id="scene-<%= scene.id %>" class="col-xl-4 col-lg-4 col-md-6 mb-4 scene-item">
   <div class="card photo-card h-100">
-    <%= link_to edit_user_guidebook_scene_path(user_id: @user.id, guidebook_id: @guidebook.id, id: scene.id) do %>
-      <div class="card-body">
-        <h4 class="card-text">
-          <%= truncate(scene.description, length: 120, separator: ' ') %>
-        </h4>
-        <p class="card-text">Position: <%= scene.position %></p>
-      </div>
+    <div class="card-body">
+      <h4 class="card-text">
+        <%= truncate(scene.description, length: 120, separator: ' ') %>
+      </h4>
+      <p class="card-text">Position: <%= scene.position %></p>
+    </div>
 
-      <%= render partial: 'photos/photo', locals: { photo: scene.photo } %>
+    <%= render partial: 'photos/photo', locals: { photo: scene.photo } %>
 
-      <div class="card-footer">
-        <small class="text-muted">
-          uploaded by: 
-          <%= link_to @user.try(:name), user_path(@user) %>
-        </small>
-      </div>
-    <% end %>
+    <div class="card-footer">
+      <small class="text-muted">
+        uploaded by: 
+        <%= @guidebook.user.name %>
+      </small>
+    </div>
   </div>
 
 </div>

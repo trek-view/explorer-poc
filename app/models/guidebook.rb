@@ -31,6 +31,6 @@ class Guidebook < ApplicationRecord
   end
 
   def photos
-    Photo.where(id: photos_ids)
+    Photo.where(id: self.photos_ids)
   end
 end

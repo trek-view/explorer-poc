@@ -1,8 +1,19 @@
 # frozen_string_literal: true
 class ToursController < ApplicationController
   include MetaTagsHelper
-
+  # before_action :authenticate_user!, only: %i[show]
+  before_action :set_user, only: %i[index show]
   before_action :set_tour, only: %i[show]
+
+  def index
+    @tours = @user ? @user.tours : Tour.all.order(created_at: :desc)
+    @tours = @tours.page(params[:page]).per(
+      Constants::WEB_ITEMS_PER_PAGE[:tours]
+    )
+    return render 'user_index' if @user
+
+    render 'index'
+  end
 
   def show
     set_sort_params
@@ -26,28 +37,40 @@ class ToursController < ApplicationController
     @tourbooks = @tourbooks.page(params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
 
     tour_og_meta_tag(@tour)
+
+    return render 'user_show' if @user
+
+    render 'show'
   end
 
   private
 
-    def set_tour
-      @tour = Tour.includes(:countries).friendly.find(params[:id])
-    end
+  def set_tour
+    @tour = Tour.includes(:countries).friendly.find(params[:id])
+  end
 
-    def set_tours_search_params
-      @search_text = tour_search_params[:search_text]
-      @query = tour_search_params[:query]
-    end
+  def set_tours_search_params
+    @search_text = tour_search_params[:search_text]
+    @query = tour_search_params[:query]
+  end
 
-    def tour_search_params
-      params.permit(:search_text, query: [:country_id, :tour_type])
-    end
+  def tour_search_params
+    params.permit(:search_text, query: %i[country_id tour_type])
+  end
 
   def set_sort_params
     @sort = sort_params[:sort]
   end
 
   def sort_params
-    params.permit(sort: [:photos, :tourbooks])
+    params.permit(sort: %i[photos tourbooks])
+  end
+
+  def set_user
+    @user = if params[:user_id]
+              User.friendly.find(params[:user_id])
+            elsif params[:user]
+              User.friendly.find(params[:id])
+            end
   end
 end

@@ -54,4 +54,15 @@ class User < ApplicationRecord
     Mailchimp::ListUpdater.new(self).delete
   end
 
+  def photos_ids
+    ids = []
+    tours.map { |t|
+      ids = ids + t.photos.ids
+    }
+    ids.uniq
+  end
+
+  def photos
+    Photo.where(id: self.photos_ids)
+  end
 end

@@ -7,6 +7,7 @@ class UsersController < ApplicationController
 
   def show
     result = Finder.new(params, @user).search
+    puts "====== result: #{result.inspect}"
 
     @tours = result[:tours]
     @tourbooks = result[:tourbooks]
@@ -33,20 +34,19 @@ class UsersController < ApplicationController
 
   private
 
-    def set_user
-      if params[:user_id].present?
-        @user = User.friendly.find(params[:user_id])
-      else
-        @user = User.friendly.find(params[:id])
-      end
-
+  def set_user
+    if params[:user_id].present?
+      @user = User.friendly.find(params[:user_id])
+    else
+      @user = User.friendly.find(params[:id])
     end
+  end
 
-    def set_sort_params
-      @sort = sort_params[:sort]
-    end
+  def set_sort_params
+    @sort = sort_params[:sort]
+  end
 
-    def sort_params
-      params.permit(sort: [:tours, :tourbooks])
-    end    
+  def sort_params
+    params.permit(sort: %i[tours tourbooks guidebooks])
+  end
 end

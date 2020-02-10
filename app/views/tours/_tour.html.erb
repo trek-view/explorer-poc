@@ -1,12 +1,14 @@
 <div id="tour-<%= tour.id %>" class="col-xl-4 col-lg-4 col-md-6 mb-4 tour-item">
   <div class="card photo-card h-100">
-    <span class="badge badge-primary badge-count" title="Added to Tourbook"><%= tour.tourbooks_count %></span>
+    <span class="badge badge-primary badge-count" title="Added to Tourbook">
+      <%= tour.tourbooks_count %>
+    </span>
     <% thumb_url = tour_thumb_url(tour) %>
     <% if thumb_url.present? %>
       <img class="card-img-top" src="<%= thumb_url %>" alt="">
     <% end %>
     <div class="card-body">
-      <% if @tourbook.present? && policy(@tourbook).remove_item? %>
+      <% if @user.present? && @tourbook.present? && policy(@tourbook).remove_item? %>
         <%= link_to remove_item_user_tourbook_path(tour.user, @tourbook, item_id: tour.id),
                     class: 'close delete_from_book',
                     title: 'delete tour from book',
@@ -18,10 +20,12 @@
       <% end %>
 
       <h4 class="card-title">
-        <%= link_to tour.name, user_tour_path(tour.user, tour) %>
+        <%= link_to tour.name, @user.present? ? user_tour_path(tour.user, tour) : tour_path(tour) %>
       </h4>
 
-      <p class="card-text"><%= truncate(tour.description, length: 120, separator: ' ') %></p>
+      <p class="card-text">
+        <%= truncate(tour.description, length: 120, separator: ' ') %>
+      </p>
 
       <div class="tags">
         <% tour.tags.each do |tag| %>
@@ -50,7 +54,9 @@
     </div>
 
     <div class="card-footer">
-      <small class="text-muted">uploaded by: <%= link_to tour.user.try(:name), user_path(tour.user) %></small>
+      <small class="text-muted">
+        uploaded by: 
+        <%= link_to tour.user.try(:name), @user.present? ? user_path(tour.user, tab: :tours) : tours_path() %></small>
     </div>
   </div>
 

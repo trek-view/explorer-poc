@@ -30,20 +30,17 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[show] do
     post 'generate_new_token', to: 'users#generate_new_token'
-    get 'tourbooks', to: 'tourbooks#user_tourbooks'
 
-    resources :tours, only: %i[show]
+    resources :tours
 
-    resources :tourbooks, except: %i[index] do
+    resources :tourbooks do
       member do
         post 'add_item', to: 'tourbooks#add_item'
         delete 'remove_item', to: 'tourbooks#remove_item'
       end
     end
 
-    get 'guidebooks', to: 'guidebooks#user_guidebooks'
-
-    resources :guidebooks, except: %i[index] do
+    resources :guidebooks do
       member do
         post 'add_item', to: 'guidebooks#add_item'
         delete 'remove_item', to: 'guidebooks#remove_item'
@@ -59,6 +56,12 @@ Rails.application.routes.draw do
       get 'viewpoints'
     end
   end
+
+  resources :tours, only: %i[index show]
+  resources :tourbooks, only: %i[index show]
+  resources :viewpoints, only: %i[index show]
+  resources :guidebooks, only: %i[index show]
+  resources :scenes, only: %i[index show]
 
   get '/search_tours', to: 'tours#search_tours'
   get '/sitemap.xml', to: 'application#sitemap'

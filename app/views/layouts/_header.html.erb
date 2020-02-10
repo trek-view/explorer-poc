@@ -9,37 +9,49 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
+          <%= link_to 'Home',
+                '/',
+                class: "nav-link #{current_class? photos_path }"
+          %>
+        </li>
+        <li class="nav-item">
           <%= link_to 'Top Viewpoints',
-                      viewpoints_photos_path,
-                      class: "nav-link #{current_class? photos_path }" %>
+                viewpoints_photos_path(),
+                class: "nav-link #{current_class? photos_path }"
+          %>
         </li>
         <% if user_signed_in? %>
           <li class="nav-item">
             <%= link_to 'My Profile',
-                        user_path(current_user),
-                        class: "nav-link #{current_class? user_path(current_user) }" %>
+                  user_path(current_user),
+                  class: "nav-link #{current_class? user_path(current_user) }"
+            %>
           </li>
           <li class="nav-item">
             <%= link_to 'Edit my profile',
-                        edit_user_registration_path,
-                        class: "nav-link #{current_class? edit_user_registration_path }" %>
+                  edit_user_registration_path,
+                  class: "nav-link #{current_class? edit_user_registration_path }"
+            %>
           </li>
           <li class="nav-item">
             <%= link_to 'Log out',
-                        destroy_user_session_path,
-                        class: "nav-link #{current_class? destroy_user_session_path }",
-                        method: :delete %>
+                  destroy_user_session_path,
+                  class: "nav-link #{current_class? destroy_user_session_path }",
+                  method: :delete
+            %>
           </li>
         <% else %>
           <li class="nav-item">
             <%= link_to 'Sign up',
-                        new_user_registration_path,
-                        class: "nav-link #{current_class? new_user_registration_path }" %>
+                  new_user_registration_path,
+                  class: "nav-link #{current_class? new_user_registration_path }"
+            %>
           </li>
           <li class="nav-item">
             <%= link_to 'Log in',
-                        new_user_session_path,
-                        class: "nav-link #{current_class? new_user_session_path }" %>
+                  new_user_session_path,
+                  class: "nav-link #{current_class? new_user_session_path }"
+            %>
           </li>
         <% end %>
       </ul>

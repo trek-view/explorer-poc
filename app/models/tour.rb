@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 class Tour < ApplicationRecord
-
   include PgSearch::Model
+
   extend FriendlyId
 
   enum tour_type: Constants::TOUR_TYPES
   enum transport_type: Constants::TRANSPORT_TYPES
 
-  belongs_to :user, :counter_cache => true
+  belongs_to :user, counter_cache: true
 
   has_many :taggings, dependent: :destroy
   has_many :tags, through: :taggings
@@ -25,7 +25,7 @@ class Tour < ApplicationRecord
   validates :tour_type, presence: true
   validates :transport_type, presence: true
 
-  validates_uniqueness_of :tourer_tour_id, :scope => :user_id, allow_blank: true
+  validates_uniqueness_of :tourer_tour_id, scope: :user_id, allow_blank: true
 
   validates_associated :tags
   validates_associated :countries
@@ -36,18 +36,15 @@ class Tour < ApplicationRecord
   validate :transport_type_should_be_valid
   # validate :types_dependency
 
-  friendly_id :name, :use => :scoped, :scope => :user
+  friendly_id :name, use: :scoped, scope: :user
 
   pg_search_scope :search,
-                  against: [
-                      :name,
-                      :description
-                  ],
+                  against: %i[name description],
                   associated_against: {
-                      tags: [:name],
+                    tags: [:name]
                   },
-                  :using => {
-                      :tsearch => {:prefix => true}
+                  using: {
+                    tsearch: { prefix: true }
                   }
 
   paginates_per Constants::ITEMS_PER_PAGE[:tours]
@@ -181,6 +178,4 @@ class Tour < ApplicationRecord
       errors.add(:types_mismatch, error_message) unless Constants::DEPENDENCY_OF_TYPES[self[:tour_type]].include? self[:transport_type]
     end
   end
-  #---------------------------------------------------------------------------------------------------------
-
 end

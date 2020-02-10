@@ -1,0 +1,22 @@
+
+<div class="float-right">
+  <%= link_to 'Add scene', new_user_guidebook_scene_path(user_id: @user.id, guidebook_id: @guidebook.id), class: 'btn btn-primary' %>
+</div>
+
+<h4>Added Scenes</h4>
+<div class="h-divider"></div>
+
+<% if @scenes.any? %>
+  <div class="sort-wrapper">
+    <%= render(
+          SortComponent, collection_name: :scenes,
+          value: @sort.try(:[], :scenes)
+        )
+    %>
+  </div>
+  <div class="row">
+    <%= render partial: 'scenes/user_scene', collection: @scenes %>
+  </div>
+<% else %>
+  <p class="card-text">Nothing</p>
+<% end %> 

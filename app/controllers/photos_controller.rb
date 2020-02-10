@@ -3,8 +3,7 @@ class PhotosController < ApplicationController
   include MetaTagsHelper
 
   before_action :authenticate_user!, only: %i[set_photo_view_point]
-  before_action :set_photo, only: %i[show
-                                      set_photo_view_point]
+  before_action :set_photo, only: %i[show set_photo_view_point]
 
   def index
     find_photos
@@ -54,8 +53,11 @@ class PhotosController < ApplicationController
 
   def find_viewpoints
     set_sort_params
-
-    @photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
+    if @user.present?
+      @photos = @user.photos
+    else
+      @photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
+    end
 
     if @sort.present?
       @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
@@ -76,7 +78,7 @@ class PhotosController < ApplicationController
   end
 
   def sort_params
-    params.permit(sort: [:photos])
+    params.permit(sort: %i[photos top])
   end
 
   def pannellum_config

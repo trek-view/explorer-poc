@@ -1,20 +1,38 @@
 class GuidebooksController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
+  before_action :authenticate_user!, except: %i[index show]
   before_action :set_user
-  before_action :set_guidebook, except: %i[new create user_guidebooks]
+  before_action :set_guidebook, except: %i[index new create]
   before_action :authorize_guidebook, only: %i[
-    show edit update destroy add_item remove_item
+    edit update destroy add_item remove_item
   ]
   before_action :set_scenes, only: %i[show edit update destroy]
   before_action :sort_scenes, only: %i[show edit]
-  before_action :set_tab, only: %i[new create user_guidebooks show index]
+  before_action :set_tab, only: %i[new create index show]
 
   def index
-    user_guidebooks
+    @guidebooks = @user ? current_user.guidebooks : Guidebook.all
+    @guidebooks = @guidebooks.page(params[:page]).per(
+      Constants::WEB_ITEMS_PER_PAGE[:guidebooks]
+    )
+    return render 'user_index' if @user
+
+    render 'index'
   end
 
-  def show; end
+  def show
+    return render 'user_show' if @user
 
+    render 'show'
+  end
+
+  # def user_index
+  #   @guidebooks = @user.guidebooks
+  # end
+
+  # def user_show
+  #   @guidebooks = @user.guidebooks
+  # end
+  
   def new
     @guidebook = Guidebook.new
   end
@@ -27,7 +45,7 @@ class GuidebooksController < ApplicationController
       if @guidebook.save
         add_item
         flash[:success] = 'You Guidebook was created!'
-        format.html { redirect_to user_guidebooks_path }
+        format.html { redirect_to user_index_path }
       else
         format.html { render :new }
       end
@@ -50,7 +68,7 @@ class GuidebooksController < ApplicationController
   def destroy
     @guidebook.destroy
     flash[:success] = "Guidebook #{@guidebook.name} was destroyed"
-    redirect_to user_guidebooks_path(current_user)
+    redirect_to user_index_path(current_user)
   end
 
   def add_item
@@ -79,14 +97,6 @@ class GuidebooksController < ApplicationController
     rescue ActiveRecord::RecordNotDestroyed => e
       flash[:error] = e.message
     end
-  end
-
-  def user_guidebooks
-    @guidebooks = @user.guidebooks
-    @guidebooks = @guidebooks.page(params[:page]).per(
-      Constants::WEB_ITEMS_PER_PAGE[:guidebooks]
-    )
-    render 'index'
   end
 
   private
@@ -120,8 +130,6 @@ class GuidebooksController < ApplicationController
               User.friendly.find(params[:user_id])
             elsif params[:user]
               User.friendly.find(params[:id])
-            else
-              current_user
             end
   end
 

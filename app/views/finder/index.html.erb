@@ -12,6 +12,7 @@
 
       <% if user_signed_in? %>
         <div class="col-lg-3 col-sm-12 mt-4">
+          <%= link_to "New Tour", '#', class: 'btn btn-primary float-right new-tour-btn' %>
           <%= link_to 'New Tourbook', new_user_tourbook_path(current_user), class: 'btn btn-primary float-right new-tourbook-btn' %>
           <%= link_to 'New Guidebook', new_user_guidebook_path(current_user), class: 'btn btn-primary float-right new-guidebook-btn' %>
         </div>
@@ -27,7 +28,7 @@
       <div class="row tours-container">
         <%= render partial: 'tours/tour', collection: @tours %>
       </div>
-      <%= paginate @tours, param_name: :tour_pagina, :params => {:tab => "tours"} %>
+      <%= paginate @tours, param_name: :tour_pagina, :params => {tab: :tours} %>
     </div>
 
     <div id="tourbooks-content" style="<%= @tab == 'tourbooks' ? '' : 'display: none;' %>">
@@ -38,8 +39,8 @@
 
       <div class="row">
         <div class="col-lg-12">
-          <div class="row tours-container">
-            <%= render partial: 'tourbooks/tourbooks_display' %>
+          <div class="row tourbooks-container">
+            <%= render partial: 'tourbooks/tourbook', collection: @tourbooks %>
           </div>
         </div>
 
@@ -48,42 +49,60 @@
     </div>
 
     <div id="guidebooks-content" style="<%= @tab == 'guidebooks' ? '' : 'display: none;' %>">
-
       <div class="sort-wrapper">
         <%= render(SortComponent, collection_name: :guidebooks, value: @sort.try(:[], :guidebooks)) %>
       </div>
-
       <div class="row">
         <div class="col-lg-12">
-          <div class="row tours-container">
-            <%= render partial: 'guidebooks/guidebooks_display' %>
+          <div class="row guidebooks-container">
+            <%= render partial: 'guidebooks/guidebook', collection: @guidebooks %>
           </div>
         </div>
 
       </div>
-      <%= paginate @guidebooks, param_name: :guidebook_pagina, :params => {:tab => "guidebooks"} %> 
+      <%= paginate @guidebooks, param_name: :guidebook_pagina, :params => {:tab => "guidebooks"} %>
     </div>
+    
 
   </div>
 </div>
 
 <%= javascript_tag do %>
+  $('.new-tour-btn').hide();
   $('.new-tourbook-btn').hide();
   $('.new-guidebook-btn').hide();
 
+  switch($('#tab')[0].value) {
+    case 'tours':
+      $('.new-tour-btn').show();
+      break;
+    case 'tourbooks':
+      $('.new-tourbook-btn').show();
+      break;
+    case 'guidebooks':
+      $('.new-guidebook-btn').show();
+      break;
+    default:
+      break;
+  }
+
   $('#option-tour').change(function() {
     $('#tourbooks-content').hide();
-    $('#guidebooks-content').hide();
     $('.new-tourbook-btn').hide();
+    $('#guidebooks-content').hide();
     $('.new-guidebook-btn').hide();
+
     $('#tours-content').show();
+    $('.new-tour-btn').show();
     $('#tab').val('tours');
   });
 
   $('#option-tourbooks').change(function() {
     $('#tours-content').hide();
+    $('.new-tour-btn').hide();
     $('#guidebooks-content').hide();
     $('.new-guidebook-btn').hide();
+
     $('#tourbooks-content').show();
     $('.new-tourbook-btn').show();
     $('#tab').val('tourbooks');
@@ -91,12 +110,12 @@
 
   $('#option-guidebooks').change(function() {
     $('#tours-content').hide();
+    $('.new-tour-btn').hide();
     $('#tourbooks-content').hide();
     $('.new-tourbook-btn').hide();
 
     $('#guidebooks-content').show();
     $('.new-guidebook-btn').show();
-
     $('#tab').val('guidebooks');
   });
 
