@@ -59,7 +59,7 @@ Rails.application.routes.draw do
 
   resources :tours, only: %i[index show]
   resources :tourbooks, only: %i[index show]
-  resources :viewpoints, only: %i[index show]
+  get '/viewpoints', to: 'photos#viewpoints'
   resources :guidebooks, only: %i[index show]
   resources :scenes, only: %i[index show]
 

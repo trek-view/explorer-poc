@@ -27,15 +27,7 @@ if Rails.env.test? || Rails.env.cucumber?
       end
     end
   end
-
-elsif Rails.env.development?
-  CarrierWave.configure do |config|
-    config.permissions = 0666
-    config.directory_permissions = 0777
-    config.storage = :file
-  end
-else
-
+elsif Rails.env.staging? || Rails.env.production?
   CarrierWave.configure do |config|
     config.fog_credentials = {
         provider:              'AWS',
@@ -46,6 +38,10 @@ else
     config.fog_directory  = ENV['AWS_S3_BUCKET']
     config.fog_public     = true
   end
-
+elsif Rails.env.development?
+  CarrierWave.configure do |config|
+    config.permissions = 0666
+    config.directory_permissions = 0777
+    config.storage = :file
+  end
 end
-
