@@ -16,17 +16,17 @@ if Rails.env.test? || Rails.env.cucumber?
       storage :file
 
       def cache_dir
-        # "#{Rails.root}/spec/support/uploads/tmp"
-        "#{Rails.root.join('public', 'uploads')}"
+        "#{Rails.root}/spec/support/uploads/tmp"
+        # "#{Rails.root.join('public', 'uploads')}"
       end
 
       def store_dir
-        "#{Rails.root.join('public', 'uploads')}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-        # "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+        # "#{Rails.root.join('public', 'uploads')}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+        "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
       end
     end
   end
-elsif Rails.env.staging? || Rails.env.production?
+else
   CarrierWave.configure do |config|
     config.fog_credentials = {
         provider:              'AWS',
@@ -37,10 +37,10 @@ elsif Rails.env.staging? || Rails.env.production?
     config.fog_directory  = ENV['AWS_S3_BUCKET']
     config.fog_public     = true
   end
-elsif Rails.env.development?
-  CarrierWave.configure do |config|
-    config.permissions = 0666
-    config.directory_permissions = 0777
-    config.storage = :file
-  end
+# elsif Rails.env.development?
+#   CarrierWave.configure do |config|
+#     config.permissions = 0666
+#     config.directory_permissions = 0777
+#     config.storage = :file
+#   end
 end

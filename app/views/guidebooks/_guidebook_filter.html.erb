@@ -9,27 +9,6 @@
       %>
     </div>
 
-    <div class="search_country mt-3">
-      <%= select_tag 'query[country_id]',
-            options_from_collection_for_select(
-                Country.all,
-                'id',
-                'name',
-                @query.try(:[], :country_id)
-            ),
-            class: 'select-country form-control',
-            include_blank: 'Country'
-      %>
-    </div>
-
-    <div class="search_tour_type mt-3">
-      <%= select_tag 'query[tour_type]',
-            options_for_select(tour_types_for_select, @query.try(:[], :tour_type)),
-            class: 'select-tour-type form-control',
-            include_blank: 'Tour type'
-      %>
-    </div>
-
     <button class="btn btn-primary mt-3">filter</button>
 
   </div>
