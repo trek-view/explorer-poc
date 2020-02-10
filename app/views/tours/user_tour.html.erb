@@ -6,8 +6,19 @@
       <img class="card-img-top" src="<%= thumb_url %>" alt="">
     <% end %>
     <div class="card-body">
+      <% if @tourbook.present? && policy(@tourbook).remove_item? %>
+        <%= link_to remove_item_user_tourbook_path(tour.user, @tourbook, item_id: tour.id),
+                    class: 'close delete_from_book',
+                    title: 'delete tour from book',
+                    data: {confirm: 'Are you sure?'},
+                    method: :delete,
+                    remote: true do %>
+            <span aria-hidden="true">&times;</span>
+        <% end %>
+      <% end %>
+
       <h4 class="card-title">
-        <%= link_to tour.name, tour_path(tour) %>
+        <%= link_to tour.name, user_tour_path(tour.user, tour) %>
       </h4>
 
       <p class="card-text"><%= truncate(tour.description, length: 120, separator: ' ') %></p>
@@ -39,7 +50,7 @@
     </div>
 
     <div class="card-footer">
-      <small class="text-muted">uploaded by: <%= link_to tour.user.try(:name), tours_path() %></small>
+      <small class="text-muted">uploaded by: <%= link_to tour.user.try(:name), user_path(tour.user) %></small>
     </div>
   </div>
 

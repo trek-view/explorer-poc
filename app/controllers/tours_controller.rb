@@ -6,16 +6,13 @@ class ToursController < ApplicationController
   before_action :set_tour, only: %i[show]
 
   def index
-    # Global view
-    unless @user
-      @tours = Tour.all.order(created_at: :desc)
-    else
-      # User view
-      @tours = @user.tours
-    end
+    @tours = @user ? @user.tours : Tour.all.order(created_at: :desc)
     @tours = @tours.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:tours]
     )
+    return render 'user_index' if @user
+
+    render 'index'
   end
 
   def show
@@ -40,6 +37,10 @@ class ToursController < ApplicationController
     @tourbooks = @tourbooks.page(params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
 
     tour_og_meta_tag(@tour)
+
+    return render 'user_show' if @user
+
+    render 'show'
   end
 
   private
@@ -54,7 +55,7 @@ class ToursController < ApplicationController
   end
 
   def tour_search_params
-    params.permit(:search_text, query: [:country_id, :tour_type])
+    params.permit(:search_text, query: %i[country_id tour_type])
   end
 
   def set_sort_params
@@ -62,7 +63,7 @@ class ToursController < ApplicationController
   end
 
   def sort_params
-    params.permit(sort: [:photos, :tourbooks])
+    params.permit(sort: %i[photos tourbooks])
   end
 
   def set_user
@@ -70,8 +71,6 @@ class ToursController < ApplicationController
               User.friendly.find(params[:user_id])
             elsif params[:user]
               User.friendly.find(params[:id])
-            else
-              current_user
             end
   end
 end

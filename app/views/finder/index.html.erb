@@ -12,6 +12,7 @@
 
       <% if user_signed_in? %>
         <div class="col-lg-3 col-sm-12 mt-4">
+          <%= link_to "New Tour", '#', class: 'btn btn-primary float-right new-tour-btn' %>
           <%= link_to 'New Tourbook', new_user_tourbook_path(current_user), class: 'btn btn-primary float-right new-tourbook-btn' %>
           <%= link_to 'New Guidebook', new_user_guidebook_path(current_user), class: 'btn btn-primary float-right new-guidebook-btn' %>
         </div>
@@ -68,22 +69,41 @@
 </div>
 
 <%= javascript_tag do %>
+  $('.new-tour-btn').hide();
   $('.new-tourbook-btn').hide();
   $('.new-guidebook-btn').hide();
 
+  switch($('#tab')[0].value) {
+    case 'tours':
+      $('.new-tour-btn').show();
+      break;
+    case 'tourbooks':
+      $('.new-tourbook-btn').show();
+      break;
+    case 'guidebooks':
+      $('.new-guidebook-btn').show();
+      break;
+    default:
+      break;
+  }
+
   $('#option-tour').change(function() {
     $('#tourbooks-content').hide();
-    $('#guidebooks-content').hide();
     $('.new-tourbook-btn').hide();
+    $('#guidebooks-content').hide();
     $('.new-guidebook-btn').hide();
+
     $('#tours-content').show();
+    $('.new-tour-btn').show();
     $('#tab').val('tours');
   });
 
   $('#option-tourbooks').change(function() {
     $('#tours-content').hide();
+    $('.new-tour-btn').hide();
     $('#guidebooks-content').hide();
     $('.new-guidebook-btn').hide();
+
     $('#tourbooks-content').show();
     $('.new-tourbook-btn').show();
     $('#tab').val('tourbooks');
@@ -91,12 +111,12 @@
 
   $('#option-guidebooks').change(function() {
     $('#tours-content').hide();
+    $('.new-tour-btn').hide();
     $('#tourbooks-content').hide();
     $('.new-tourbook-btn').hide();
 
     $('#guidebooks-content').show();
     $('.new-guidebook-btn').show();
-
     $('#tab').val('guidebooks');
   });
 
