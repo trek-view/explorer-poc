@@ -13,11 +13,11 @@ class PhotoUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    if Rails.env.development?
-      # "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-      "#{Rails.root.join('public', 'uploads', 'home-cards')}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-    else
+    if Rails.env.staging? || Rails.env.production?
       "uploads/panoramas/#{model.s3_dir}"
+    elsif Rails.env.development?
+      # "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+      "#{Rails.root.join('public', 'uploads')}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
     end
   end
 

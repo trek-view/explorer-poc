@@ -5,7 +5,7 @@ ActiveAdmin.register HomeCard do
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :title, :description, :priority, :url, :avatar
+  permit_params :title, :description, :priority, :url, :avatar, :avatar_cache
 
   form(html: { multipart: true }) do |f|
     f.inputs 'Create a home card...' do
@@ -20,13 +20,4 @@ ActiveAdmin.register HomeCard do
     end
     f.actions
   end
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:title, :description]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
-  
 end

@@ -17,12 +17,11 @@ if Rails.env.test? || Rails.env.cucumber?
 
       def cache_dir
         # "#{Rails.root}/spec/support/uploads/tmp"
-        "#{Rails.root.join('public', 'uploads', 'home-cards')}"
+        "#{Rails.root.join('public', 'uploads')}"
       end
 
       def store_dir
-        "#{Rails.root.join('public', 'uploads', 'home-cards')}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-
+        "#{Rails.root.join('public', 'uploads')}/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
         # "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
       end
     end
