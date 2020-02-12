@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_04_195916) do
+ActiveRecord::Schema.define(version: 2020_02_12_154213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -92,6 +92,17 @@ ActiveRecord::Schema.define(version: 2020_02_04_195916) do
     t.bigint "user_id"
     t.index ["category_id"], name: "index_guidebooks_on_category_id"
     t.index ["user_id"], name: "index_guidebooks_on_user_id"
+  end
+
+  create_table "home_cards", force: :cascade do |t|
+    t.string "title", limit: 20
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "priority"
+    t.string "avatar"
+    t.string "url"
+    t.string "icon", limit: 30
   end
 
   create_table "photos", force: :cascade do |t|
