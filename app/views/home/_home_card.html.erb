@@ -4,7 +4,12 @@
   <%= link_to home_card.url do%>
     <div class="card home-card h-100">
       <div class="card-body home-card-description">
-        <img class="card-img-top card-icon" src="<%= home_card.avatar.url(:thumb) %>" alt="">
+        <%= fa_icon(home_card.icon, class: 'home-card-icon') %>
+        <%
+=begin%>
+ <img class="card-img-top card-icon" src="<%= home_card.avatar.url(:thumb) %>" alt=""> 
+<%
+=end%>
 
         <div class="card-title home-card-title">
           <%= home_card.title %>
