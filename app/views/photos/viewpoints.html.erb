@@ -1,24 +1,26 @@
 <div class="row">
-  <div class="py-5 col-lg-12">
-    <div class="card">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col-lg-9 col-sm-12">
+        <h1 class="my-4"><%= 'Viewpoints' %></h1>
+        <% description app_description %>
+      </div>
+    </div>
+  
+    <div class="row mt-4">
+      <div class="col-lg-3">
+        <%= render partial: 'photo_filter' %>
+      </div>
 
-      <div class="card-header">
+      <div class="col-lg-9 photos_list">
         <div class="row">
-          <h1 class="col-lg-12">
-            <%= title 'Top Viewpoints' %>
-          </h1>
-
+          <div class="row photos-container">
+            <%= render partial: 'photos_display', locals: { photos: @photos } %>
+          </div>
+          <%= paginate @photos %>
         </div>
       </div>
-
-      <div class="card-body">
-
-        <%= render partial: 'photos_display', locals: { photos: @photos } %>
-
-        <br/>
-        <%= paginate @photos %>
-      </div>
-
     </div>
+    
   </div>
 </div>
