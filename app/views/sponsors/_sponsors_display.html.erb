@@ -1,0 +1,7 @@
+<div class="row">
+  <% sponsors.each do |sponsor| %>
+    <div class="col-lg-4 col-md-6 mb-4 sponsor-container">
+      <%= render partial: 'sponsors/sponsor', locals: { sponsor: sponsor } %>
+    </div>
+  <% end %>
+</div>
