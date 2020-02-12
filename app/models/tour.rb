@@ -15,6 +15,7 @@ class Tour < ApplicationRecord
   has_many :countries, through: :photos
   has_many :tour_tourbooks, dependent: :destroy
   has_many :tourbooks, -> { distinct }, through: :tour_tourbooks, inverse_of: :tours
+  has_many :sponsorships
 
   # accepts_nested_attributes_for :photos
 
@@ -177,5 +178,13 @@ class Tour < ApplicationRecord
       error_message = "#{self[:tour_type]} and #{self[:transport_type]} mismatch"
       errors.add(:types_mismatch, error_message) unless Constants::DEPENDENCY_OF_TYPES[self[:tour_type]].include? self[:transport_type]
     end
+  end
+
+  def sponsors_ids
+    sponsorships.map { |s| s.sponsor.id }
+  end
+
+  def sponsors
+    Sponsor.where(id: self.sponsors_ids)
   end
 end

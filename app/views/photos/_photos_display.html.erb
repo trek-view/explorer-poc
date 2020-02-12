@@ -1,10 +1,14 @@
-<h3 class="card-title">Photos</h3>
+<%
+=begin%>
+ <h3 class="card-title">Photos</h3>
 
 <div class="sort-wrapper">
   <%= render(SortComponent, collection_name: :photos, value: @sort.try(:[], :photos)) %>
 </div>
 
-<br/>
+<br/> 
+<%
+=end%>
 
 <div class="row">
   <% photos.each do |photo| %>

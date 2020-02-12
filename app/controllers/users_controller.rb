@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     @query = result[:query]
     @search_text = result[:search_text]
     @tab = result[:tab]
-
+    @home_cards = HomeCard.all
     tour_og_meta_tag(@tours.first) unless @tours.empty?
   end
 
