@@ -14,7 +14,7 @@ class Photo < ApplicationRecord
   store_accessor :tourer, :connections
   store_accessor :opentrailview, :photo_id
 
-  validates :image, file_size: { less_than: 30.megabytes }, presence: true
+  validates :image, file_size: { less_than: 50.megabytes }, presence: true
   validates :filename, presence: true
   validates :taken_at, presence: true
   validates :latitude , numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }, length: { maximum: 20 }

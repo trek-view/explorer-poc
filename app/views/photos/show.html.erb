@@ -22,7 +22,11 @@
           </thead>
           <tbody>
             <tr>
-              <td>Tour</td>
+              <td><strong>Tour info</strong></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Name</td>
               <td><%= link_to @tour.name, user_tour_path(@tour.user, @tour) %></td>
             </tr>
             <tr>
@@ -32,6 +36,26 @@
             <tr>
               <td>Tourer Photo ID</td>
               <td><%= @photo.tourer_photo_id %></td>
+            </tr>
+            <tr><td></td><td></td></tr>
+            <% if @guidebook.present? %>
+              <tr>
+                <td><strong>Guidebook info</strong></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Name</td>
+                <td><%= @guidebook.name %></td>
+              </tr>
+              <tr>
+                <td>Description</td>
+                <td><%= @guidebook.description %></td>
+              </tr>
+              <tr><td></td><td></td></tr>
+            <% end %>
+            <tr>
+              <td><strong>Photo info</strong></td>
+              <td></td>
             </tr>
             <tr>
               <td>Filename</td>
