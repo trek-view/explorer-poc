@@ -8,14 +8,15 @@ class GuidebooksController < ApplicationController
   before_action :set_scenes, only: %i[show edit update destroy]
   before_action :sort_scenes, only: %i[show edit]
   before_action :set_tab, only: %i[new create index show]
+  before_action :set_guidebooks_search_params, only: [:index]
 
   def index
     @guidebooks = @user ? @user.guidebooks : Guidebook.all
+    search_guidebooks
+    @guidebooks.order(created_at: :desc)
     @guidebooks = @guidebooks.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:guidebooks]
     )
-
-    render 'index'
   end
 
   def show; end
@@ -138,5 +139,26 @@ class GuidebooksController < ApplicationController
         @sort[:scenes] == 'scenes_count'
     end
     @scenes = @scenes.order(:position)
+  end
+
+  def set_guidebooks_search_params
+    @search_text = guidebooks_search_params[:search_text]
+  end
+
+  def guidebooks_search_params
+    params.permit(:search_text)
+  end
+
+  def search_guidebooks
+    # @guidebooks = @guidebooks.search(@search_text) if @search_text.present?
+    if @search_text.present?
+      @guidebooks = @guidebooks.where(
+        'lower(name) LIKE ?', '%' + @search_text.downcase + '%'
+      ).or(
+        @guidebooks.where(
+          'lower(description) LIKE ?', '%' + @search_text.downcase + '%'
+        )
+      )
+    end
   end
 end

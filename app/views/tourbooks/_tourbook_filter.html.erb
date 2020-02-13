@@ -1,11 +1,11 @@
 <h5>Filters</h5>
-<%= form_tag(tours_path, method: :get, class: 'index-search-form page-item-search clearfix') do %>
+<%= form_tag(@user.present? ? user_tourbooks_path : tourbooks_path, method: :get, class: 'index-search-form page-item-search clearfix') do %>
   <div class="search-text clearfix">
     <div class="search-input mt-3">
       <%= text_field_tag 'search_text',
-            @search_text, 
-            class: 'search-text-input with-img form-control',
-            placeholder: 'Search for tours'
+          @search_text, 
+          class: 'search-text-input with-img form-control',
+          placeholder: 'Search for tourbooks'
       %>
     </div>
 

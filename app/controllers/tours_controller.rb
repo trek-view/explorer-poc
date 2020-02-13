@@ -80,6 +80,7 @@ class ToursController < ApplicationController
         )
       )
     end
+    # @tours.search(@search_text) if @search_text.present?
     return unless @query.present?
 
     if @query[:country_id].present?

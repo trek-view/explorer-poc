@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 class TourbooksController < ApplicationController
   before_action :authenticate_user!, except: %i[show index]
+  before_action :set_tourbooks_search_params, only: [:index]
   before_action :set_tourbook, except: %i[index new create user_tourbooks show]
   before_action :set_user
 
   def index
-    @tourbooks = @user.present? ?
-      @user.tourbooks.order(created_at: :desc) :
-      Tourbook.all.order(created_at: :desc)
+    @tourbooks = @user.present? ? @user.tourbooks : Tourbook.all
+    search_tourbooks
+    @tourbooks.order(created_at: :desc)
     @tourbooks = @tourbooks.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:tourbooks]
     )
@@ -135,5 +136,30 @@ class TourbooksController < ApplicationController
 
   def sort_params
     params.permit(sort: [:tours])
+  end
+
+  def set_tourbooks_search_params
+    @search_text = tourbooks_search_params[:search_text]
+  end
+
+  def tourbooks_search_params
+    params.permit(:search_text)
+  end
+
+  def search_tourbooks
+    # @tourbooks = @tourbooks.search(@search_text) if @search_text.present?
+    if @search_text.present?
+      @tourbooks = @tourbooks.where(
+        'lower(name) LIKE ?', '%' + @search_text.downcase + '%'
+      ).or(
+        @tourbooks.where(
+          'lower(description) LIKE ?', '%' + @search_text.downcase + '%'
+        )
+      ).or(
+        @tourbooks.where(
+          'lower(slug) LIKE ?', '%' + @search_text.downcase + '%'
+        )
+      )
+    end
   end
 end
