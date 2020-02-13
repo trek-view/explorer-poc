@@ -10,10 +10,10 @@ ActiveAdmin.register Sponsorship do
   form(html: { multipart: true }) do |f|
     f.inputs '' do
       f.input :tour_id, as: :select, prompt: 'Select a tour',
-        collection: Tour.all,
+        collection: Tour.all.order(:name),
         input_html: { :class => 'chzn-select', :width => 'auto', "data-placeholder" => 'Click' }
       f.input :sponsor_id, as: :select, prompt: 'Select a sponsor',
-        collection: Sponsor.all,
+        collection: Sponsor.all.order(:title),
         input_html: { :class => 'chzn-select', :width => 'auto', "data-placeholder" => 'Click' }
     end
     f.actions
