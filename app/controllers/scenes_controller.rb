@@ -26,7 +26,7 @@ class ScenesController < ApplicationController
   def update
     if @scene.update(scene_params)
       flash[:success] = 'Your scene was updated!'
-      redirect_to user_guidebook_scene_path(@user, @guidebook, @scene)
+      redirect_to user_guidebook_path(@user, @guidebook)
     else
       flash[:error] = @scene.errors.full_messages.to_sentence
       render :edit
@@ -35,6 +35,7 @@ class ScenesController < ApplicationController
 
   def destroy
     @scene.destroy
+    redirect_to user_guidebook_path(@user, @guidebook)
   end
 
   def guidebook_scenes

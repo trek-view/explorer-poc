@@ -94,7 +94,7 @@ class GuidebooksController < ApplicationController
   end
 
   def set_scenes
-    @scenes = @guidebook.scenes
+    @scenes = @guidebook.scenes.order(:position)
   end
 
   def set_tab

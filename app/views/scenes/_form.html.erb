@@ -43,7 +43,7 @@
       <div class="form-group">
         <%= f.label :position %>
         <%= f.number_field(
-              :positon, value: @scene.position, min: 0, class: 'form-control'
+              :position, value: @scene.position, min: 0, class: 'form-control'
             )
         %>
       </div>
@@ -66,5 +66,15 @@
         <%= render partial: 'photos/photo', locals: { photo: @scene.photo } %>
       <% end %>
     </div>
+  </div>
+  <div class="col-12">
+    <% if policy(@scene).destroy? %>
+      <%= link_to 'Delete',
+            url_for(action: :destroy, id: @scene.id),
+            method: :delete,
+            data: {confirm: 'Are you sure?'},
+            class: 'btn btn-danger'
+      %>
+    <% end %>
   </div>
 </div>
