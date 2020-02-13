@@ -45,15 +45,6 @@ class ToursController < ApplicationController
     @tour = Tour.includes(:countries).friendly.find(params[:id])
   end
 
-  def set_tours_search_params
-    @search_text = tour_search_params[:search_text]
-    @query = tour_search_params[:query]
-  end
-
-  def tour_search_params
-    params.permit(:search_text, query: %i[country_id tour_type transport_type])
-  end
-
   def set_sort_params
     @sort = sort_params[:sort]
   end
@@ -68,6 +59,15 @@ class ToursController < ApplicationController
             elsif params[:user]
               User.friendly.find(params[:id])
             end
+  end
+
+  def set_tours_search_params
+    @search_text = tour_search_params[:search_text]
+    @query = tour_search_params[:query]
+  end
+
+  def tour_search_params
+    params.permit(:search_text, query: %i[country_id tour_type transport_type])
   end
 
   def search_tours

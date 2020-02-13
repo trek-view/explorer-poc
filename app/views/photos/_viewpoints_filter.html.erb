@@ -1,0 +1,19 @@
+<h5>Filters</h5>
+<%= form_tag(@user.present? ? user_viewpoints_path : viewpoints_path, method: :get, class: 'index-search-form page-item-search clearfix') do %>
+  <div class="search-text clearfix">
+
+    <div class="search_country mt-3">
+      <%= select_tag 'query[country_id]',
+          options_from_collection_for_select(
+            Country.all, 'id', 'name',
+            @query.try(:[], :country_id)
+          ),
+          class: 'select-country form-control',
+          include_blank: 'Country'
+      %>
+    </div>
+
+    <button class="btn btn-primary mt-3">Filter</button>
+
+  </div>
+<% end %>
