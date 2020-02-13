@@ -10,9 +10,6 @@ class ToursController < ApplicationController
     @tours = @tours.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:tours]
     )
-    return render 'user_index' if @user
-
-    render 'index'
   end
 
   def show
@@ -37,10 +34,6 @@ class ToursController < ApplicationController
     @tourbooks = @tourbooks.page(params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
 
     tour_og_meta_tag(@tour)
-
-    return render 'user_show' if @user
-
-    render 'show'
   end
 
   private

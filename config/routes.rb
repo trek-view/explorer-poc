@@ -40,6 +40,8 @@ Rails.application.routes.draw do
       end
     end
 
+    get 'viewpoints', to: 'photos#viewpoints'
+
     resources :guidebooks do
       member do
         post 'add_item', to: 'guidebooks#add_item'

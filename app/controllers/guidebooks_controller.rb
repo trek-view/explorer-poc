@@ -10,29 +10,16 @@ class GuidebooksController < ApplicationController
   before_action :set_tab, only: %i[new create index show]
 
   def index
-    @guidebooks = @user ? current_user.guidebooks : Guidebook.all
+    @guidebooks = @user ? @user.guidebooks : Guidebook.all
     @guidebooks = @guidebooks.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:guidebooks]
     )
-    return render 'user_index' if @user
 
     render 'index'
   end
 
-  def show
-    return render 'user_show' if @user
+  def show; end
 
-    render 'show'
-  end
-
-  # def user_index
-  #   @guidebooks = @user.guidebooks
-  # end
-
-  # def user_show
-  #   @guidebooks = @user.guidebooks
-  # end
-  
   def new
     @guidebook = Guidebook.new
   end
@@ -45,7 +32,7 @@ class GuidebooksController < ApplicationController
       if @guidebook.save
         add_item
         flash[:success] = 'You Guidebook was created!'
-        format.html { redirect_to user_index_path }
+        format.html { redirect_to user_guidebooks_path(@user) }
       else
         format.html { render :new }
       end
@@ -58,7 +45,7 @@ class GuidebooksController < ApplicationController
   def update
     if @guidebook.update(guidebook_params)
       flash[:success] = 'Your guidebook was updated!'
-      redirect_to user_guidebook_path(@guidebook.user, @guidebook)
+      redirect_to user_guidebook_path(@user, @guidebook)
     else
       flash[:error] = @guidebook.errors.full_messages.to_sentence
       render :edit
@@ -68,7 +55,7 @@ class GuidebooksController < ApplicationController
   def destroy
     @guidebook.destroy
     flash[:success] = "Guidebook #{@guidebook.name} was destroyed"
-    redirect_to user_index_path(current_user)
+    redirect_to user_guidebook_path(@user)
   end
 
   def add_item

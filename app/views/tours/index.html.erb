@@ -2,9 +2,17 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-9 col-sm-12">
-        <h1 class="my-4"><%= 'Tours' %></h1>
+        <h1 class="my-4">
+          <%= @user.present? ? 'My tours' : 'Tours' %>
+        </h1>
         <% description app_description %>
       </div>
+
+      <% if @user.present? %>
+        <div class="col-lg-3 col-sm-12 mt-4">
+          <%= link_to "New Tour", new_user_tour_path(current_user), class: 'btn btn-primary float-right' %>
+        </div>
+      <% end %>
     </div>
   
     <div class="row mt-4">
@@ -13,10 +21,8 @@
       </div>
 
       <div class="col-lg-9 tours_list">
-        <div class="row">
-          <div class="row tours-container">
-            <%= render partial: 'tour', collection: @tours %>
-          </div>
+        <div class="tours-container">
+          <%= render partial: 'tours_display', locals: {tours: @tours} %>
           <%= paginate @tours %>
         </div>
       </div>

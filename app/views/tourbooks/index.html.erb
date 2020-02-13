@@ -2,7 +2,9 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-9 col-sm-12">
-        <h1 class="my-4"><%= 'Tourbooks' %></h1>
+        <h1 class="my-4">
+          <%= @user.present? ? 'My tourbooks' : 'Tourbooks' %>
+        </h1>
         <% description app_description %>
       </div>
     </div>
@@ -13,10 +15,10 @@
       </div>
 
       <div class="col-lg-9">
-        <div class="row tours-container">
-          <%= render partial: 'tourbook', collection: @tourbooks %>
+        <div class="tourbooks-container">
+          <%= render partial: 'tourbooks_display', locals: {tourbooks: @tourbooks} %>
+          <%= paginate @tourbooks %>
         </div>
-        <%= paginate @tourbooks %>
       </div>
     </div>
 

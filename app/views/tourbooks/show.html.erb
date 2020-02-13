@@ -15,6 +15,31 @@
 
           <h1 class="col-lg-10 col-sm-12"><%= title "#{@tourbook.name} tourbook" %></h1>
           <% description @tourbook.description %>
+          <% if @user.present? %>
+            <% if policy(@tourbook).update? %>
+              <div class="col-lg-1 col-sm-6">
+                <div class="float-right">
+                  <%= link_to 'Edit',
+                      edit_user_tourbook_path(@tourbook.user, @tourbook),
+                      class: 'btn btn-warning mt-2'
+                  %>
+                </div>
+              </div>
+            <% end %>
+
+            <% if policy(@tourbook).destroy? %>
+              <div class="col-lg-1 col-sm-6">
+                <div class="float-right">
+                  <%= link_to 'Delete',
+                      url_for(action: :destroy, id: @tourbook.slug),
+                      method: :delete,
+                      data: {confirm: 'Are you sure?'},
+                      class: 'btn btn-danger mt-2'
+                  %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
         </div>
       </div>
 
@@ -38,21 +63,13 @@
         <% end %>
 
         <h3 class="card-title">Tourbook sponsors</h3>
-          <div class="row"> 
-            <% if @tourbook.sponsors.size > 0 %>
-              <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @tourbook.sponsors } %>
-            <% else %>
-              <%= render 'sponsors/default_sponsors' %>
-            <% end %>
-          </div>
-          
-
-          <div class="card text-white bg-dark mb-3">
-            <div class="card-header">Your name here</div>
-            <div class="card-body">
-              <p class="card-text">Is your small business nearby? Are you a local organisation? For a small donation you can be listed as a sponsor of this tourbook whilst supporting our work to protect the natural world. <a href="https://www.trekview.org/contact/" target="_blank">Contact us for more information</a>.</p>
-            </div>
-          </div>
+        <div class="row"> 
+          <% if @tourbook.sponsors.size > 0 %>
+            <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @tourbook.sponsors } %>
+          <% else %>
+            <%= render 'sponsors/default_sponsors' %>
+          <% end %>
+        </div>
 
         <% if @tours.any? %>
           <h4>Added Tours</h4>
@@ -71,5 +88,5 @@
 </div>
 
 <div class="form-group">
-  <%= link_to 'Back', tourbooks_path(), class: 'btn btn-success' %>
+  <%= link_to 'Back', @user.present? ? user_tours_path(@user) : tourbooks_path(), class: 'btn btn-success' %>
 </div>

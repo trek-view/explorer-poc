@@ -30,10 +30,38 @@
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <h1 class="<%= current_user ? 'col-lg-8' : 'col-lg-12' %> col-sm-12">
+          <h1 class="<%= @user.present? ? 'col-lg-8' : 'col-lg-12' %> col-sm-12">
             <%= title "#{@tour.name} tour" %>
           </h1>
           <% description @tour.description %>
+
+          <% if @user.present? %>
+            <div class="col-lg-3 col-sm-12">
+              <div class="form-group mt-2 float-right">
+                <%= link_to 'Back', user_tours_path(@user), class: 'btn btn-success' %>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add to Tourbook
+                </button>
+                <div id="tourBooksList" class="dropdown-menu">
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createTourbookModal">Create new Tourbook</a>
+
+                  <% if @user.tourbooks.any? %>
+                    <div class="dropdown-divider"></div>
+                    <% @user.tourbooks.each do |book| %>
+                      <%= link_to book.name,
+                                  add_item_user_tourbook_path(@user, book, item_id: @tour.id),
+                                  class: 'dropdown-item',
+                                  remote: true,
+                                  method: :post %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+              
+             
+            </div>
+          <% end %>
+
         </div>
       </div>
 
@@ -162,5 +190,5 @@
 <%= render 'show_photo' %>
 
 <div class="form-group">
-  <%= link_to 'Back', tours_path(), class: 'btn btn-success' %>
+  <%= link_to 'Back', @user.present? ? user_tours_path(@user) : tours_path(), class: 'btn btn-success' %>
 </div>

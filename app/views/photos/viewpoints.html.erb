@@ -2,7 +2,9 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-9 col-sm-12">
-        <h1 class="my-4"><%= 'Viewpoints' %></h1>
+        <h1 class="my-4">
+          <%= @user.present? ? 'My viewpoints' : 'Viewpoints' %>
+        </h1>
         <% description app_description %>
       </div>
     </div>

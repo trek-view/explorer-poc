@@ -4,6 +4,7 @@ class PhotosController < ApplicationController
 
   before_action :authenticate_user!, only: %i[set_photo_view_point]
   before_action :set_photo, only: %i[show set_photo_view_point]
+  before_action :set_user, only: %i[viewpoints]
 
   def index
     find_photos
@@ -79,6 +80,14 @@ class PhotosController < ApplicationController
 
   def sort_params
     params.permit(sort: %i[photos top])
+  end
+
+  def set_user
+    @user = if params[:user_id]
+              User.friendly.find(params[:user_id])
+            elsif params[:user]
+              User.friendly.find(params[:id])
+            end
   end
 
   def pannellum_config

@@ -1,1 +1,14 @@
- <%= render template: 'finder/index' %> 
+ <%
+=begin%>
+ <%= render template: 'finder/index' %>  
+<%
+=end%>
+
+<div class="home-content">
+  <div class="row">
+    <h1 class="my-4">My Profile</h1>
+  </div>
+  <div class="row">
+    <%= render partial: 'home/home_card', collection: @home_cards %>
+  </div>
+</div>

@@ -5,13 +5,12 @@ class TourbooksController < ApplicationController
   before_action :set_user
 
   def index
-    @tourbooks = @user ? @user.tourbooks : Tourbook.all.order(created_at: :desc)
+    @tourbooks = @user.present? ?
+      @user.tourbooks.order(created_at: :desc) :
+      Tourbook.all.order(created_at: :desc)
     @tourbooks = @tourbooks.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:tourbooks]
     )
-    return render 'user_index' if @user
-
-    render 'index'
   end
 
   def show
@@ -25,10 +24,6 @@ class TourbooksController < ApplicationController
       @tours = @tours.order(tourbooks_count: :desc) if @sort[:tours] == 'tourbooks_count'
     end
     @tours = @tours.order(created_at: :desc)
-
-    return render 'user_show' if @user
-
-    render 'show'
   end
 
   def new

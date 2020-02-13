@@ -1,0 +1,7 @@
+<div class="row">
+  <% tourbooks.each do |tourbook| %>
+    <div id="tourbook-<%= tourbook.id %>" class="col-xl-4 col-lg-4 col-md-6 mb-3">
+      <%= render partial: 'tourbooks/tourbook', locals: { tourbook: tourbook } %>
+    </div>
+  <% end %>
+</div>
