@@ -44,13 +44,13 @@
         </div>
 
         <h3 class="card-title">Guidebook sponsors</h3>
-
-          <div class="card text-white bg-dark mb-3">
-            <div class="card-header">Your name here</div>
-            <div class="card-body">
-              <p class="card-text">Is your small business nearby? Are you a local organisation? For a small donation you can be listed as a sponsor of this guidebook whilst supporting our work to protect the natural world. <a href="https://www.trekview.org/contact/" target="_blank">Contact us for more information</a>.</p>
-            </div>
-          </div>
+        <div class="row"> 
+          <% if @guidebook.sponsors.size > 0 %>
+            <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @guidebook.sponsors } %>
+          <% else %>
+            <%= render 'sponsors/default_sponsors' %>
+          <% end %>
+        </div>
 
         <h4>Added Scenes</h4>
         <% if @scenes.any? %>

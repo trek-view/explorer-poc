@@ -41,4 +41,13 @@ class Tourbook < ApplicationRecord
     end
   end
 
+  def sponsors_ids
+    ids = []
+    tours.map { |t| ids = ids + t.sponsors_ids }.uniq
+    ids.uniq
+  end
+
+  def sponsors
+    Sponsor.where(id: self.sponsors_ids)
+  end
 end
