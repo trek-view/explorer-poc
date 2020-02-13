@@ -68,13 +68,19 @@
     </div>
   </div>
   <div class="col-12">
-    <% if policy(@scene).destroy? %>
-      <%= link_to 'Delete',
-            url_for(action: :destroy, id: @scene.id),
+    <% unless @scene.new_record? %>
+      <% if policy(@scene).destroy? %>
+        <%= link_to 'Delete',
+            user_guidebook_scene_path(
+              user_id: @user.id,
+              guidebook_id: @guidebook.id,
+              id: @scene.id
+            ),
             method: :delete,
             data: {confirm: 'Are you sure?'},
             class: 'btn btn-danger'
-      %>
+        %>
+      <% end %>
     <% end %>
   </div>
 </div>
