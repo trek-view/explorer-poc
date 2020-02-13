@@ -130,7 +130,7 @@ class PhotosController < ApplicationController
             "title": @tour.name,
             "author": @tour.user.name,
             "authorURL": photo_path(@photo),
-            "sceneFadeDuration": 1000
+            "sceneFadeDuration": 0
         },
         "scenes": {}
     }
