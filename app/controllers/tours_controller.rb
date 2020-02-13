@@ -2,11 +2,14 @@
 class ToursController < ApplicationController
   include MetaTagsHelper
   # before_action :authenticate_user!, only: %i[show]
+  before_action :set_tours_search_params, only: [:index]
   before_action :set_user, only: %i[index show]
   before_action :set_tour, only: %i[show]
 
   def index
-    @tours = @user ? @user.tours : Tour.all.order(created_at: :desc)
+    @tours = @user ? @user.tours : Tour.all
+    search_tours
+    @tours = @tours.order(created_at: :desc)
     @tours = @tours.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:tours]
     )
@@ -48,7 +51,7 @@ class ToursController < ApplicationController
   end
 
   def tour_search_params
-    params.permit(:search_text, query: %i[country_id tour_type])
+    params.permit(:search_text, query: %i[country_id tour_type transport_type])
   end
 
   def set_sort_params
@@ -65,5 +68,24 @@ class ToursController < ApplicationController
             elsif params[:user]
               User.friendly.find(params[:id])
             end
+  end
+
+  def search_tours
+    if @search_text.present?
+      @tours = @tours.where(
+        'lower(name) LIKE ?', '%' + @search_text.downcase + '%'
+      ).or(
+        @tours.where(
+          'lower(description) LIKE ?', '%' + @search_text.downcase + '%'
+        )
+      )
+    end
+    return unless @query.present?
+
+    if @query[:country_id].present?
+      # somthing
+    end
+    @tours = @tours.where(tour_type: @query[:tour_type]) if @query[:tour_type].present?
+    @tours = @tours.where(transport_type: @query[:transport_type]) if @query[:transport_type].present?
   end
 end
