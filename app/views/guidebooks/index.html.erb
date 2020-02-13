@@ -2,9 +2,21 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-9 col-sm-12">
-        <h1 class="my-4"><%= title 'Guidebooks' %></h1>
+        <h1 class="my-4">
+          <%= @user.present? ? 'My guidebooks' : 'Guidebooks' %>
+        </h1>
         <% description app_description %>
       </div>
+      <% if @user.present? %>
+        <div class="col-lg-3 col-sm-12 mt-4">
+          <%= link_to(
+                "New Guidebook",
+                new_user_guidebook_path(@user),
+                class: 'btn btn-primary float-right'
+              )
+          %>
+        </div>
+      <% end %>
     </div>
 
     <div class="row mt-4">
@@ -13,10 +25,10 @@
       </div>
 
       <div class="col-lg-9">
-        <div class="row guidebooks-container">
-          <%= render partial: 'guidebook', collection: @guidebooks %>
+        <div class="guidebooks-container">
+          <%= render partial: 'guidebooks_display', locals: {guidebooks: @guidebooks} %>
+          <%= paginate @guidebooks %>
         </div>
-        <%= paginate @guidebooks %>
       </div>
     </div>
   </div>

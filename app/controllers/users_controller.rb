@@ -6,18 +6,19 @@ class UsersController < ApplicationController
   before_action :set_user
 
   def show
-    result = Finder.new(params, @user).search
-    puts "====== result: #{result.inspect}"
+    # result = Finder.new(params, @user).search
+    # puts "====== result: #{result.inspect}"
 
-    @tours = result[:tours]
-    @tourbooks = result[:tourbooks]
-    @guidebooks = result[:guidebooks]
-    @sort = result[:sort]
-    @query = result[:query]
-    @search_text = result[:search_text]
-    @tab = result[:tab]
-    @home_cards = HomeCard.all
-    tour_og_meta_tag(@tours.first) unless @tours.empty?
+    # @tours = result[:tours]
+    # @tourbooks = result[:tourbooks]
+    # @guidebooks = result[:guidebooks]
+    # @sort = result[:sort]
+    # @query = result[:query]
+    # @search_text = result[:search_text]
+    # @tab = result[:tab]
+    # @home_cards = HomeCard.all
+    # tour_og_meta_tag(@tours.first) unless @tours.empty?
+    @home_cards = HomeCard.all.order(:priority)
   end
 
   def generate_new_token

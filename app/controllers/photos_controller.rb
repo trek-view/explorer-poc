@@ -4,6 +4,8 @@ class PhotosController < ApplicationController
 
   before_action :authenticate_user!, only: %i[set_photo_view_point]
   before_action :set_photo, only: %i[show set_photo_view_point]
+  before_action :set_user, only: %i[viewpoints]
+  before_action :set_viewpoints_search_params, only: [:viewpoints]
 
   def index
     find_photos
@@ -48,7 +50,7 @@ class PhotosController < ApplicationController
       @photos = @photos.order(filename: :asc) if @sort[:photos] == 'filename'
     end
 
-    @photos = @photos.order('substring(favoritable_score from 15)::integer DESC')
+    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
   end
 
   def find_viewpoints
@@ -59,12 +61,14 @@ class PhotosController < ApplicationController
       @photos = Photo.all #Photo.where('substring(favoritable_score from 15)::integer > 0')
     end
 
+    search_viewpoints
+
     if @sort.present?
       @photos = @photos.order(taken_at: :desc) if @sort[:photos] == 'taken_at'
       @photos = @photos.order(filename: :desc) if @sort[:photos] == 'filename'
     end
 
-    @photos = @photos.order('substring(favoritable_score from 15)::integer DESC')
+    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
   end
 
   private
@@ -79,6 +83,14 @@ class PhotosController < ApplicationController
 
   def sort_params
     params.permit(sort: %i[photos top])
+  end
+
+  def set_user
+    @user = if params[:user_id]
+              User.friendly.find(params[:user_id])
+            elsif params[:user]
+              User.friendly.find(params[:id])
+            end
   end
 
   def pannellum_config
@@ -154,5 +166,20 @@ class PhotosController < ApplicationController
     end
 
     options
+  end
+
+  def set_viewpoints_search_params
+    @search_text = viewpoints_search_params[:search_text]
+    @query = viewpoints_search_params[:query]
+  end
+
+  def viewpoints_search_params
+    params.permit(:search_text, query: %i[country_id tour_type transport_type])
+  end
+
+  def search_viewpoints
+    return unless @query.present?
+
+    @photos = @photos.where(country_id: @query[:country_id]) if @query[:country_id].present?
   end
 end

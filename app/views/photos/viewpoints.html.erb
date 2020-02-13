@@ -2,25 +2,25 @@
   <div class="col-lg-12">
     <div class="row">
       <div class="col-lg-9 col-sm-12">
-        <h1 class="my-4"><%= 'Viewpoints' %></h1>
+        <h1 class="my-4">
+          <%= @user.present? ? 'My viewpoints' : 'Viewpoints' %>
+        </h1>
         <% description app_description %>
       </div>
     </div>
-  
+
     <div class="row mt-4">
       <div class="col-lg-3">
-        <%= render partial: 'photo_filter' %>
+        <%= render partial: 'viewpoints_filter' %>
       </div>
 
-      <div class="col-lg-9 photos_list">
-        <div class="row">
-          <div class="row photos-container">
-            <%= render partial: 'photos_display', locals: { photos: @photos } %>
-          </div>
+      <div class="col-lg-9">
+        <div class="viewpoints-container">
+          <%= render partial: 'photos_display', locals: {photos: @photos} %>
           <%= paginate @photos %>
         </div>
       </div>
     </div>
-    
+
   </div>
 </div>

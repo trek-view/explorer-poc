@@ -33,4 +33,14 @@ class Guidebook < ApplicationRecord
   def photos
     Photo.where(id: self.photos_ids)
   end
+
+  def sponsors_ids
+    ids = []
+    user.tours.map { |t| ids = ids + t.sponsors_ids }.uniq
+    ids.uniq
+  end
+
+  def sponsors
+    Sponsor.where(id: sponsors_ids)
+  end
 end

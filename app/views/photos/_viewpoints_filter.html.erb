@@ -1,5 +1,5 @@
 <h5>Filters</h5>
-<%= form_tag(photos_path, method: :get, class: 'index-search-form page-item-search clearfix') do %>
+<%= form_tag(@user.present? ? user_viewpoints_path : viewpoints_path, method: :get, class: 'index-search-form page-item-search clearfix') do %>
   <div class="search-text clearfix">
 
     <div class="search_country mt-3">

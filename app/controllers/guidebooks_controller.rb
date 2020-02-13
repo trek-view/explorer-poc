@@ -8,31 +8,19 @@ class GuidebooksController < ApplicationController
   before_action :set_scenes, only: %i[show edit update destroy]
   before_action :sort_scenes, only: %i[show edit]
   before_action :set_tab, only: %i[new create index show]
+  before_action :set_guidebooks_search_params, only: [:index]
 
   def index
-    @guidebooks = @user ? current_user.guidebooks : Guidebook.all
+    @guidebooks = @user ? @user.guidebooks : Guidebook.all
+    search_guidebooks
+    @guidebooks.order(created_at: :desc)
     @guidebooks = @guidebooks.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:guidebooks]
     )
-    return render 'user_index' if @user
-
-    render 'index'
   end
 
-  def show
-    return render 'user_show' if @user
+  def show; end
 
-    render 'show'
-  end
-
-  # def user_index
-  #   @guidebooks = @user.guidebooks
-  # end
-
-  # def user_show
-  #   @guidebooks = @user.guidebooks
-  # end
-  
   def new
     @guidebook = Guidebook.new
   end
@@ -45,7 +33,7 @@ class GuidebooksController < ApplicationController
       if @guidebook.save
         add_item
         flash[:success] = 'You Guidebook was created!'
-        format.html { redirect_to user_index_path }
+        format.html { redirect_to user_guidebooks_path(@user) }
       else
         format.html { render :new }
       end
@@ -58,7 +46,7 @@ class GuidebooksController < ApplicationController
   def update
     if @guidebook.update(guidebook_params)
       flash[:success] = 'Your guidebook was updated!'
-      redirect_to user_guidebook_path(@guidebook.user, @guidebook)
+      redirect_to user_guidebook_path(@user, @guidebook)
     else
       flash[:error] = @guidebook.errors.full_messages.to_sentence
       render :edit
@@ -68,7 +56,7 @@ class GuidebooksController < ApplicationController
   def destroy
     @guidebook.destroy
     flash[:success] = "Guidebook #{@guidebook.name} was destroyed"
-    redirect_to user_index_path(current_user)
+    redirect_to user_guidebook_path(@user)
   end
 
   def add_item
@@ -151,5 +139,26 @@ class GuidebooksController < ApplicationController
         @sort[:scenes] == 'scenes_count'
     end
     @scenes = @scenes.order(:position)
+  end
+
+  def set_guidebooks_search_params
+    @search_text = guidebooks_search_params[:search_text]
+  end
+
+  def guidebooks_search_params
+    params.permit(:search_text)
+  end
+
+  def search_guidebooks
+    # @guidebooks = @guidebooks.search(@search_text) if @search_text.present?
+    if @search_text.present?
+      @guidebooks = @guidebooks.where(
+        'lower(name) LIKE ?', '%' + @search_text.downcase + '%'
+      ).or(
+        @guidebooks.where(
+          'lower(description) LIKE ?', '%' + @search_text.downcase + '%'
+        )
+      )
+    end
   end
 end

@@ -2,17 +2,17 @@
 class ToursController < ApplicationController
   include MetaTagsHelper
   # before_action :authenticate_user!, only: %i[show]
+  before_action :set_tours_search_params, only: [:index]
   before_action :set_user, only: %i[index show]
   before_action :set_tour, only: %i[show]
 
   def index
-    @tours = @user ? @user.tours : Tour.all.order(created_at: :desc)
+    @tours = @user ? @user.tours : Tour.all
+    search_tours
+    @tours = @tours.order(created_at: :desc)
     @tours = @tours.page(params[:page]).per(
       Constants::WEB_ITEMS_PER_PAGE[:tours]
     )
-    return render 'user_index' if @user
-
-    render 'index'
   end
 
   def show
@@ -37,25 +37,12 @@ class ToursController < ApplicationController
     @tourbooks = @tourbooks.page(params[:tourbook_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tourbooks])
 
     tour_og_meta_tag(@tour)
-
-    return render 'user_show' if @user
-
-    render 'show'
   end
 
   private
 
   def set_tour
     @tour = Tour.includes(:countries).friendly.find(params[:id])
-  end
-
-  def set_tours_search_params
-    @search_text = tour_search_params[:search_text]
-    @query = tour_search_params[:query]
-  end
-
-  def tour_search_params
-    params.permit(:search_text, query: %i[country_id tour_type])
   end
 
   def set_sort_params
@@ -72,5 +59,34 @@ class ToursController < ApplicationController
             elsif params[:user]
               User.friendly.find(params[:id])
             end
+  end
+
+  def set_tours_search_params
+    @search_text = tour_search_params[:search_text]
+    @query = tour_search_params[:query]
+  end
+
+  def tour_search_params
+    params.permit(:search_text, query: %i[country_id tour_type transport_type])
+  end
+
+  def search_tours
+    if @search_text.present?
+      @tours = @tours.where(
+        'lower(name) LIKE ?', '%' + @search_text.downcase + '%'
+      ).or(
+        @tours.where(
+          'lower(description) LIKE ?', '%' + @search_text.downcase + '%'
+        )
+      )
+    end
+    # @tours.search(@search_text) if @search_text.present?
+    return unless @query.present?
+
+    if @query[:country_id].present?
+      # somthing
+    end
+    @tours = @tours.where(tour_type: @query[:tour_type]) if @query[:tour_type].present?
+    @tours = @tours.where(transport_type: @query[:transport_type]) if @query[:transport_type].present?
   end
 end

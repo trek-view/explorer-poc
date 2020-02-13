@@ -30,10 +30,38 @@
     <div class="card">
       <div class="card-header">
         <div class="row">
-          <h1 class="<%= current_user ? 'col-lg-8' : 'col-lg-12' %> col-sm-12">
+          <h1 class="<%= @user.present? ? 'col-lg-8' : 'col-lg-12' %> col-sm-12">
             <%= title "#{@tour.name} tour" %>
           </h1>
           <% description @tour.description %>
+
+          <% if @user.present? %>
+            <div class="col-lg-3 col-sm-12">
+              <div class="form-group mt-2 float-right">
+                <%= link_to 'Back', user_tours_path(@user), class: 'btn btn-success' %>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add to Tourbook
+                </button>
+                <div id="tourBooksList" class="dropdown-menu">
+                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createTourbookModal">Create new Tourbook</a>
+
+                  <% if @user.tourbooks.any? %>
+                    <div class="dropdown-divider"></div>
+                    <% @user.tourbooks.each do |book| %>
+                      <%= link_to book.name,
+                                  add_item_user_tourbook_path(@user, book, item_id: @tour.id),
+                                  class: 'dropdown-item',
+                                  remote: true,
+                                  method: :post %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+              
+             
+            </div>
+          <% end %>
+
         </div>
       </div>
 
@@ -109,33 +137,12 @@
 
         <h3 class="card-title">Tour sponsors</h3>
 
-        <div class="row">
-          
-          <div class="col-sm-4">
-            <div class="card text-white bg-success mb-3">
-              <div class="card-header">Your name here</div>
-              <div class="card-body">
-                <p class="text-sm">Is your small business nearby? Are you a local organisation? For a small donation you can be listed as a sponsor of this tour and support our work. <a href="/about#sponsorship" target="_blank">Learn more</a>.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card text-white bg-danger mb-3">
-              <div class="card-header">Your name here</div>
-              <div class="card-body">
-                <p class="text-sm">Is your small business nearby? Are you a local organisation? For a small donation you can be listed as a sponsor of this tour and support our work. <a href="/about#sponsorship" target="_blank">Learn more</a>.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card text-white bg-warning mb-3">
-              <div class="card-header">Your name here</div>
-              <div class="card-body">
-                <p class="text-sm">Is your small business nearby? Are you a local organisation? For a small donation you can be listed as a sponsor of this tour and support our work. <a href="/about#sponsorship" target="_blank">Learn more</a>.</p>
-              </div>
-            </div>
-          </div>
-
+        <div class="row"> 
+          <% if @tour.sponsors.size > 0 %>
+            <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @tour.sponsors } %>
+          <% else %>
+            <%= render 'sponsors/default_sponsors' %>
+          <% end %>
         </div>
 
         <% if @photos.any? %>
@@ -183,5 +190,5 @@
 <%= render 'show_photo' %>
 
 <div class="form-group">
-  <%= link_to 'Back', tours_path(), class: 'btn btn-success' %>
+  <%= link_to 'Back', @user.present? ? user_tours_path(@user) : tours_path(), class: 'btn btn-success' %>
 </div>
