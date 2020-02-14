@@ -66,19 +66,11 @@ Tests:
 #   script:
 #     - bundle exec pronto run -f gitlab -c origin/production
 
-Deploy Production:
+deploy_staging:
   stage: deploy
-  retry: 2
-  only:
-    - production
-  script:
-    - ./bin/setup_heroku
-    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
-    - heroku run rake db:migrate --exit-code --app $HEROKU_APP_PRODUCTION
-    - heroku run rake db:seed --exit-code --app $HEROKU_APP_PRODUCTION
-
-Deploy Staging:
-  stage: deploy
+  environment:
+    name: staging
+    url: https://staging.explorer.trekview.org
   allow_failure: true
   retry: 1
   only:
@@ -88,3 +80,17 @@ Deploy Staging:
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
     - heroku run rake db:migrate --exit-code --app $HEROKU_APP_STAGING
     - heroku run rake db:seed --exit-code --app $HEROKU_APP_STAGING
+    
+deploy_production:
+  stage: deploy
+  environment:
+    name: production
+    url: https://explorer.trekview.org
+  retry: 2
+  only:
+    - production
+  script:
+    - ./bin/setup_heroku
+    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+    - heroku run rake db:migrate --exit-code --app $HEROKU_APP_PRODUCTION
+    - heroku run rake db:seed --exit-code --app $HEROKU_APP_PRODUCTION
