@@ -47,7 +47,7 @@ stages:
   - lint
   - deploy
 
-tests:
+Tests:
   stage: test
   script:
     - bundle exec rspec
