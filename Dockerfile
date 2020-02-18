@@ -26,15 +26,17 @@ WORKDIR /app
 # Install gems
 ADD Gemfile* /app/
 # RUN bundle update --bundler
-RUN bundle config --global frozen 1 \
-    && bundle install -j4 --retry 3 \
-    # Remove unneeded files (cached *.gem, *.o, *.c)
-    && rm -rf /usr/local/bundle/cache/*.gem \
-    && find /usr/local/bundle/gems/ -name "*.c" -delete \
-    && find /usr/local/bundle/gems/ -name "*.o" -delete
+RUN gem install bundler -v '2.0.2'
+RUN bundle config --global frozen 1
+# RUN gem install bundler -v '2.0.2'
+RUN bundle install -j4 --retry 3
+# Remove unneeded files (cached *.gem, *.o, *.c)
+RUN rm -rf /usr/local/bundle/cache/*.gem 
+RUN find /usr/local/bundle/gems/ -name "*.c" -delete 
+RUN find /usr/local/bundle/gems/ -name "*.o" -delete
 
 # Install yarn packages
-COPY package.json yarn.lock .yarnclean /app/
+COPY package.json yarn.lock /app/
 RUN yarn install
 
 # Add the Rails app
