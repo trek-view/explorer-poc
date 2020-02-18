@@ -1,11 +1,11 @@
-version: '3.4'
+version: '3.7'
 
 services:
-  db:
+  postgresdb:
     image: postgres:11-alpine
     container_name: postgresdb
     restart: always
-    hostname: db
+    hostname: postgresdb
     environment:
       POSTGRES_DB: explorer
       POSTGRES_USER: postgres
@@ -35,7 +35,7 @@ services:
       - postgresdb:postgresdb
     environment:
       RAILS_ENV: development
-      DATABASE_HOST: db
+      DATABASE_HOST: postgresdb
       DATABASE_NAME: explorer_development
       DATABASE_USER_NAME: postgres
       DATABASE_PASSWORD: postgres

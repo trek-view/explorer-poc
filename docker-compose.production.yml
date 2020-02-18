@@ -1,7 +1,7 @@
-version: '3.4'
+version: '3.7'
 
 services:
-  db:
+  postgresdb:
     environment:
       - POSTGRES_PASSWORD=postgres
     hostname: db.explorer.trekview.com
@@ -28,7 +28,7 @@ services:
         - RAILS_ENV=production
     environment:
       RAILS_ENV: production
-      DATABASE_HOST: db
+      DATABASE_HOST: postgresdb
       DATABASE_NAME: explorer
       DATABASE_USER_NAME: postgres
       DATABASE_PASSWORD: postgres
