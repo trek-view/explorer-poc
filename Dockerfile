@@ -9,8 +9,8 @@ ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 ENV RAILS_ENV ${RAILS_ENV}
 ENV SECRET_KEY_BASE=foo
 ENV RAILS_SERVE_STATIC_FILES=true
-#--no-cache 
-RUN apk add --update \ 
+
+RUN apk add --update --no-cache \ 
     build-base \
     postgresql-dev \
     git \
@@ -25,13 +25,13 @@ WORKDIR /app
 
 # Install gems
 ADD Gemfile* /app/
-RUN bundle update --bundler
+# RUN bundle update --bundler
 RUN bundle config --global frozen 1 \
- && bundle install -j4 --retry 3
- # Remove unneeded files (cached *.gem, *.o, *.c)
-#  && rm -rf /usr/local/bundle/cache/*.gem \
-#  && find /usr/local/bundle/gems/ -name "*.c" -delete \
-#  && find /usr/local/bundle/gems/ -name "*.o" -delete
+    && bundle install -j4 --retry 3 \
+    # Remove unneeded files (cached *.gem, *.o, *.c)
+    && rm -rf /usr/local/bundle/cache/*.gem \
+    && find /usr/local/bundle/gems/ -name "*.c" -delete \
+    && find /usr/local/bundle/gems/ -name "*.o" -delete
 
 # Install yarn packages
 COPY package.json yarn.lock .yarnclean /app/
@@ -49,6 +49,7 @@ RUN rm -rf $FOLDERS_TO_REMOVE
 ###############################
 # Stage Final
 FROM ruby:2.6.3-alpine
+
 LABEL maintainer="ivanov.arterm.1009@gmail.com"
 
 ARG ADDITIONAL_PACKAGES
