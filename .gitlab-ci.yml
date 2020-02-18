@@ -112,8 +112,8 @@ stages:
 before_script:
   - docker info
   - docker-compose --version
-  - pip install docker-compose  
-
+  - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
+  
 test:
   stage: test
   script:
@@ -129,7 +129,6 @@ test:
 build:
   stage: build
   script:
-    - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
     - docker-compose -f docker-compose.production.yml build --pull
     - docker tag explorer_app_production $CONTAINER_CURRENT_IMAGE
     - docker push $CONTAINER_CURRENT_IMAGE
@@ -137,7 +136,6 @@ build:
 release-latest-image:
   stage: deploy
   script:
-    - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_LATEST_IMAGE
     - docker push $CONTAINER_LATEST_IMAGE
