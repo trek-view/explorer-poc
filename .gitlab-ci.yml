@@ -100,6 +100,11 @@ variables:
   CONTAINER_LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
   CONTAINER_STABLE_IMAGE: $CI_REGISTRY_IMAGE:stable
 
+cache:
+  paths:
+    - vendor/bundle
+    - node_modules
+
 services:
   - docker:dind
 
@@ -112,8 +117,8 @@ stages:
 before_script:
   - docker info
   - docker-compose --version
-  - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
-  
+  - docker login -u $DOCKER_HUB_USER --password $DOCKER_HUB_PASSWORD
+
 test:
   stage: test
   script:
