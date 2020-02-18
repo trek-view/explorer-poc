@@ -92,10 +92,16 @@
 #     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_LATEST_IMAGE
 #     - docker push $CONTAINER_LATEST_IMAGE
 
+image: docker:latest
+
 variables:
+  DOCKER_DRIVER: overlay
   CONTAINER_CURRENT_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   CONTAINER_LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
   CONTAINER_STABLE_IMAGE: $CI_REGISTRY_IMAGE:stable
+
+services:
+  - docker:dind
 
 stages:
   - test
@@ -105,7 +111,10 @@ stages:
 
 before_script:
   - docker info
-  - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
+  - apk update
+  - apk upgrade
+  - apk add python python-dev py-pip build-base
+  - pip install docker-compose  
 
 test:
   stage: test
@@ -122,6 +131,7 @@ test:
 build:
   stage: build
   script:
+    - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
     - docker-compose -f docker-compose.production.yml build --pull
     - docker tag explorer_app_production $CONTAINER_CURRENT_IMAGE
     - docker push $CONTAINER_CURRENT_IMAGE
@@ -129,6 +139,7 @@ build:
 release-latest-image:
   stage: deploy
   script:
+    - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_LATEST_IMAGE
     - docker push $CONTAINER_LATEST_IMAGE
