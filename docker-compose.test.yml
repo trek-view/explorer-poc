@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.4'
 services:
   db:
     image: postgres:11-alpine
@@ -22,16 +22,15 @@ services:
     image: explorer_app_development
     build:
       context: .
-      # dockerfile: ./Dockerfile
+      args:
+        - ADDITIONAL_PACKAGES=nodejs-current yarn build-base git
+        - EXECJS_RUNTIME=Node
+        - RAILS_ENV=test
     restart: always
     depends_on:
       - postgresdb
     links:
       - postgresdb:postgresdb
-    args:
-      - ADDITIONAL_PACKAGES=nodejs-current yarn build-base git
-      - EXECJS_RUNTIME=Node
-      - RAILS_ENV=test
     environment:
       RAILS_ENV: test
       DATABASE_HOST: db

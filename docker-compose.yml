@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.4'
 
 services:
   db:
@@ -24,15 +24,15 @@ services:
     build:
       context: .
       # dockerfile: ./Dockerfile
+      args:
+        - ADDITIONAL_PACKAGES=nodejs-current yarn build-base git
+        - EXECJS_RUNTIME=Node
+        - RAILS_ENV=development
     restart: always
     depends_on:
       - postgresdb
     links:
       - postgresdb:postgresdb
-    args:
-      - ADDITIONAL_PACKAGES=nodejs-current yarn build-base git
-      - EXECJS_RUNTIME=Node
-      - RAILS_ENV=development
     environment:
       RAILS_ENV: development
       DATABASE_HOST: db
