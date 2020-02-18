@@ -101,14 +101,14 @@ stages:
   - release
 
 before_script:
-  - echo $CI_JOB_TOKEN | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+  - echo $CI_JOB_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_PASSWORD
 
 test:
   stage: test
   script:
     - docker-compose -f docker-compose.test.yml build --pull
     - docker-compose -f docker-compose.test.yml run --rm app sh -c "bundle exec pronto run -f gitlab -c origin/production"
-    - docker-compose -f docker-compose.test.yml run --rm app sh -c "./docker/wait-for-services.sh && bundle exec rake db:create spec"
+    - docker-compose -f docker-compose.test.yml run --rm app sh -c "bundle exec rake db:create spec"
 
   after_script:
     - docker-compose -f docker-compose.test.yml run --rm app rm -rf tmp/

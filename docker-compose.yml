@@ -1,28 +1,38 @@
-version: '3.4'
+version: "3.7"
+
 services:
   db:
     image: postgres:11-alpine
+    container_name: postgresdb
+    restart: always
+    hostname: db
     environment:
       POSTGRES_DB: explorer
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
     networks:
       services-network:
         aliases:
-          - db
-    volumes:
-      - db-data:/var/lib/postgresql/data
+          - postgresdb
 
   app: &app_base
     image: explorer_app_development
     build:
       context: .
-      args:
-        - ADDITIONAL_PACKAGES=nodejs-current yarn build-base git
-        - EXECJS_RUNTIME=Node
-        - RAILS_ENV=development
+      # dockerfile: ./Dockerfile
+    restart: always
+    depends_on:
+      - postgresdb
+    links:
+      - postgresdb:postgresdb
+    args:
+      - ADDITIONAL_PACKAGES=nodejs-current yarn build-base git
+      - EXECJS_RUNTIME=Node
+      - RAILS_ENV=development
     environment:
       RAILS_ENV: development
       DATABASE_HOST: db
@@ -35,11 +45,18 @@ services:
       FOG_PROVIDER: AWS
       FOG_REGION: eu-west-2
     ports:
-      - "3000"
-    links:
-      - db
+      - "3000:3000"
     volumes:
       - .:/app
+    networks:
+      services-network:
+        aliases:
+          - explorer_development
 
 volumes:
   db-data:
+
+networks:
+  services-network:
+    name: services-network
+    driver: bridge
