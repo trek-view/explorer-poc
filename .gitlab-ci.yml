@@ -9,10 +9,10 @@ variables:
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
-  # CONTAINER_IMAGE: registry.gitlab.com/trekview/explorer
-  CONTAINER_CURRENT_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-  CONTAINER_LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
-  CONTAINER_STABLE_IMAGE: $CI_REGISTRY_IMAGE:stable
+  CONTAINER_IMAGE: registry.gitlab.com/trekview/explorer
+  CONTAINER_CURRENT_IMAGE: $CONTAINER_IMAGE:$CI_COMMIT_REF_SLUG
+  CONTAINER_LATEST_IMAGE: $CONTAINER_IMAGE:latest
+  CONTAINER_STABLE_IMAGE: $CONTAINER_IMAGE:stable
 
 stages:
   - test
@@ -47,8 +47,17 @@ build:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
     - docker pull $CONTAINER_IMAGE:master || true
-    - docker build --cache-from $CONTAINER_IMAGE:master --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME .
-    - docker tag dockerrails_app_production $CONTAINER_CURRENT_IMAGE
+    - docker build --cache-from \
+        $CONTAINER_IMAGE:master --tag \
+        $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
+        --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
+        --build-arg DATABASE_URL=${DATABASE_URL} \
+        --build-arg DATABASE_HOST=${DATABASE_HOST} \
+        --build-arg DATABASE_USER_NAME=${DATABASE_USER_NAME} \
+        --build-arg DATABASE_PASSWORD=${DATABASE_PASSWORD} \
+        --build-arg DATABASE_PORT=${DATABASE_PORT} \
+        .  
+    - docker tag explorer $CONTAINER_CURRENT_IMAGE
     - docker push $CONTAINER_CURRENT_IMAGE
 
 deploy-latest-image:
