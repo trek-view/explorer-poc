@@ -1,91 +1,47 @@
-# Stage: Builder
-FROM ruby:2.6.3-alpine as Builder
+FROM ruby:2.6-alpine AS base
 
-ARG FOLDERS_TO_REMOVE
-ARG BUNDLE_WITHOUT
-ARG RAILS_ENV
+RUN apk add --no-cache --update build-base \
+                                git \
+                                postgresql-dev \
+                                nodejs \
+                                tzdata
 
-ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
-ENV RAILS_ENV ${RAILS_ENV}
-ENV SECRET_KEY_BASE=foo
-ENV RAILS_SERVE_STATIC_FILES=true
-
-RUN apk add --update --no-cache \ 
-    build-base \
-    postgresql-dev \
-    git \
-    imagemagick \
-    nodejs-current \
-    python2 \
-    yarn \
-    unzip \
-    tzdata
-
+RUN mkdir /app
 WORKDIR /app
 
-# Install gems
-ADD Gemfile* /app/
-# RUN bundle update --bundler
-RUN gem install bundler -v '2.0.2'
-RUN bundle config --global frozen 1
-# RUN gem install bundler -v '2.0.2'
-RUN bundle install -j4 --retry 3
-# Remove unneeded files (cached *.gem, *.o, *.c)
-RUN rm -rf /usr/local/bundle/cache/*.gem 
-RUN find /usr/local/bundle/gems/ -name "*.c" -delete 
-RUN find /usr/local/bundle/gems/ -name "*.o" -delete
+# Add the Gemfile and bundle first, so changes to the app don't invalidate the
+# cache
+ADD Gemfile /app/Gemfile
+ADD Gemfile.lock /app/Gemfile.lock
+RUN bundle install --without development test --deployment
 
-# Install yarn packages
-COPY package.json yarn.lock /app/
-RUN yarn install
+#
+# Development stage
+#
+FROM base AS development
+ENV RAILS_ENV development
 
-# Add the Rails app
+RUN bundle install
+
 ADD . /app
 
-# Precompile assets
-RUN bundle exec rake assets:precompile
+CMD bundle exec rails s
 
-# Remove folders not needed in resulting image
-RUN rm -rf $FOLDERS_TO_REMOVE
+#
+# Production stage
+#
+FROM base AS production
 
-###############################
-# Stage Final
-FROM ruby:2.6.3-alpine
+# Add the rest of the app
+ADD . /app
 
-LABEL maintainer="ivanov.arterm.1009@gmail.com"
+ENV RAILS_ENV production
+ENV NODE_ENV production
 
-ARG ADDITIONAL_PACKAGES
-ARG EXECJS_RUNTIME
+# Build assets - n.b. the DATABASE_URL doesn't need to be valid, it's just to
+# stop Rails complaining and saying that it isn't set
+RUN bundle exec rake assets:precompile DATABASE_URL=postgresql://localhost/
 
-# Add Alpine packages
-RUN apk add --update --no-cache \
-    postgresql-client \
-    imagemagick \
-    $ADDITIONAL_PACKAGES \
-    tzdata \
-    file
-
-# Add user
-RUN addgroup -g 1000 -S app \
- && adduser -u 1000 -S app -G app
-USER app
-
-# Copy app with gems from former build stage
-COPY --from=Builder /usr/local/bundle/ /usr/local/bundle/
-COPY --from=Builder --chown=app:app /app /app
-
-# Set Rails env
-ENV RAILS_LOG_TO_STDOUT true
-ENV RAILS_SERVE_STATIC_FILES true
-ENV EXECJS_RUNTIME $EXECJS_RUNTIME
-
-WORKDIR /app
-
-# Expose Puma port
 EXPOSE 3000
 
-# Save timestamp of image building
-RUN date -u > BUILD_TIME
-
-# Start up
-CMD ["docker/startup.sh"]
+CMD bin/prod-start
