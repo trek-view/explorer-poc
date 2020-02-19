@@ -46,18 +46,17 @@ build:
     - docker:dind
   before_script:
     # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - echo  $DOCKER_HUB_USER $DOCKER_HUB_PASSWORD
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
+    - echo $CONTAINER_IMAGE $CI_COMMIT_REF_NAME 
   script:
     - docker pull $CONTAINER_IMAGE:master || true
     - docker build --cache-from $CONTAINER_IMAGE:master \
         --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
         --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
-        --build-arg DATABASE_URL=$DATABASE_URL \
-        --build-arg DATABASE_HOST=$DATABASE_HOST \
-        --build-arg DATABASE_USER_NAME=$DATABASE_USER_NAME \
-        --build-arg DATABASE_PASSWORD=$DATABASE_PASSWORD \
-        --build-arg DATABASE_PORT=$DATABASE_PORT \
+        --build-arg DATABASE_HOST=$AWS_RDS_HOSTNAME \
+        --build-arg DATABASE_USER_NAME=$AWS_RDS_USERNAME \
+        --build-arg DATABASE_PASSWORD=$AWS_RDS_PASSWORD \
+        --build-arg DATABASE_PORT=$AWS_RDS_PORT \
         --build-arg ADMIN_EMAIL=$ADMIN_EMAIL \
         --build-arg ADMIN_PASSWORD=$ADMIN_PASSWORD \
         --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
@@ -71,7 +70,6 @@ build:
         --build-arg FOG_REGION=$FOG_REGION \
         --build-arg GOOGLE_ANALYTICS_KEY=$GOOGLE_ANALYTICS_KEY \
         --build-arg GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY \
-        --build-arg LANG=$LANG \
         --build-arg MAILCHIMP_AUDIENCE_ID=$MAILCHIMP_AUDIENCE_ID \
         --build-arg RACK_ENV=$RACK_ENV \
         --build-arg RAILS_ENV=$RAILS_ENV \
