@@ -9,6 +9,7 @@ variables:
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
+  DEPLOY_REGISTRY_DOMAIN: hub.docker.com
   CONTAINER_IMAGE: trekview/explorer
   CONTAINER_CURRENT_IMAGE: $CONTAINER_IMAGE:$CI_COMMIT_REF_SLUG
   CONTAINER_LATEST_IMAGE: $CONTAINER_IMAGE:latest
@@ -45,7 +46,7 @@ build:
     - docker:dind
   before_script:
     # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
   script:
     - docker pull $CONTAINER_IMAGE:master || true
     - docker build --cache-from $CONTAINER_IMAGE:master \
@@ -84,6 +85,9 @@ build:
         .
     - docker tag explorer $CONTAINER_CURRENT_IMAGE
     - docker push $CONTAINER_CURRENT_IMAGE
+  # only:
+  #   - staging
+  #   - production
 
 deploy-latest-image:
   stage: deploy
@@ -91,7 +95,7 @@ deploy-latest-image:
     - docker:dind
   before_script:
     # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
   script:
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_LATEST_IMAGE
@@ -107,7 +111,7 @@ deploy-stable-image:
     - docker:dind
   before_script:
     # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
   script:
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_STABLE_IMAGE
