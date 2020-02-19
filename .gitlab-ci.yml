@@ -54,7 +54,6 @@ build:
         --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
         --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
         --build-arg DATABASE_URL=postgres://$AWS_RDS_USERNAME:$AWS_RDS_PASSWORD@$AWS_RDS_HOSTNAME:$AWS_RDS_PORT/$AWS_RDS_INSTANCE_ID \
-        postgres://trekker:HjO0AdKKEpBytJr01Gzi@staging-explorer-trekview-org.cuoo0iw6cxfx.eu-west-2.rds.amazonaws.com:5432/explorer
         --build-arg DATABASE_HOST=$AWS_RDS_HOSTNAME \
         --build-arg DATABASE_USER_NAME=$AWS_RDS_USERNAME \
         --build-arg DATABASE_PASSWORD=$AWS_RDS_PASSWORD \
