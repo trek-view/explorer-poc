@@ -100,10 +100,10 @@ variables:
   CONTAINER_LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
   CONTAINER_STABLE_IMAGE: $CI_REGISTRY_IMAGE:stable
 
-cache:
-  paths:
-    - vendor/bundle
-    - node_modules
+#cache:
+#  paths:
+#    - vendor/bundle
+#    - node_modules
 
 services:
   - docker:dind

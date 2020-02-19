@@ -43,7 +43,7 @@ RUN yarn install
 ADD . /app
 
 # Precompile assets
-RUN bundle exec rake assets:precompile
+# RUN bundle exec rake assets:precompile
 
 # Remove folders not needed in resulting image
 RUN rm -rf $FOLDERS_TO_REMOVE
