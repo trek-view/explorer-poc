@@ -1,15 +1,20 @@
 image: ruby:2.6.3
 
 services:
-  - postgres:11-alpine
+  - postgres:10.1
 
 variables:
-  POSTGRES_DB: postgresdb
+  BUNDLE_PATH: vendor/bundle
+  DISABLE_SPRING: 1
+  POSTGRES_DB: explorer_test
+  POSTGRES_USER: runner
+  POSTGRES_PASSWORD: ""
   CONTAINER_IMAGE: registry.gitlab.com/trekview/explorer
 
 stages:
   - test
   - build
+  # - deploy
 
 cache:
   paths:
