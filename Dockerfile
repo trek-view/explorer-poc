@@ -99,7 +99,6 @@ RUN gem install bundler -v '2.0.2'
 RUN bundle install
 
 ADD . /app
-COPY ./config/credentials.yml.enc /app/config/credentials.yml
 
 CMD bundle exec rails s
 
@@ -110,7 +109,6 @@ FROM base AS production
 
 # Add the rest of the app
 ADD . /app
-COPY ./config/credentials.yml.enc /app/config/credentials.yml
 
 ENV RAILS_ENV production
 ENV NODE_ENV production

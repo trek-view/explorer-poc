@@ -53,8 +53,9 @@ build:
     - docker build --cache-from $CONTAINER_IMAGE:staging \
         --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
         --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
-        --build-arg DATABASE_URL=postgres://$AWS_RDS_USERNAME:$AWS_RDS_PASSWORD@$AWS_RDS_HOSTNAME:$AWS_RDS_PORT/$AWS_RDS_INSTANCE_ID \
+        --build-arg DATABASE_URL=postgres://$AWS_RDS_USERNAME:$AWS_RDS_PASSWORD@$AWS_RDS_HOSTNAME:$AWS_RDS_PORT/$AWS_RDS_DB_NAME \
         --build-arg DATABASE_HOST=$AWS_RDS_HOSTNAME \
+        --build-arg DATABASE_NAME=$AWS_RDS_DB_NAME \
         --build-arg DATABASE_USER_NAME=$AWS_RDS_USERNAME \
         --build-arg DATABASE_PASSWORD=$AWS_RDS_PASSWORD \
         --build-arg DATABASE_PORT=$AWS_RDS_PORT \
