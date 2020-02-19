@@ -22,6 +22,7 @@ test:
   script:
     - apt-get update -qy
     - apt-get install -y nodejs
+    - gem install bundler:2.0.2
     - bundle install --path .bundle
     - cp .env
     - cp config/database.ci.yml config/database.yml
