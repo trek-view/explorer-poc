@@ -3,7 +3,10 @@ FROM ruby:2.6-alpine AS base
 RUN apk add --no-cache --update build-base \
                                 git \
                                 postgresql-dev \
+                                imagemagick \
                                 nodejs \
+                                yarn \
+                                unzip \
                                 tzdata
 
 RUN mkdir /app
@@ -21,6 +24,7 @@ RUN bundle install --without development test --deployment
 FROM base AS development
 ENV RAILS_ENV development
 
+RUN gem install bundler -v '2.0.2'
 RUN bundle install
 
 ADD . /app
