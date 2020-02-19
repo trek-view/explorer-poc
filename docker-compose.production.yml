@@ -40,7 +40,7 @@ services:
       FOG_REGION: eu-west-2
     hostname: app.explorer.trekview.com
     links:
-      - db
+      - postgresdb
     ports:
       - 3000
     restart: always
