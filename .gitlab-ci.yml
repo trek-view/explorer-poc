@@ -9,7 +9,7 @@ variables:
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
-  CONTAINER_IMAGE: registry.gitlab.com/trekview/explorer
+  CONTAINER_IMAGE: trekview/explorer
   CONTAINER_CURRENT_IMAGE: $CONTAINER_IMAGE:$CI_COMMIT_REF_SLUG
   CONTAINER_LATEST_IMAGE: $CONTAINER_IMAGE:latest
   CONTAINER_STABLE_IMAGE: $CONTAINER_IMAGE:stable
@@ -44,19 +44,44 @@ build:
   services:
     - docker:dind
   before_script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
   script:
     - docker pull $CONTAINER_IMAGE:master || true
-    - docker build --cache-from \
-        $CONTAINER_IMAGE:master --tag \
-        $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
+    - docker build --cache-from $CONTAINER_IMAGE:master \
+        --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
         --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
-        --build-arg DATABASE_URL=${DATABASE_URL} \
-        --build-arg DATABASE_HOST=${DATABASE_HOST} \
-        --build-arg DATABASE_USER_NAME=${DATABASE_USER_NAME} \
-        --build-arg DATABASE_PASSWORD=${DATABASE_PASSWORD} \
-        --build-arg DATABASE_PORT=${DATABASE_PORT} \
-        .  
+        --build-arg DATABASE_URL=$DATABASE_URL \
+        --build-arg DATABASE_HOST=$DATABASE_HOST \
+        --build-arg DATABASE_USER_NAME=$DATABASE_USER_NAME \
+        --build-arg DATABASE_PASSWORD=$DATABASE_PASSWORD \
+        --build-arg DATABASE_PORT=$DATABASE_PORT \
+        --build-arg ADMIN_EMAIL=$ADMIN_EMAIL \
+        --build-arg ADMIN_PASSWORD=$ADMIN_PASSWORD \
+        --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+        --build-arg AWS_S3_BUCKET=$AWS_S3_BUCKET \
+        --build-arg AWS_S3_BUCKET_REGION=$AWS_S3_BUCKET_REGION \
+        --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+        --build-arg DEVISE_SENDER_EMAIL_ADDRESS=$DEVISE_SENDER_EMAIL_ADDRESS \
+        --build-arg DEVISE_SENDER_NAME=$DEVISE_SENDER_NAME \
+        --build-arg FOG_DIRECTORY=$FOG_DIRECTORY \
+        --build-arg FOG_PROVIDER=$FOG_PROVIDER \
+        --build-arg FOG_REGION=$FOG_REGION \
+        --build-arg GOOGLE_ANALYTICS_KEY=$GOOGLE_ANALYTICS_KEY \
+        --build-arg GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY \
+        --build-arg LANG=$LANG \
+        --build-arg MAILCHIMP_AUDIENCE_ID=$MAILCHIMP_AUDIENCE_ID \
+        --build-arg RACK_ENV=$RACK_ENV \
+        --build-arg RAILS_ENV=$RAILS_ENV \
+        --build-arg SITE_URL=$SITE_URL \
+        --build-arg DISALLOW_ALL_WEB_CRAWLERS=$DISALLOW_ALL_WEB_CRAWLERS \
+        --build-arg MAILCHIMP_API_KEY=$MAILCHIMP_API_KEY \
+        --build-arg MAILGUN_DOMAIN=$MAILGUN_DOMAIN \
+        --build-arg MAILGUN_SMTP_LOGIN=$MAILGUN_SMTP_LOGIN \
+        --build-arg MAILGUN_SMTP_PASSWORD=$MAILGUN_SMTP_PASSWORD \
+        --build-arg MAILGUN_SMTP_PORT=$MAILGUN_SMTP_PORT \
+        --build-arg MAILGUN_SMTP_SERVER=s$MAILGUN_SMTP_SERVER \
+        .
     - docker tag explorer $CONTAINER_CURRENT_IMAGE
     - docker push $CONTAINER_CURRENT_IMAGE
 
@@ -65,7 +90,8 @@ deploy-latest-image:
   services:
     - docker:dind
   before_script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
   script:
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_LATEST_IMAGE
@@ -80,7 +106,8 @@ deploy-stable-image:
   services:
     - docker:dind
   before_script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
   script:
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_STABLE_IMAGE
