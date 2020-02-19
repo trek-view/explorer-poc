@@ -1,5 +1,11 @@
 FROM ruby:2.6.3-alpine AS base
 
+ARG RAILS_ENV
+ARG DATABASE_URL
+
+ENV RAILS_ENV ${RAILS_ENV}
+ENV DATABASE_URL ${DATABASE_URL}
+
 RUN apk add --no-cache --update build-base \
                                 git \
                                 postgresql-dev \
