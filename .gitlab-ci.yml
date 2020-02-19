@@ -19,9 +19,6 @@ stages:
   - build
   - deploy
 
-before_script:
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-
 cache:
   paths:
     - .bundle
@@ -43,12 +40,11 @@ test:
 
 build:
   stage: build
-
   image: docker:stable
-
   services:
     - docker:dind
-
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
     - docker pull $CONTAINER_IMAGE:master || true
     - docker build --cache-from $CONTAINER_IMAGE:master --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME .
@@ -57,6 +53,10 @@ build:
 
 deploy-latest-image:
   stage: deploy
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_LATEST_IMAGE
@@ -68,6 +68,10 @@ deploy-latest-image:
 
 deploy-stable-image:
   stage: deploy
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   script:
     - docker pull $CONTAINER_CURRENT_IMAGE
     - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_STABLE_IMAGE
