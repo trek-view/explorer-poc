@@ -22,6 +22,7 @@ WORKDIR /app
 # cache
 ADD Gemfile /app/Gemfile
 ADD Gemfile.lock /app/Gemfile.lock
+RUN gem install bundler -v '2.0.2'
 RUN bundle install --without development test --deployment
 
 #

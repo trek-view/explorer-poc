@@ -9,12 +9,18 @@ variables:
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
-  CONTAINER_IMAGE: registry.gitlab.com/trekview/explorer
+  # CONTAINER_IMAGE: registry.gitlab.com/trekview/explorer
+  CONTAINER_CURRENT_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  CONTAINER_LATEST_IMAGE: $CI_REGISTRY_IMAGE:latest
+  CONTAINER_STABLE_IMAGE: $CI_REGISTRY_IMAGE:stable
 
 stages:
   - test
   - build
-  # - deploy
+  - deploy
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
 
 cache:
   paths:
@@ -43,10 +49,28 @@ build:
   services:
     - docker:dind
 
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-
   script:
     - docker pull $CONTAINER_IMAGE:master || true
     - docker build --cache-from $CONTAINER_IMAGE:master --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME .
-    - docker push $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME
+    - docker tag dockerrails_app_production $CONTAINER_CURRENT_IMAGE
+    - docker push $CONTAINER_CURRENT_IMAGE
+
+deploy-latest-image:
+  stage: deploy
+  script:
+    - docker pull $CONTAINER_CURRENT_IMAGE
+    - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_LATEST_IMAGE
+    - docker push $CONTAINER_LATEST_IMAGE
+    # - curl -X POST $PORTAINER_HOOK_APP
+    # - curl -X POST $PORTAINER_HOOK_WORKER
+  only:
+    - staging
+
+deploy-stable-image:
+  stage: deploy
+  script:
+    - docker pull $CONTAINER_CURRENT_IMAGE
+    - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_STABLE_IMAGE
+    - docker push $CONTAINER_STABLE_IMAGE
+  only:
+    - production
