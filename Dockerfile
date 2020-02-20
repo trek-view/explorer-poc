@@ -1,5 +1,8 @@
-FROM ruby:2.6.3-alpine AS base
+######################
+# Stage: Builder
+FROM ruby:2.6.2-alpine as Builder
 
+ARG BUNDLE_WITHOUT
 ARG DATABASE_URL
 ARG SECRETE_KEY_BASE=foo
 ARG DATABASE_HOST
@@ -33,7 +36,7 @@ ARG MAILGUN_SMTP_PASSWORD=6e1bbf20c1b47ba32878af36bc76bfdc-816b23ef-aa95db1b
 ARG MAILGUN_SMTP_PORT=587
 ARG MAILGUN_SMTP_SERVER=smtp.mailgun.org
 
-
+ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 ENV DATABASE_URL ${DATABASE_URL}
 ENV SECRETE_KEY_BASE ${SECRETE_KEY_BASE}
 ENV DATABASE_HOST ${DATABASE_HOST}
@@ -66,57 +69,82 @@ ENV MAILGUN_SMTP_LOGIN ${MAILGUN_SMTP_LOGIN}
 ENV MAILGUN_SMTP_PASSWORD ${MAILGUN_SMTP_PASSWORD}
 ENV MAILGUN_SMTP_PORT ${MAILGUN_SMTP_PORT}
 ENV MAILGUN_SMTP_SERVER ${MAILGUN_SMTP_SERVER}
+ENV RAILS_SERVE_STATIC_FILES=true
+
 
 RUN export
 
-RUN apk add --no-cache --update build-base \
-                                git \
-                                postgresql-dev \
-                                imagemagick \
-                                nodejs \
-                                yarn \
-                                unzip \
-                                tzdata
+RUN apk add --update --no-cache \
+    build-base \
+    postgresql-dev \
+    git \
+    imagemagick \
+    nodejs-current \
+    yarn \
+    python2 \
+    tzdata
 
-RUN mkdir /app
 WORKDIR /app
 
-# Add the Gemfile and bundle first, so changes to the app don't invalidate the
-# cache
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
-RUN gem install bundler -v '2.0.2'
-RUN bundle install --without development test --deployment
+# Install gems
+ADD Gemfile* /app/
+RUN bundle config --global frozen 1 \
+ && bundle install -j4 --retry 3 \
+ # Remove unneeded files (cached *.gem, *.o, *.c)
+ && rm -rf /usr/local/bundle/cache/*.gem \
+ && find /usr/local/bundle/gems/ -name "*.c" -delete \
+ && find /usr/local/bundle/gems/ -name "*.o" -delete
 
-#
-# Development stage
-#
-FROM base AS staging
+# Install yarn packages
+COPY package.json yarn.lock .yarnclean /app/
+RUN yarn install
 
-ENV RAILS_ENV staging
-
-RUN gem install bundler -v '2.0.2'
-RUN bundle install
-
+# Add the Rails app
 ADD . /app
 
-CMD bundle exec rails s
+# Precompile assets
+RUN bundle exec rake assets:precompile
 
-#
-# Production stage
-#
-FROM base AS production
+# Remove folders not needed in resulting image
+RUN rm -rf $FOLDERS_TO_REMOVE
 
-# Add the rest of the app
-ADD . /app
+###############################
+# Stage Final
+FROM ruby:2.6.2-alpine
+LABEL maintainer="mail@georg-ledermann.de"
 
-ENV RAILS_ENV production
-ENV NODE_ENV production
+ARG ADDITIONAL_PACKAGES
+ARG EXECJS_RUNTIME
 
-# Build assets - n.b. the DATABASE_URL doesn't need to be valid, it's just to
-# stop Rails complaining and saying that it isn't set
-# RUN bundle exec rake assets:precompile
+# Add Alpine packages
+RUN apk add --update --no-cache \
+    postgresql-client \
+    imagemagick \
+    $ADDITIONAL_PACKAGES \
+    tzdata \
+    file
 
+# Add user
+RUN addgroup -g 1000 -S app \
+ && adduser -u 1000 -S app -G app
+USER app
+
+# Copy app with gems from former build stage
+COPY --from=Builder /usr/local/bundle/ /usr/local/bundle/
+COPY --from=Builder --chown=app:app /app /app
+
+# Set Rails env
+ENV RAILS_LOG_TO_STDOUT true
+ENV RAILS_SERVE_STATIC_FILES true
+ENV EXECJS_RUNTIME $EXECJS_RUNTIME
+
+WORKDIR /app
+
+# Expose Puma port
 EXPOSE 3000
 
-CMD ["/app/bin/prod-start.sh"]
+# Save timestamp of image building
+RUN date -u > BUILD_TIME
+
+# Start up
+CMD ["docker/startup.sh"]
