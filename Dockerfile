@@ -1,6 +1,4 @@
-######################
-# Stage: Builder
-FROM ruby:2.6.2-alpine as Builder
+FROM ruby:2.6.3-alpine
 
 ARG BUNDLE_WITHOUT
 ARG DATABASE_URL
@@ -74,77 +72,30 @@ ENV RAILS_SERVE_STATIC_FILES=true
 
 RUN export
 
-RUN apk add --update --no-cache \
-    build-base \
-    postgresql-dev \
-    git \
-    imagemagick \
-    nodejs-current \
-    yarn \
-    python2 \
-    tzdata
+RUN apk update --no-cache && apk add build-base nodejs postgresql-dev git yarn tzdata imagemagick
 
+RUN mkdir /app
 WORKDIR /app
 
-# Install gems
-ADD Gemfile* /app/
-RUN bundle config --global frozen 1 \
- && bundle install -j4 --retry 3 \
- # Remove unneeded files (cached *.gem, *.o, *.c)
- && rm -rf /usr/local/bundle/cache/*.gem \
- && find /usr/local/bundle/gems/ -name "*.c" -delete \
- && find /usr/local/bundle/gems/ -name "*.o" -delete
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler -v '2.0.2'
+RUN bundle install --binstubs
 
-# Install yarn packages
-COPY package.json yarn.lock .yarnclean /app/
-RUN yarn install
+COPY . .
 
-# Add the Rails app
-ADD . /app
+# # Install yarn packages
+# COPY package.json yarn.lock /app/
+# RUN yarn install
 
 # Precompile assets
 RUN bundle exec rake assets:precompile
 
-# Remove folders not needed in resulting image
-RUN rm -rf $FOLDERS_TO_REMOVE
-
-###############################
-# Stage Final
-FROM ruby:2.6.2-alpine
-LABEL maintainer="mail@georg-ledermann.de"
-
-ARG ADDITIONAL_PACKAGES
-ARG EXECJS_RUNTIME
-
-# Add Alpine packages
-RUN apk add --update --no-cache \
-    postgresql-client \
-    imagemagick \
-    $ADDITIONAL_PACKAGES \
-    tzdata \
-    file
-
-# Add user
-RUN addgroup -g 1000 -S app \
- && adduser -u 1000 -S app -G app
-USER app
-
-# Copy app with gems from former build stage
-COPY --from=Builder /usr/local/bundle/ /usr/local/bundle/
-COPY --from=Builder --chown=app:app /app /app
-
-# Set Rails env
-ENV RAILS_LOG_TO_STDOUT true
-ENV RAILS_SERVE_STATIC_FILES true
-ENV EXECJS_RUNTIME $EXECJS_RUNTIME
-
-WORKDIR /app
-
 # Expose Puma port
 EXPOSE 3000
 
-# Save timestamp of image building
-RUN date -u > BUILD_TIME
+LABEL maintainer="Ivanov Artem <ivanov.artem.1009@gmail.com>"
+
+# CMD puma -C config/puma.rb
 
 # Start up
 CMD ["docker/startup.sh"]
