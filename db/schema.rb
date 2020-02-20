@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_154213) do
+ActiveRecord::Schema.define(version: 2020_02_12_183117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -145,6 +145,24 @@ ActiveRecord::Schema.define(version: 2020_02_12_154213) do
     t.index ["photo_id"], name: "index_scenes_on_photo_id"
   end
 
+  create_table "sponsors", force: :cascade do |t|
+    t.string "title", limit: 100
+    t.text "description"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "duration"
+  end
+
+  create_table "sponsorships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "tour_id"
+    t.bigint "sponsor_id"
+    t.index ["sponsor_id"], name: "index_sponsorships_on_sponsor_id"
+    t.index ["tour_id"], name: "index_sponsorships_on_tour_id"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "kind"
@@ -243,6 +261,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_154213) do
   add_foreign_key "photos", "tours"
   add_foreign_key "scenes", "guidebooks"
   add_foreign_key "scenes", "photos"
+  add_foreign_key "sponsorships", "sponsors"
+  add_foreign_key "sponsorships", "tours"
   add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "taggings", "tours"

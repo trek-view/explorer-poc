@@ -17,6 +17,7 @@ gem 'uglifier', '>= 1.3.0'
 # gem 'mini_racer', platforms: :ruby
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'dotenv-rails', :groups => [:development, :test]
+
 gem 'activeadmin'
 gem 'cancancan'
 gem 'draper'

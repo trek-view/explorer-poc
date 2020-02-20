@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       end
       resources :scenes do
         get 'guidebook_scenes', to: 'scenes#guidebook_scenes'
+        get 'photo/:id', to: 'photos#show'
       end
     end
   end

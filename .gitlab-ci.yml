@@ -1,90 +1,122 @@
 image: ruby:2.6.3
 
-cache:
-  paths:
-    - vendor/bundle
-    - node_modules
-
 services:
   - postgres:10.1
 
 variables:
   BUNDLE_PATH: vendor/bundle
   DISABLE_SPRING: 1
-
-  # postgres service configuration for running tests
-  # if changed also remember to change the credentials in config/database.yml.ci
-  # more info: https://docs.gitlab.com/ee/ci/services/postgres.html
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
-
-before_script:
-  # Install node and some other deps
-  - curl -sL https://deb.nodesource.com/setup_11.x | bash -
-  - apt-get update -yq
-  - apt-get install -y apt-transport-https build-essential cmake nodejs software-properties-common unzip
-  
-  # Install yarn
-  - wget -q -O - https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-  - echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
-  - apt-get update -yq
-  - apt-get install -y yarn
-
-  # Project setup
-  - gem install bundler:2.0.2
-  - bundle check || bundle install --jobs $(nproc)
-  - yarn install
-
-  - cp config/database.yml.ci config/database.yml
-#  - bundle exec rails db:create RAILS_ENV=test
-  - bundle exec rails db:schema:load RAILS_ENV=test
-  - bundle exec rails db:migrate RAILS_ENV=test
-#  - bundle exec webpack
+  DEPLOY_REGISTRY_DOMAIN: index.docker.io
+  CONTAINER_IMAGE: ivvanov1009/explorer #trekview/explorer
+  CONTAINER_CURRENT_IMAGE: $CONTAINER_IMAGE:$CI_COMMIT_REF_SLUG
+  CONTAINER_STAGING_IMAGE: $CONTAINER_IMAGE:staging
+  CONTAINER_PRODUCTION_IMAGE: $CONTAINER_IMAGE:production
 
 stages:
   - test
-  - lint
+  - build
   - deploy
 
-Tests:
+cache:
+  paths:
+    - .bundle
+    - vendor/ruby
+
+test:
   stage: test
+
   script:
+    - apt-get update -qy
+    - apt-get install -y nodejs
+    - gem install bundler:2.0.2
+    - bundle install --path .bundle
+    - cp config/database.yml.ci config/database.yml
+    - bundle exec rake db:create db:schema:load RAILS_ENV=test || true
+    - bundle exec rake db:migrate RAILS_ENV=test
     - bundle exec rspec
+    # - bundle exec cucumber
 
-# System Tests:
-#   stage: test
-#   script:
-#     - ./bin/setup_chrome
-#     - bundle exec rails test:system
-
-# Pronto:
-#   stage: lint
-#   allow_failure: true
-#   except:
-#     - production
-#   script:
-#     - bundle exec pronto run -f gitlab -c origin/production
-
-Deploy Production:
-  stage: deploy
-  retry: 2
-  only:
-    - production
+build:
+  stage: build
+  image: docker:stable
+  services:
+    - docker:dind
+  before_script:
+    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
+    - echo $CONTAINER_IMAGE $CI_COMMIT_REF_NAME $CONTAINER_CURRENT_IMAGE
   script:
-    - ./bin/setup_heroku
-    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
-    - heroku run rake db:migrate --exit-code --app $HEROKU_APP_PRODUCTION
-    - heroku run rake db:seed --exit-code --app $HEROKU_APP_PRODUCTION
-
-Deploy Staging:
-  stage: deploy
-  allow_failure: true
-  retry: 1
+    - docker pull $CONTAINER_IMAGE:staging || true
+    - docker build 
+        --cache-from $CONTAINER_IMAGE:staging 
+        --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME 
+        --build-arg SECRET_KEY_BASE=${SECRET_KEY_BASE} 
+        --build-arg DATABASE_URL="postgres://${AWS_RDS_USERNAME}:${AWS_RDS_PASSWORD}@${AWS_RDS_HOSTNAME}:${AWS_RDS_PORT}/${AWS_RDS_DB_NAME}" 
+        --build-arg DATABASE_HOST=${AWS_RDS_HOSTNAME} 
+        --build-arg DATABASE_NAME=${AWS_RDS_DB_NAME} 
+        --build-arg DATABASE_USER_NAME=${AWS_RDS_USERNAME} 
+        --build-arg DATABASE_PASSWORD=${AWS_RDS_PASSWORD} 
+        --build-arg DATABASE_PORT=${AWS_RDS_PORT} 
+        --build-arg ADMIN_EMAIL=${ADMIN_EMAIL} 
+        --build-arg ADMIN_PASSWORD=${ADMIN_PASSWORD} 
+        --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} 
+        --build-arg AWS_S3_BUCKET=${AWS_S3_BUCKET} 
+        --build-arg AWS_S3_BUCKET_REGION=${AWS_S3_BUCKET_REGION} 
+        --build-arg AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} 
+        --build-arg DEVISE_SENDER_EMAIL_ADDRESS=${DEVISE_SENDER_EMAIL_ADDRESS} 
+        --build-arg DEVISE_SENDER_NAME=${DEVISE_SENDER_NAME} 
+        --build-arg FOG_DIRECTORY=${FOG_DIRECTORY} 
+        --build-arg FOG_PROVIDER=${FOG_PROVIDER} 
+        --build-arg FOG_REGION=${FOG_REGION} 
+        --build-arg GOOGLE_ANALYTICS_KEY=${GOOGLE_ANALYTICS_KEY} 
+        --build-arg GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} 
+        --build-arg MAILCHIMP_AUDIENCE_ID=${MAILCHIMP_AUDIENCE_ID} 
+        --build-arg RACK_ENV=${RACK_ENV} 
+        --build-arg RAILS_ENV=${RAILS_ENV} 
+        --build-arg SITE_URL=${SITE_URL} 
+        --build-arg DISALLOW_ALL_WEB_CRAWLERS=${DISALLOW_ALL_WEB_CRAWLERS} 
+        --build-arg MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY} 
+        --build-arg MAILGUN_DOMAIN=${MAILGUN_DOMAIN} 
+        --build-arg MAILGUN_SMTP_LOGIN=${MAILGUN_SMTP_LOGIN} 
+        --build-arg MAILGUN_SMTP_PASSWORD=${MAILGUN_SMTP_PASSWORD} 
+        --build-arg MAILGUN_SMTP_PORT=${MAILGUN_SMTP_PORT} 
+        --build-arg MAILGUN_SMTP_SERVER=${MAILGUN_SMTP_SERVER} 
+        .
+    # - docker tag $CONTAINER_IMAGE:staging $CONTAINER_CURRENT_IMAGE
+    - docker push $CONTAINER_CURRENT_IMAGE
   only:
     - staging
+    - production
+
+deploy-latest-image:
+  stage: deploy
+  services:
+    - docker:dind
+  before_script:
+    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
   script:
-    - ./bin/setup_heroku
-    - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
-    - heroku run rake db:migrate --exit-code --app $HEROKU_APP_STAGING
-    - heroku run rake db:seed --exit-code --app $HEROKU_APP_STAGING
+    - docker pull $CONTAINER_CURRENT_IMAGE
+    - docker tag $CONTAINER_IMAGE:CI_COMMIT_REF_NAME $CONTAINER_STAGING_IMAGE
+    - docker push $CONTAINER_STAGING_IMAGE
+    # - curl -X POST $PORTAINER_HOOK_APP
+    # - curl -X POST $PORTAINER_HOOK_WORKER
+  only:
+    - staging
+
+deploy-stable-image:
+  stage: deploy
+  services:
+    - docker:dind
+  before_script:
+    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
+  script:
+    - docker pull $CONTAINER_CURRENT_IMAGE
+    - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_PRODUCTION_IMAGE
+    - docker push $CONTAINER_PRODUCTION_IMAGE
+  only:
+    - production
