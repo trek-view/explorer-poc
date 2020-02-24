@@ -10,6 +10,7 @@ class TourSerializer < ActiveModel::Serializer
                 tour_type
                 transport_type
                 tourer
+                sponsors
                 created_at
                 updated_at
                 user_id
