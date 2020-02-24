@@ -24,13 +24,17 @@ class PhotosController < ApplicationController
     @tour = @photo.tour
     @connected_photos = []
 
-    connections = JSON.parse(@photo.tourer['connections']) if @photo.tourer['connections']
+    begin
+      connections = JSON.parse(@photo.tourer['connections']) if @photo.tourer['connections']
 
-    connections&.keys&.each do |key|
-      photo = @tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
-      if photo
-        @connected_photos << photo
+      connections&.keys&.each do |key|
+        photo = @tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
+        if photo
+          @connected_photos << photo
+        end
       end
+    rescue => exception
+      puts "=== exception: #{exception.inspect}"
     end
 
     gon.pannellum_config = pannellum_config
@@ -137,22 +141,23 @@ class PhotosController < ApplicationController
 
     @tour.photos.each do |photo|
       next unless photo.tourer["connections"]
-      connections = JSON.parse(photo.tourer["connections"])
-
-      hot_spots = []
-
-      connections&.keys&.each do |key|
-        hot_photo = @tour.photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
-
-        if hot_photo
-          hot_spots << {
-              "type": "scene",
-              "pitch": connections[key]["pitch_degrees"].to_f,
-              "yaw": connections[key]["adjusted_heading_degrees"].to_f,
-              "text": hot_photo.tourer_photo_id,
-              "sceneId": hot_photo.tourer_photo_id
-          }
+      begin
+        connections = JSON.parse(photo.tourer["connections"])
+        hot_spots = []
+        connections&.keys&.each do |key|
+          hot_photo = @tour.photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
+          if hot_photo
+            hot_spots << {
+                "type": "scene",
+                "pitch": connections[key]["pitch_degrees"].to_f,
+                "yaw": connections[key]["adjusted_heading_degrees"].to_f,
+                "text": hot_photo.tourer_photo_id,
+                "sceneId": hot_photo.tourer_photo_id
+            }
+          end
         end
+      rescue => exception
+        puts "=== exception: #{exception.inspect}"
       end
 
       options[:scenes][photo.tourer["photo_id"]] = {
