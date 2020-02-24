@@ -33,6 +33,16 @@ class UsersController < ApplicationController
     end
   end
 
+  def submit_request_apikey
+    authorize @user
+    UserMailer.with(user: @user).submit_require_apikey_email.deliver_now
+    if @user.errors.any?
+      respond_to do |format|
+        format.js {  flash[:error] = "Cannot submit to require API key usage." }
+      end
+    end
+  end
+
   private
 
   def set_user

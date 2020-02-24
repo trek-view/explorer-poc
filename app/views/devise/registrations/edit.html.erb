@@ -30,20 +30,45 @@
         <%= f.password_field :password_confirmation, autocomplete: 'new-password', class: 'form-control'  %>
       </div>
 
-      <div class="row">
-        <div class="col-lg-6">
-          <p class="my-4">Your API key: <span class="text-success user-api-token"><%= current_user.api_token %></span></p>
-        </div>
+      <% if current_user.present? && current_user.enabled_apikey %>
+        <div class="row">
+          <div class="col-lg-6">
+            <p class="my-4">Your API key: <span class="text-success user-api-token"><%= current_user.api_token %></span></p>
+          </div>
 
-        <div class="col-lg-6">
-          <%= link_to user_generate_new_token_path(current_user), method: :post, confirm: 'Generate new token?',
-                      class: 'btn btn-primary regenerate-token my-3', 'data-message' => 'Are you sure?',
-                      'data-severity' => 'warning', remote: true do %>
-            Generate new API key
-          <% end %>
-          <p class="small"><em>Regenerating your API key will invalidate your existing key immediately.</em></p>
+          <div class="col-lg-6">
+            <%= link_to(
+              user_generate_new_token_path(current_user),
+              method: :post,
+              confirm: 'Generate new token?',
+              class: 'btn btn-primary regenerate-token my-3',
+              'data-message' => 'Are you sure?',
+              'data-severity' => 'warning', remote: true) do 
+            %>
+              Generate new API key
+            <% end %>
+            <p class="small"><em>Regenerating your API key will invalidate your existing key immediately.</em></p>
+          </div>
         </div>
-      </div>
+      <% else %>
+        <div class="row">
+          <div class="col-lg-6">
+            <p class="my-4">Your API key: <em class="text-muted">You don't have permission for usage of API, yet.</em></p>
+          </div>
+          <div class="col-lg-6">
+            <%= link_to(
+                  user_submit_request_apikey_path(current_user),
+                  method: :post,
+                  class: 'btn btn-primary regenerate-token my-3',
+                  remote: true
+                ) do
+            %>
+              Submit request to get api key.
+            <% end %>
+            <p class="small"><em>We will send email to admin. Please wait for approval from admin.</em></p>
+          </div>
+        </div>
+      <% end %>
 
       <div class="form-group">
         <%= f.label :current_password %>

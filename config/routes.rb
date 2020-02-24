@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[show] do
     post 'generate_new_token', to: 'users#generate_new_token'
+    post 'submit_request_apikey', to: 'users#submit_request_apikey'
 
     resources :tours
 
