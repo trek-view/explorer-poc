@@ -1,5 +1,6 @@
-FROM ruby:2.6.3-alpine AS base
+FROM ruby:2.6.3-alpine
 
+ARG BUNDLE_WITHOUT
 ARG DATABASE_URL
 ARG SECRETE_KEY_BASE=foo
 ARG DATABASE_HOST
@@ -32,8 +33,10 @@ ARG MAILGUN_SMTP_LOGIN=staging@mg.trekview.org
 ARG MAILGUN_SMTP_PASSWORD=6e1bbf20c1b47ba32878af36bc76bfdc-816b23ef-aa95db1b
 ARG MAILGUN_SMTP_PORT=587
 ARG MAILGUN_SMTP_SERVER=smtp.mailgun.org
+ARG MAILERLITE_API_KEY=3ea2b1dae8091c50d600b41a062694a8
+ARG MAILERLITE_GROUP_ID
 
-
+ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
 ENV DATABASE_URL ${DATABASE_URL}
 ENV SECRETE_KEY_BASE ${SECRETE_KEY_BASE}
 ENV DATABASE_HOST ${DATABASE_HOST}
@@ -66,57 +69,36 @@ ENV MAILGUN_SMTP_LOGIN ${MAILGUN_SMTP_LOGIN}
 ENV MAILGUN_SMTP_PASSWORD ${MAILGUN_SMTP_PASSWORD}
 ENV MAILGUN_SMTP_PORT ${MAILGUN_SMTP_PORT}
 ENV MAILGUN_SMTP_SERVER ${MAILGUN_SMTP_SERVER}
+ENV RAILS_SERVE_STATIC_FILES=true
+ENV MAILERLITE_API_KEY ${MAILERLITE_API_KEY}
+ENV MAILERLITE_GROUP_ID ${MAILERLITE_GROUP_ID}
 
 RUN export
 
-RUN apk add --no-cache --update build-base \
-                                git \
-                                postgresql-dev \
-                                imagemagick \
-                                nodejs \
-                                yarn \
-                                unzip \
-                                tzdata
+RUN apk update --no-cache && apk add build-base nodejs postgresql-dev git yarn tzdata imagemagick
 
 RUN mkdir /app
 WORKDIR /app
 
-# Add the Gemfile and bundle first, so changes to the app don't invalidate the
-# cache
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
+COPY Gemfile Gemfile.lock ./
 RUN gem install bundler -v '2.0.2'
-RUN bundle install --without development test --deployment
+RUN bundle install --binstubs
 
-#
-# Development stage
-#
-FROM base AS staging
+COPY . .
 
-ENV RAILS_ENV staging
+# # Install yarn packages
+# COPY package.json yarn.lock /app/
+# RUN yarn install
 
-RUN gem install bundler -v '2.0.2'
-RUN bundle install
+# Precompile assets
+RUN bundle exec rake assets:precompile
 
-ADD . /app
-
-CMD bundle exec rails s
-
-#
-# Production stage
-#
-FROM base AS production
-
-# Add the rest of the app
-ADD . /app
-
-ENV RAILS_ENV production
-ENV NODE_ENV production
-
-# Build assets - n.b. the DATABASE_URL doesn't need to be valid, it's just to
-# stop Rails complaining and saying that it isn't set
-# RUN bundle exec rake assets:precompile
-
+# Expose Puma port
 EXPOSE 3000
 
-CMD ["/app/bin/prod-start.sh"]
+LABEL maintainer="Ivanov Artem <ivanov.artem.1009@gmail.com>"
+
+# CMD puma -C config/puma.rb
+
+# Start up
+CMD ["docker/startup.sh"]

@@ -190,7 +190,10 @@ module Api::V1
          :camera_model,
          address: [:locality, :administrative_area_level_3, :administrative_area_level_2, :administrative_area_level_1, :postal_code, :country, :country_code, :place_id, :plus_code],
          streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [:photo_id, :version, :heading_degrees, connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters, :heading_degrees, :adjusted_heading_degrees ]],
+         tourer: [
+          :photo_id, :version, :heading_degrees, 
+          connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters, :heading_degrees, :adjusted_heading_degrees ]
+        ],
          opentrailview: [:photo_id]
         ]
       end
