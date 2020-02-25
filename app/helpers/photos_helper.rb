@@ -52,12 +52,12 @@ module PhotosHelper
     end
   end
 
-  def change_photo_url(photo_url)
-    photo_url.gsub("s3.#{ENV['FOG_REGION']}.amazonaws.com/", '')
+  def photo_thumb_url(photo)
+    # photo.image.thumb.url if photo.present?
+    photo.image_thumb_path if photo.present?
   end
 
-  def photo_thumb_url(photo)
-    # change_photo_url(photo.image.thumb.url) if photo.present?
+  def photo_image_url(photo)
     photo.image_path if photo.present?
   end
 
