@@ -114,7 +114,7 @@ function showThumbModal(photo) {
             photo.id + '"><i class="fa fa-star"></i><span>' +
             favorite_score + '</span></span><a href="/photos/' +
             photo.id +'"><img id="photoImg" src="' +
-            photo.image.thumb.url +
+            photo.image_path +
             '" style="width: 100%" /><div class="card-body"><p class="card-text">Latitude: ' +
             photo.latitude + '</p><p class="card-text">Longitude: ' +
             photo.longitude + '</p><p class="card-text">Photo elevation: ' +

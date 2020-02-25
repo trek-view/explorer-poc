@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_24_174925) do
+ActiveRecord::Schema.define(version: 2020_02_25_112245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 2020_02_24_174925) do
     t.string "filename"
     t.hstore "opentrailview"
     t.text "tourer_connection_photos", default: [], array: true
+    t.string "image_path"
     t.index ["streetview"], name: "index_photos_on_streetview", using: :gin
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer"], name: "index_photos_on_tourer", using: :gin

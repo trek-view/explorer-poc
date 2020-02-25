@@ -12,6 +12,8 @@
         <%= render(EmbedComponent, code: pannellum_iframe(@photo)) %>
         <div id="panorama"></div>
         <div id="mapbox" class="mb-3"></div>
+        <div id="mapbox-token" class="photo-additional-info"><%= get_mapbox_token() %></div>
+        <div id="aws-s3-bucket-name" class="photo-additional-info"><%= get_aws_s3_bucket_name() %></div>
       </div>
       <div class="card-body">
         <table class="table table-response table-bordered photo-attributes-table">

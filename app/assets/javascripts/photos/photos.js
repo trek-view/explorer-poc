@@ -30,7 +30,10 @@ function initSceneMap(objects) {
 
 function initSceneMapBox(objects) {
   if (!objects) return;
-  L.mapbox.accessToken = 'pk.eyJ1IjoidmFsZXJpaWFkaWR1c2hvayIsImEiOiJjazcxNnd6OGgwM2lyM2xsYzB4ZWZ1YWR6In0.Fjhltt0WG0t3YH3kFZpIfQ';
+  // Get mapbox_token
+  const mapboxTokenDom = document.getElementById('mapbox-token').childNodes;
+  console.log('==== mapboxTokenDom: ', mapboxTokenDom[0].data);
+  L.mapbox.accessToken = mapboxTokenDom[0].data;
   var latlng = L.latLng(
     parseFloat(objects[0]['latitude']),
     parseFloat(objects[0]['longitude'])
@@ -40,10 +43,27 @@ function initSceneMapBox(objects) {
     .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
 
   console.log('====== map: ', map);
-  // var featureLayer = null;
   for (var i=0; i < objects.length; i++) {
     var markerData = objects[i];
     console.log('===== markerData: ', markerData);
+    
+    const markerColor = '#d6eff9';
+    const markerHtmlStyles = `
+      background-color: ${markerColor};
+      background-color: #d6eff9;
+      width: 1.25rem;
+      height: 1.25rem;
+      display: block;
+      border-radius: 1.5rem;
+      transform: rotate(45deg);
+      border: 2px solid #7cb4c6;`;
+    const markerIcon = L.divIcon({
+      className: "my-custom-pin",
+      iconAnchor: [0, 0],
+      labelAnchor: [-3, 0],
+      popupAnchor: [0, -10],
+      html: `<span style="${markerHtmlStyles}" />`
+    });
 
     var marker = L.marker(
       new L.latLng(
@@ -51,40 +71,27 @@ function initSceneMapBox(objects) {
         parseFloat(markerData.longitude)
       ),
       {
-        icon: L.mapbox.marker.icon({
-            'marker-color': 'ff8888'
-        }),
+        icon: markerIcon,
         data: markerData
     }).bindPopup(`${markerData.latitude}, ${markerData.longitude}`).addTo(map);
-
-    console.log('===== marker: ', marker);
     markers.push(marker);
 
     // var featureLayer = L.mapbox.featureLayer().addTo(map);
     marker.on('click', function(e) {
-      console.log('===== click: e: ', e.target);
       viewer.loadScene(e.target.options.data.tourer_photo_id);
     });
   }
-  
-  
-
-  // map.on('click', function(ev) {
-  //   viewer.loadScene(ev.optioins.data.tourer_photo_id);
-  // });
 }
 
 document.addEventListener("DOMContentLoaded", function(){
   if (gon.pannellum_config === undefined) {
     return false;
   }
-  console.log('==== gon.pannellum_config: ', gon.pannellum_config);
   markers = [];
-  console.log('==== pannellum: ', pannellum);
   viewer = pannellum.viewer('panorama', gon.pannellum_config);
   console.log('==== viewer: ', viewer);
 
-  // initSceneMap(gon.photos);
+  // initSceneMap(gon.photos); // removed Google Map
   initSceneMapBox(gon.photos);
 
   currentScene = viewer.getScene();
@@ -93,35 +100,44 @@ document.addEventListener("DOMContentLoaded", function(){
   if (currentScene) {
     currentMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
     if (currentMarker) {
-      currentMarker.setAnimation(google.maps.Animation.BOUNCE);
+      // currentMarker.setAnimation(google.maps.Animation.BOUNCE);
+      currentMarker.bounce({duration: 5000, height: 100});
     }
   }
 
   viewer.on('scenechange', function () {
-    hotSpot = gon.pannellum_config.scenes[currentScene].hotSpots.find(obj => obj.sceneId == viewer.getScene())
-    photo = gon.photos.find(obj => obj.tourer_photo_id == viewer.getScene())
-
-    iframe_url = '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + 
-      photo.image.med.url + 
+    hotSpot = gon.pannellum_config.scenes[currentScene].hotSpots.find(obj => obj.sceneId == viewer.getScene());
+    photo = gon.photos.find(obj => obj.tourer_photo_id == viewer.getScene());
+    const s3dom = document.getElementById('aws-s3-bucket-name').childNodes;
+    const s3name = s3dom[0].data;
+    iframe_url = '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' + 
+    'https://' + s3name + '/static/pannellum/pannellum.htm' + 
+    '#panorama=' + 
+      photo.image_path + 
       '&amp;title=' + encodeURIComponent(gon.tour_name) + 
       '&amp;author=' + encodeURIComponent(gon.author_name) + 
       '&amp;autoLoad=true"></iframe><p><a href="' + 
       gon.root_url + 'photos/' + photo.id + 
-      '" target="_blank">View on Trek View Explorer</a></p>'
-
-    $('.custom-tooltip').text(iframe_url)
+      '" target="_blank">View on Trek View Explorer</a></p>';
+    console.log('===== iframe_url: ', iframe_url);
+    $('.custom-tooltip').text(iframe_url);
 
     if (hotSpot) {
-      viewer.setYaw(hotSpot.yaw)
+      viewer.setYaw(hotSpot.yaw);
     }
 
-    prevMarker = markers.find(obj => obj.tourer_photo_id == currentScene)
+    prevMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
 
-    currentScene = viewer.getScene()
+    currentScene = viewer.getScene();
 
-    currentMarker = markers.find(obj => obj.tourer_photo_id == currentScene)
+    currentMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
 
-    prevMarker.setAnimation(google.maps.Animation.DROP)
-    currentMarker.setAnimation(google.maps.Animation.BOUNCE)
+    if (prevMarker) prevMarker.drop();
+    if (currentMarker) {
+      currentMarker.bounce({duration: 5000, height: 100});
+    }
+
+    // prevMarker.setAnimation(google.maps.Animation.DROP);
+    // currentMarker.setAnimation(google.maps.Animation.BOUNCE);
   });
 });

@@ -25,7 +25,6 @@ class PhotosController < ApplicationController
     @connected_photos = []
 
     begin
-      puts "===== @photo.tourer['connections']: #{@photo.tourer['connections']}"
       connections = JSON.parse(@photo.tourer['connections']) if @photo.tourer['connections']
 
       connections&.keys&.each do |key|
@@ -166,7 +165,7 @@ class PhotosController < ApplicationController
         "author": @tour.user.name,
         "authorURL": photo_path(photo),
         "type": "equirectangular",
-        "panorama": photo.image.url(:med),
+        "panorama": photo.image_path,
         "hotSpots": hot_spots
       }
     end

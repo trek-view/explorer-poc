@@ -41,8 +41,8 @@ module Api::V1
       photo = @tour.photos.build(photo_params)
       photo.image = params[:image]
       if photo.save
-        puts "======= photo.id: #{photo.id}"
-      
+        photo.image_path = change_photo_url(photo.image.thumb.url)
+        photo.save!
         render json: photo.reload, status: :created
       else
         render json: {

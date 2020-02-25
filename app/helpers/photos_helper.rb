@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 module PhotosHelper
-
   def view_point_class(photo, user)
     photo.favorited_by?(user) ? 'fa-heart' : 'fa-heart-o'
   end
@@ -53,8 +52,13 @@ module PhotosHelper
     end
   end
 
+  def change_photo_url(photo_url)
+    photo_url.gsub("s3.#{ENV['FOG_REGION']}.amazonaws.com/", '')
+  end
+
   def photo_thumb_url(photo)
-    photo.image.thumb.url if photo.present?
+    # change_photo_url(photo.image.thumb.url) if photo.present?
+    photo.image_path if photo.present?
   end
 
   def full_address(address)
@@ -70,7 +74,22 @@ module PhotosHelper
   end
 
   def pannellum_iframe(photo)
-    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url(:med) + '&amp;title=' + URI.encode(photo.tour.name) + '&amp;author=' + URI.encode(photo.tour.user.name) + '&amp;autoLoad=true"></iframe><p><a href="' + URI.encode(photo_url(photo)) + '" target="_blank">View on Trek View Explorer</a></p>'
+    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' +
+    'https://' + get_aws_s3_bucket_name() + '/static/pannellum/pannellum.htm' +
+    '#panorama=' +
+    photo.image_path +
+    '&amp;title=' + URI.encode(photo.tour.name) +
+    '&amp;author=' + URI.encode(photo.tour.user.name) +
+    '&amp;autoLoad=true"></iframe><p><a href="' +
+    URI.encode(photo_url(photo)) +
+    '" target="_blank">View on Trek View Explorer</a></p>'
   end
 
+  def get_aws_s3_bucket_name
+    ENV['AWS_S3_BUCKET']
+  end
+
+  def get_mapbox_token
+    ENV['MAPBOX_TOKEN']
+  end
 end
