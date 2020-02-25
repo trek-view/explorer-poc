@@ -39,21 +39,27 @@
               <td><%= @photo.tourer_photo_id %></td>
             </tr>
             <tr><td></td><td></td></tr>
-            <% if @guidebook.present? %>
+
+            <% @guidebooks.each do |guidebook| %>
               <tr>
                 <td><strong>Guidebook info</strong></td>
                 <td></td>
               </tr>
               <tr>
                 <td>Name</td>
-                <td><%= @guidebook.name %></td>
+                <td><%= guidebook.name %></td>
               </tr>
               <tr>
                 <td>Description</td>
-                <td><%= @guidebook.description %></td>
+                <td><%= guidebook.description %></td>
+              </tr>
+              <tr>
+                <td>Category</td>
+                <td><%= guidebook.category.name %></td>
               </tr>
               <tr><td></td><td></td></tr>
             <% end %>
+
             <tr>
               <td><strong>Photo info</strong></td>
               <td></td>

@@ -22,6 +22,7 @@ class PhotosController < ApplicationController
   def show
     photo_og_meta_tag(@photo)
     @tour = @photo.tour
+    @guidebooks = @photo.guidebooks
     @connected_photos = []
 
     begin
