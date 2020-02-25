@@ -86,6 +86,7 @@ build:
         --build-arg MAILGUN_SMTP_SERVER=${MAILGUN_SMTP_SERVER}
         --build-arg MAILERLITE_API_KEY=${MAILERLITE_API_KEY}
         --build-arg MAILERLITE_GROUP_ID=${MAILERLITE_GROUP_ID}
+        --build-arg MAPBOX_TOKEN=${MAPBOX_TOKEN}
         .
     - docker tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME $CONTAINER_CURRENT_IMAGE
     - docker push $CONTAINER_CURRENT_IMAGE

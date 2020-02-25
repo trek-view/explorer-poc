@@ -40,8 +40,9 @@ module Api::V1
 
       photo = @tour.photos.build(photo_params)
       photo.image = params[:image]
-
       if photo.save
+        puts "======= photo.id: #{photo.id}"
+      
         render json: photo.reload, status: :created
       else
         render json: {
@@ -168,9 +169,17 @@ module Api::V1
 
           prms[:tourer][:connections].each do |c|
             prms[:tourer_connection_photos] << c.last[:photo_id]
-            connections_h[c.first] = c.last.slice(:photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters, :heading_degrees, :adjusted_heading_degrees).to_h
+            connections_h[c.first] = c.last.slice(
+              :photo_id,
+              :distance_meters,
+              :heading_degrees,
+              :pitch_degrees,
+              :elevation_meters,
+              :heading_degrees,
+              :adjusted_heading_degrees
+            ).to_h
           end
-
+          puts "===== connections_h: #{connections_h}"
           prms[:tourer][:connections] = connections_h.to_json
         end
         prms
