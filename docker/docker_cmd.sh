@@ -7,7 +7,6 @@ docker build --cache-from ivvanov1009/explorer:staging \
 --build-arg ADMIN_PASSWORD=password \
 --build-arg AWS_ACCESS_KEY_ID=AKIASRC7TRBPAFJKUZV5 \
 --build-arg AWS_S3_BUCKET=backpack.staging.explorer.trekview.org \
-backpack-staging-explorer-trekview-org.s3.amazonaws.com
 --build-arg AWS_S3_BUCKET_REGION=eu-west-2 \
 --build-arg AWS_SECRET_ACCESS_KEY=bpasTQGPDbSQwO7wMaeucanWEYBYch5JfK1RNvGV \
 --build-arg DATABASE_URL=postgres://trekker:HjO0AdKKEpBytJr01Gzi@staging-explorer-trekview-org.cuoo0iw6cxfx.eu-west-2.rds.amazonaws.com:5432/staging_explorer_trekview_org \
