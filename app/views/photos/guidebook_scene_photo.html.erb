@@ -5,36 +5,12 @@
 <% end %>
 
 <div class="photo-container row">
+  
   <% if @user.present? %>
-    <div class="col-lg-6 col-sm-12"></div>
-    <div class="col-lg-3 col-sm-12">
-      <div class="form-group mt-2 float-right">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Add to Guidebook
-        </button>
-        <div id="guidebooksList" class="dropdown-menu">
-          <%= link_to "Create new Guidebook",
-              new_user_guidebook_path(@user),
-              class: 'dropdown-item'
-          %>
-          <% if @user.tourbooks.any? %>
-            <div class="dropdown-divider"></div>
-            <% @user.guidebooks.each do |guidebook| %>
-              <%=
-                link_to guidebook.name,
-                  add_photo_user_guidebook_path(@user, guidebook, photo_id: @photo.id),
-                  class: 'dropdown-item',
-                  remote: true,
-                  method: :post
-              %>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
+    <%= render partial: 'photos/photo_addition_button', locals: {user: @user, photo: @photo} %>
   <% end %>
 
-  <div class="py-5 col-lg-12">
+  <div class="py-3 col-lg-12">
     <div class="card">
       <div class="card-header">
         <%= render(ViewpointComponent, viewpoint: @photo.favoritable_score.present? ? @photo.favoritable_score[:favorite] : 0, photo_id: @photo.id) %>
@@ -76,7 +52,7 @@
               </tr>
               <tr>
                 <td>Name</td>
-                <td><%= guidebook.name %></td>
+                <td><%= link_to guidebook.name, user_guidebook_path(@user, guidebook) %></td>
               </tr>
               <tr>
                 <td>Description</td>

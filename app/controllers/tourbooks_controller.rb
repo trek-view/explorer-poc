@@ -100,7 +100,6 @@ class TourbooksController < ApplicationController
         flash[:error] = e.message
       end
     end
-    redirect_to user_tourbook_path(@user, id: @tourbook.id)
   end
 
   def user_tourbooks

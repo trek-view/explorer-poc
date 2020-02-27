@@ -1,7 +1,8 @@
 class GuidebooksController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_user
-  before_action :set_guidebook, except: %i[index new create]
+  before_action :set_guidebook, except: %i[index new create remove_photo]
+  before_action :set_guidebook_for_remove_photo, only: %i[remove_photo]
   before_action :authorize_guidebook, only: %i[
     edit update destroy add_photo remove_photo
   ]
@@ -62,6 +63,11 @@ class GuidebooksController < ApplicationController
   def add_photo
     return unless params[:photo_id].present?
 
+    if @guidebook.have_photo(params[:photo_id])
+      flash.now[:error] = "The photo already was added in the guidebook."
+      return
+    end
+
     begin
       @scene = Scene.create(
         guidebook_id: @guidebook.id,
@@ -81,11 +87,11 @@ class GuidebooksController < ApplicationController
   def remove_photo
     return unless params[:photo_id].present?
 
-    @scene = Scene.find(params[:photo_id])
+    @scene = Scene.find(params[:scene_id])
     begin
-      @guidebook.scenes.delete(@scene)
+      @scene.delete
       flash[:success] = "
-        Scene \"#{@scene.name}\" was removed from this Guidebook
+        Scene \"#{@scene.description}\" was removed from this Guidebook
       "
     rescue ActiveRecord::RecordNotDestroyed => e
       flash[:error] = e.message
@@ -165,5 +171,9 @@ class GuidebooksController < ApplicationController
         )
       )
     end
+  end
+
+  def set_guidebook_for_remove_photo
+    @guidebook = Guidebook.find(params[:guidebook_id])
   end
 end

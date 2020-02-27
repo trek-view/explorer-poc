@@ -47,10 +47,10 @@ Rails.application.routes.draw do
       resources :scenes do
         resources :photo, only: %i[show], to: 'photos#guidebook_scene_photo'
         get 'guidebook_scenes', to: 'scenes#guidebook_scenes'
+        delete 'remove_photo', to: 'guidebooks#remove_photo'
       end
       member do
         post 'add_photo', to: 'guidebooks#add_photo'
-        delete 'remove_photo', to: 'guidebooks#remove_photo'
       end
     end
   end

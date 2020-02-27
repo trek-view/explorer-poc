@@ -5,31 +5,8 @@
 <% end %>
 
 <div class="photo-container row">
-  <% if @user.present? %>
-    <div class="col-lg-6 col-sm-12"></div>
-    <div class="col-lg-3 col-sm-12">
-      <div class="form-group mt-2 float-right">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Add to Tourbook
-        </button>
-        <div id="tourBooksList" class="dropdown-menu">
-          <%= link_to "Create new Guidebook",
-              new_user_tourbook_path(@user),
-              class: 'dropdown-item'
-          %>
-          <% if @user.tourbooks.any? %>
-            <div class="dropdown-divider"></div>
-            <% @user.tourbooks.each do |book| %>
-              <%= link_to book.name,
-                          add_item_user_tourbook_path(@user, book, item_id: @tour.id),
-                          class: 'dropdown-item',
-                          remote: true,
-                          method: :post %>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
+  <% if current_user.present? %>
+    <%= render partial: 'photos/photo_addition_button', locals: {user: current_user, photo: @photo} %>
   <% end %>
 
   <div class="py-5 col-lg-12">

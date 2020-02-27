@@ -47,4 +47,8 @@ class Guidebook < ApplicationRecord
   def last_position
     scenes.maximum(:position) || 0
   end
+
+  def have_photo(photo_id)
+    scenes.where(photo_id: 12).first ? true : false
+  end
 end
