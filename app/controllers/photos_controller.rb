@@ -197,7 +197,7 @@ class PhotosController < ApplicationController
   end
 
   def set_guidebook_scene_photo_params
-    params.permit(:user_id, :guidebook_id, :scene_id)
+    params.permit(:user_id, :guidebook_id, :scene_id, :id)
   end
 
   def set_tour
@@ -205,7 +205,7 @@ class PhotosController < ApplicationController
   end
 
   def set_guidebook
-    @guidebook = Guidebook.find_by_id(params[:scene_id]) if params[:scene_id].present?
+    @guidebook = Guidebook.find_by_id(params[:guidebook_id]) if params[:guidebook_id].present?
   end
 
   def set_scene

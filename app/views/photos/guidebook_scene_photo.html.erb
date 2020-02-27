@@ -4,10 +4,29 @@
   <% end %>
 <% end %>
 
-<div class="photo-container row">
-  
+<div class="photo-container row mt-5">
   <% if @user.present? %>
-    <%= render partial: 'photos/photo_addition_button', locals: {user: @user, photo: @photo} %>
+    <div class="col-lg-9 col-sm-12">
+      <% if @guidebook.present? %>
+        <div class="row">
+          <div class="col-lg-12 mt-2">
+            <strong>Current Guidebook</strong>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <strong>Name:</strong> <%= link_to @guidebook.name, user_guidebook_path(@user, @guidebook) %>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <strong>Category:</strong> <%= @guidebook.category.name %>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <strong>Description:</strong> <%= @guidebook.description %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-lg-3 col-sm-12">
+      <%= render partial: 'photos/photo_addition_button', locals: {user: @user, photo: @photo} %>
+    </div>
   <% end %>
 
   <div class="py-3 col-lg-12">
