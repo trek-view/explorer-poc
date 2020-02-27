@@ -13,7 +13,14 @@
       <p class="card-text">Position: <%= scene.position %></p>
     </div>
 
-    <%= render partial: 'photos/photo', locals: { photo: scene.photo } %>
+    <%= render partial: 'photos/photo',
+        locals: {
+          photo: scene.photo,
+          photo_link: @user.present? ? 
+            user_guidebook_scene_photo_path(@user,  @guidebook, scene, id: scene.photo.id) :
+            photo_path(scene.photo)
+        }
+    %>
 
     <div class="card-footer">
       <small class="text-muted">

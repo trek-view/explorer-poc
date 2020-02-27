@@ -3,9 +3,18 @@ class PhotosController < ApplicationController
   include MetaTagsHelper
 
   before_action :authenticate_user!, only: %i[set_photo_view_point]
-  before_action :set_photo, only: %i[show set_photo_view_point]
-  before_action :set_user, only: %i[viewpoints]
   before_action :set_viewpoints_search_params, only: [:viewpoints]
+  before_action :set_guidebook_scene_photo_params, only: %i[guidebook_scene_photo]
+
+  before_action :set_viewpoint_photo, only: %i[show]
+  before_action :set_photo, only: %i[guidebook_scene_photo]
+  before_action :set_user, only: %i[viewpoints guidebook_scene_photo]
+  before_action :set_tour, only: %i[show guidebook_scene_photo]
+  before_action :set_guidebook, only: %i[guidebook_scene_photo]
+  before_action :set_scene, only: %i[guidebook_scene_photo]
+
+  before_action :set_guidebooks, only: %i[show guidebook_scene_photo]
+  before_action :set_connected_photos, only: %i[show guidebook_scene_photo]
 
   def index
     find_photos
@@ -21,22 +30,6 @@ class PhotosController < ApplicationController
 
   def show
     photo_og_meta_tag(@photo)
-    @tour = @photo.tour
-    @guidebooks = @photo.guidebooks
-    @connected_photos = []
-
-    begin
-      connections = JSON.parse(@photo.tourer['connections']) if @photo.tourer['connections']
-
-      connections&.keys&.each do |key|
-        photo = @tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
-        if photo
-          @connected_photos << photo
-        end
-      end
-    rescue => exception
-      puts "=== exception: #{exception.inspect}"
-    end
 
     gon.pannellum_config = pannellum_config
     gon.photos = @tour.photos
@@ -76,9 +69,23 @@ class PhotosController < ApplicationController
     @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
   end
 
+  def guidebook_scene_photo
+    photo_og_meta_tag(@photo)
+
+    gon.pannellum_config = pannellum_config
+    gon.photos = @tour.photos
+    gon.tour_name = @tour.name
+    gon.author_name = @tour.user.name
+    gon.root_url = root_url
+  end
+
   private
 
   def set_photo
+    @photo = Photo.find_by(id: params[:id]) if params[:id]
+  end
+
+  def set_viewpoint_photo
     @photo = Photo.includes(tour: :user).find(params[:id])
   end
 
@@ -187,5 +194,41 @@ class PhotosController < ApplicationController
     return unless @query.present?
 
     @photos = @photos.where(country_id: @query[:country_id]) if @query[:country_id].present?
+  end
+
+  def set_guidebook_scene_photo_params
+    params.permit(:user_id, :guidebook_id, :scene_id)
+  end
+
+  def set_tour
+    @tour = @photo.tour
+  end
+
+  def set_guidebook
+    @guidebook = Guidebook.find_by_id(params[:scene_id]) if params[:scene_id].present?
+  end
+
+  def set_scene
+    @scene = Scene.find_by_id(params[:scene_id]) if params[:scene_id].present?
+  end
+
+  def set_connected_photos
+    @connected_photos = []
+
+    begin
+      connections = JSON.parse(@photo.tourer['connections']) if @photo.tourer['connections']
+      connections&.keys&.each do |key|
+        photo = @tour.photos.find_by(tourer_photo_id: connections[key]["photo_id"])
+        if photo
+          @connected_photos << photo
+        end
+      end
+    rescue => exception
+      puts "=== exception: #{exception.inspect}"
+    end
+  end
+
+  def set_guidebooks
+    @guidebooks = @photo.guidebooks
   end
 end

@@ -16,7 +16,7 @@
 
       <div class="col-lg-9">
         <div class="viewpoints-container">
-          <%= render partial: 'photos_display', locals: {photos: @photos} %>
+          <%= render partial: 'photos_display', locals: {photos: @photos, user: @user} %>
           <%= paginate @photos %>
         </div>
       </div>

@@ -39,10 +39,11 @@ class ScenesController < ApplicationController
   end
 
   def guidebook_scenes
-    @scenes = @guidebook.senes
+    @scenes = @guidebook.scenes
   end
 
   def select_scene_photo
+    puts "===== params: #{params}"
     @photo = Photo.find_by(id: params[:photo_id])
     respond_to do |format|
       format.js

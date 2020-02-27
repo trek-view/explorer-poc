@@ -43,4 +43,8 @@ class Guidebook < ApplicationRecord
   def sponsors
     Sponsor.where(id: sponsors_ids)
   end
+
+  def last_position
+    scenes.maximum(:position) || 0
+  end
 end

@@ -10,21 +10,23 @@
     <div class="col-lg-3 col-sm-12">
       <div class="form-group mt-2 float-right">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Add to Tourbook
+          Add to Guidebook
         </button>
-        <div id="tourBooksList" class="dropdown-menu">
+        <div id="guidebooksList" class="dropdown-menu">
           <%= link_to "Create new Guidebook",
-              new_user_tourbook_path(@user),
+              new_user_guidebook_path(@user),
               class: 'dropdown-item'
           %>
           <% if @user.tourbooks.any? %>
             <div class="dropdown-divider"></div>
-            <% @user.tourbooks.each do |book| %>
-              <%= link_to book.name,
-                          add_item_user_tourbook_path(@user, book, item_id: @tour.id),
-                          class: 'dropdown-item',
-                          remote: true,
-                          method: :post %>
+            <% @user.guidebooks.each do |guidebook| %>
+              <%=
+                link_to guidebook.name,
+                  add_photo_user_guidebook_path(@user, guidebook, photo_id: @photo.id),
+                  class: 'dropdown-item',
+                  remote: true,
+                  method: :post
+              %>
             <% end %>
           <% end %>
         </div>

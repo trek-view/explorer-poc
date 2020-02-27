@@ -63,7 +63,13 @@
   <div class="col-6">
     <div id="guidebook-scene-photo">
       <% if @scene.photo.present? %>
-        <%= render partial: 'photos/photo', locals: { photo: @scene.photo } %>
+        <%= render partial: 'photos/photo',
+            locals: { photo: @scene.photo,
+              photo_link: @user.present? ? 
+                user_guidebook_scene_photo_path(@user,  @guidebook, @scene, id: @scene.photo.id) :
+                photo_path(@scene.photo)
+            }
+        %>
       <% end %>
     </div>
   </div>

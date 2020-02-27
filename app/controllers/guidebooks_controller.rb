@@ -3,7 +3,7 @@ class GuidebooksController < ApplicationController
   before_action :set_user
   before_action :set_guidebook, except: %i[index new create]
   before_action :authorize_guidebook, only: %i[
-    edit update destroy add_item remove_item
+    edit update destroy add_photo remove_photo
   ]
   before_action :set_scenes, only: %i[show edit update destroy]
   before_action :sort_scenes, only: %i[show edit]
@@ -31,7 +31,7 @@ class GuidebooksController < ApplicationController
 
     respond_to do |format|
       if @guidebook.save
-        add_item
+        add_photo
         flash[:success] = 'You Guidebook was created!'
         format.html { redirect_to user_guidebooks_path(@user) }
       else
@@ -59,24 +59,29 @@ class GuidebooksController < ApplicationController
     redirect_to user_guidebook_path(@user)
   end
 
-  def add_item
-    return unless params[:item_id].present?
+  def add_photo
+    return unless params[:photo_id].present?
 
-    @scene = Scene.find(params[:item_id])
     begin
-      @guidebook.scenes << @scene
+      @scene = Scene.create(
+        guidebook_id: @guidebook.id,
+        description: '',
+        position: @guidebook.last_position + 1,
+        photo_id: params[:photo_id]
+      )
+      @photo = Photo.find(params[:photo_id])
       flash.now[:notice] = "
-        Scene was added to your Guidebook #{@guidebook.name}
+        The photo was added to your Guidebook #{@guidebook.name}
       "
     rescue ActiveRecord::RecordInvalid => e
       flash.now[:error] = e.message
     end
   end
 
-  def remove_item
-    return unless params[:item_id].present?
+  def remove_photo
+    return unless params[:photo_id].present?
 
-    @scene = Scene.find(params[:item_id])
+    @scene = Scene.find(params[:photo_id])
     begin
       @guidebook.scenes.delete(@scene)
       flash[:success] = "

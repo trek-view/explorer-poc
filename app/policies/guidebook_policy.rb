@@ -19,11 +19,11 @@ class GuidebookPolicy < ApplicationPolicy
     update?
   end
 
-  def add_item?
+  def add_photo?
     record && user && record.user_id == user.id
   end
 
-  def remove_item?
-    add_item?
+  def remove_photo?
+    add_photo?
   end
 end
