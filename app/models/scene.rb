@@ -2,10 +2,16 @@ class Scene < ApplicationRecord
   belongs_to :photo
   belongs_to :guidebook
 
-  def prev_scene_id
-    scenes_ids = guidebook.scenes.ids
-    current_index = scenes_ids.index(id)
+  def scenes_ids
+    guidebook.scenes.ids
+  end
 
+  def index
+    scenes_ids.index(id)
+  end
+
+  def prev_scene_id
+    current_index = index
     return scenes_ids[current_index - 1] if current_index >= 1
 
     scenes_ids.first
@@ -16,9 +22,7 @@ class Scene < ApplicationRecord
   end
 
   def next_scene_id
-    scenes_ids = guidebook.scenes.ids
-    current_index = scenes_ids.index(id)
-
+    current_index = index
     return scenes_ids[current_index + 1] if current_index < (scenes_ids.size - 1)
 
     scenes_ids.last

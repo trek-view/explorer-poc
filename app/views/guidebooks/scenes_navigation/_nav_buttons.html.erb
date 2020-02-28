@@ -1,0 +1,21 @@
+<%= link_to(
+      select_scene_path(scene_id: scene.prev_scene_id),
+      method: :post, remote: true,
+      onclick: "onSelectedScene(#{scene.prev_scene_id})"
+    ) do
+%>
+  <i class="fa fa-long-arrow-left scene-nav-icon" aria-hidden="true"></i>
+<% end %>
+
+<div class="scene-nav-title">
+  Scene <span id="scene-nav-index"><%= scene.index + 1 %></span> of <%= scene.guidebook.scenes.size %>
+</div>
+
+<%= link_to(
+      select_scene_path(scene_id: scene.next_scene_id),
+      method: :post, remote: true,
+      onclick: "onSelectedScene(#{scene.next_scene_id})"
+    ) do
+%>
+  <i class="fa fa-long-arrow-right scene-nav-icon" aria-hidden="true"></i>
+<% end %>

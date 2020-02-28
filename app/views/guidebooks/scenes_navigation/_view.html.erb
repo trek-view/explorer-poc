@@ -1,0 +1,8 @@
+
+<% if current_scene %>
+  <div class="row">
+    <div id="guidebook-scene" class="mt-3 col-lg-12">
+      <%= render partial: 'guidebooks/scenes_navigation/scene_photo', locals: { scene: current_scene, photo: current_scene.photo } %>
+    </div>
+  </div>
+<% end %>
