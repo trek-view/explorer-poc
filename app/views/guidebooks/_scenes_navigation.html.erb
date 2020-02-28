@@ -1,0 +1,26 @@
+
+<% if current_scene %>
+  <div class="row">
+    <div class="py-3 col-lg-12">
+        <%= link_to(
+              select_scene_path(scene_id: current_scene.prev_scene_id),
+              method: :post, remote: true,
+              onclick: "onSelectedScene(#{current_scene.prev_scene_id})"
+            ) do
+        %>
+          <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+        <% end %>
+        <%= link_to(
+              select_scene_path(scene_id: current_scene.next_scene_id),
+              method: :post, remote: true,
+              onclick: "onSelectedScene(#{current_scene.next_scene_id})"
+            ) do
+        %>
+          <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+        <% end %>
+    </div>
+    <div id="guidebook-scene" class="py-3 col-lg-12">
+      <%= render partial: 'guidebooks/scene_photo', locals: { scene: current_scene, photo: current_scene.photo } %>
+    </div>
+  </div>
+<% end %>

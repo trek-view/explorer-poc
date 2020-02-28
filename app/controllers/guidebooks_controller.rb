@@ -1,7 +1,9 @@
 class GuidebooksController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
+  include MetaTagsHelper
+
+  before_action :authenticate_user!, except: %i[index show select_scene]
   before_action :set_user
-  before_action :set_guidebook, except: %i[index new create remove_photo]
+  before_action :set_guidebook, except: %i[index new create remove_photo select_scene]
   before_action :set_guidebook_for_remove_photo, only: %i[remove_photo]
   before_action :authorize_guidebook, only: %i[
     edit update destroy add_photo remove_photo
@@ -20,7 +22,24 @@ class GuidebooksController < ApplicationController
     )
   end
 
-  def show; end
+  def show
+    @current_scene = @guidebook.scenes[0]
+    return unless @current_scene
+
+    @photo = @current_scene ? @current_scene.photo : nil
+    @tour = @photo.tour
+    photo_og_meta_tag(@photo)
+    gon.pannellum_config = guidebook_pannellum_config
+    gon.scenes = @guidebook.scenes
+    gon.photos = @guidebook.photos
+    gon.tour_name = @tour.name
+    gon.scene_id = @current_scene.id
+    gon.scene_description = @current_scene.description
+    gon.guidebook_name = @guidebook.name
+    gon.guidebook_description = @guidebook.description
+    gon.author_name = @guidebook.user.name
+    gon.root_url = root_url
+  end
 
   def new
     @guidebook = Guidebook.new
@@ -95,6 +114,29 @@ class GuidebooksController < ApplicationController
       "
     rescue ActiveRecord::RecordNotDestroyed => e
       flash[:error] = e.message
+    end
+  end
+
+  def select_scene
+    @current_scene = Scene.find(params[:scene_id])
+    @guidebook = @current_scene.guidebook
+    @photo = @current_scene.photo
+    @tour = @photo.tour
+
+    photo_og_meta_tag(@photo)
+    gon.pannellum_config = guidebook_pannellum_config
+    gon.photos = @guidebook.photos
+    gon.scenes = @guidebook.scenes
+    gon.tour_name = @tour.name
+    gon.scene_id = @current_scene.id
+    gon.scene_description = @current_scene.description
+    gon.guidebook_name = @guidebook.name
+    gon.guidebook_description = @guidebook.description
+    gon.author_name = @guidebook.user.name
+    gon.root_url = root_url
+
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -175,5 +217,53 @@ class GuidebooksController < ApplicationController
 
   def set_guidebook_for_remove_photo
     @guidebook = Guidebook.find(params[:guidebook_id])
+  end
+
+  def guidebook_pannellum_config
+    options = {
+      "autoLoad": true,
+        "default": {
+            "firstScene": @guidebook.scenes[0].id,
+            "title": @current_scene.description,
+            "author": @guidebook.user.name,
+            "authorURL": photo_path(@photo),
+            "sceneFadeDuration": 0
+        },
+        "scenes": {}
+    }
+
+    @guidebook.scenes.each do |scene|
+      photo = scene.photo
+      next unless photo.tourer["connections"]
+      begin
+        connections = JSON.parse(photo.tourer["connections"])
+        hot_spots = []
+        connections&.keys&.each do |key|
+          hot_photo = @tour.photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
+          if hot_photo
+            hot_spots << {
+                "type": "scene",
+                "pitch": connections[key]["pitch_degrees"].to_f,
+                "yaw": connections[key]["adjusted_heading_degrees"].to_f,
+                "text": hot_photo.tourer_photo_id,
+                "sceneId": hot_photo.tourer_photo_id
+            }
+          end
+        end
+      rescue => exception
+        puts "=== exception: #{exception.inspect}"
+      end
+
+      options[:scenes][scene.id] = {
+        "title": scene.description,
+        "author": @guidebook.user.name,
+        "authorURL": photo_path(photo),
+        "type": "equirectangular",
+        "panorama": photo.image_path,
+        "hotSpots": hot_spots
+      }
+    end
+
+    options
   end
 end

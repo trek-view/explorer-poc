@@ -5,7 +5,7 @@
 <% end %>
 
 <div class="photo-container row mt-5">
-  <% if @user.present? %>
+  
     <div class="col-lg-9 col-sm-12">
       <% if @guidebook.present? %>
         <div class="row">
@@ -25,9 +25,11 @@
       <% end %>
     </div>
     <div class="col-lg-3 col-sm-12">
-      <%= render partial: 'photos/photo_addition_button', locals: {user: @user, photo: @photo} %>
+      <% if @user.present? %>
+        <%= render partial: 'photos/photo_addition_button', locals: {user: @user, photo: @photo} %>
+      <% end %>
     </div>
-  <% end %>
+  
 
   <div class="py-3 col-lg-12">
     <div class="card">
@@ -36,8 +38,8 @@
         <%= render(EmbedComponent, code: pannellum_iframe(@photo)) %>
         <div id="panorama"></div>
         <div id="mapbox" class="mb-3"></div>
-        <div id="mapbox-token" class="photo-additional-info"><%= get_mapbox_token() %></div>
-        <div id="aws-s3-bucket-name" class="photo-additional-info"><%= get_aws_s3_bucket_name() %></div>
+        <div id="mapbox-token" class="photo-additional-info"><%= mapbox_token() %></div>
+        <div id="aws-s3-bucket-name" class="photo-additional-info"><%= aws_s3_bucket_name() %></div>
       </div>
       <div class="card-body">
         <table class="table table-response table-bordered photo-attributes-table">

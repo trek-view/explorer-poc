@@ -180,7 +180,6 @@ module Api::V1
               :adjusted_heading_degrees
             ).to_h
           end
-          puts "===== connections_h: #{connections_h}"
           prms[:tourer][:connections] = connections_h.to_json
         end
         prms

@@ -27,11 +27,11 @@ class Guidebook < ApplicationRecord
   end
 
   def photos_ids
-    scenes.map { |s| s.photo.id }
+    scenes.map { |s| s.photo.id }.uniq
   end
 
   def photos
-    Photo.where(id: self.photos_ids)
+    Photo.where(id: photos_ids)
   end
 
   def sponsors_ids

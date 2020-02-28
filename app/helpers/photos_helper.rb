@@ -73,9 +73,17 @@ module PhotosHelper
     buffer
   end
 
+  def aws_s3_bucket_name
+    ENV['AWS_S3_BUCKET']
+  end
+
+  def mapbox_token
+    ENV['MAPBOX_TOKEN']
+  end
+
   def pannellum_iframe(photo)
     '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' +
-    'https://' + get_aws_s3_bucket_name() + '/static/pannellum/pannellum.htm' +
+    'https://' + aws_s3_bucket_name() + '/static/pannellum/pannellum.htm' +
     '#panorama=' +
     photo.image_path +
     '&amp;title=' + URI.encode(photo.tour.name) +
@@ -85,11 +93,16 @@ module PhotosHelper
     '" target="_blank">View on Trek View Explorer</a></p>'
   end
 
-  def get_aws_s3_bucket_name
-    ENV['AWS_S3_BUCKET']
-  end
-
-  def get_mapbox_token
-    ENV['MAPBOX_TOKEN']
+  def guidebook_pannellum_iframe(scene)
+    photo = scene.photo
+    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' +
+    'https://' + aws_s3_bucket_name + '/static/pannellum/pannellum.htm' +
+    '#panorama=' +
+    photo.image_path +
+    '&amp;title=' + URI.encode(scene.description) +
+    '&amp;author=' + URI.encode(scene.guidebook.user.name) +
+    '&amp;autoLoad=true"></iframe><p><a href="' +
+    URI.encode(photo_url(photo)) +
+    '" target="_blank">View on Trek View Explorer</a></p>'
   end
 end

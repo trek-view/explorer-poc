@@ -73,6 +73,7 @@ Rails.application.routes.draw do
   get '/about', to: 'home#about'
   get '/upload', to: 'home#upload'
   get '/select_scene_photo', to: 'scenes#select_scene_photo', as: 'select_scene_photo'
+  post '/select_scene', to: 'guidebooks#select_scene', as: 'select_scene'
 
   root to: 'home#index'
 end

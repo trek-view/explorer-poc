@@ -5,12 +5,29 @@
 <% end %>
 
 <div class="photo-container row">
-  <% if current_user.present? %>
-    <div class="col-lg-9 col-sm-12"></div>
-    <div class="col-lg-3 col-sm-12">
+  <div class="col-lg-9 col-sm-12">
+    <% if @guidebook.present? %>
+      <div class="row">
+        <div class="col-lg-12 mt-2">
+          <strong>Current Guidebook</strong>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <strong>Name:</strong> <%= link_to @guidebook.name, user_guidebook_path(@user, @guidebook) %>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <strong>Category:</strong> <%= @guidebook.category.name %>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <strong>Description:</strong> <%= @guidebook.description %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-lg-3 col-sm-12">
+    <% if current_user.present? %>
       <%= render partial: 'photos/photo_addition_button', locals: {user: current_user, photo: @photo} %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 
   <div class="py-5 col-lg-12">
     <div class="card">
@@ -19,8 +36,8 @@
         <%= render(EmbedComponent, code: pannellum_iframe(@photo)) %>
         <div id="panorama"></div>
         <div id="mapbox" class="mb-3"></div>
-        <div id="mapbox-token" class="photo-additional-info"><%= get_mapbox_token() %></div>
-        <div id="aws-s3-bucket-name" class="photo-additional-info"><%= get_aws_s3_bucket_name() %></div>
+        <div id="mapbox-token" class="photo-additional-info"><%= mapbox_token() %></div>
+        <div id="aws-s3-bucket-name" class="photo-additional-info"><%= aws_s3_bucket_name() %></div>
       </div>
       <div class="card-body">
         <table class="table table-response table-bordered photo-attributes-table">
@@ -135,3 +152,64 @@
     </div>
   </div>
 </div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(){
+    console.log('==== gon: ', gon);
+    if (gon.pannellum_config === undefined) {
+      return false;
+    }
+    markers = [];
+    viewer = pannellum.viewer('panorama', gon.pannellum_config);
+    console.log('==== viewer: ', viewer);
+
+    // initSceneMap(gon.photos); // removed Google Map
+    initSceneMapBox(gon.photos);
+
+    currentScene = viewer.getScene();
+    if (currentScene) {
+      currentMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
+      if (currentMarker) {
+        // currentMarker.setAnimation(google.maps.Animation.BOUNCE);
+        currentMarker.bounce({duration: 5000, height: 100});
+      }
+    }
+
+    viewer.on('scenechange', function () {
+      hotSpot = gon.pannellum_config.scenes[currentScene].hotSpots.find(obj => obj.sceneId == viewer.getScene());
+      photo = gon.photos.find(obj => obj.tourer_photo_id == viewer.getScene());
+      const s3dom = document.getElementById('aws-s3-bucket-name').childNodes;
+      const s3name = s3dom[0].data;
+      iframe_url = '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' + 
+      'https://' + s3name + '/static/pannellum/pannellum.htm' + 
+      '#panorama=' + 
+        photo.image_path + 
+        '&amp;title=' + encodeURIComponent(gon.tour_name) + 
+        '&amp;author=' + encodeURIComponent(gon.author_name) + 
+        '&amp;autoLoad=true"></iframe><p><a href="' + 
+        gon.root_url + 'photos/' + photo.id + 
+        '" target="_blank">View on Trek View Explorer</a></p>';
+
+      $('.custom-tooltip').text(iframe_url);
+
+      if (hotSpot) {
+        viewer.setYaw(hotSpot.yaw);
+      }
+
+      prevMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
+
+      currentScene = viewer.getScene();
+
+      currentMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
+
+      if (prevMarker) prevMarker.drop();
+      if (currentMarker) {
+        currentMarker.bounce({duration: 5000, height: 100});
+      }
+
+      // prevMarker.setAnimation(google.maps.Animation.DROP);
+      // currentMarker.setAnimation(google.maps.Animation.BOUNCE);
+    });
+  });
+</script>
