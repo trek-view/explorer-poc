@@ -239,14 +239,14 @@ class GuidebooksController < ApplicationController
         connections = JSON.parse(photo.tourer["connections"])
         hot_spots = []
         connections&.keys&.each do |key|
-          hot_photo = @tour.photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
+          hot_photo = photo.tour.photos.select{ |connected_photo| connected_photo.tourer_photo_id == connections[key]["photo_id"] }.first
           if hot_photo
             hot_spots << {
                 "type": "scene",
                 "pitch": connections[key]["pitch_degrees"].to_f,
                 "yaw": connections[key]["adjusted_heading_degrees"].to_f,
                 "text": hot_photo.tourer_photo_id,
-                "sceneId": hot_photo.tourer_photo_id
+                "sceneId": scene.id #hot_photo.tourer_photo_id
             }
           end
         end
