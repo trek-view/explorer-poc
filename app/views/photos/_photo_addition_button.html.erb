@@ -1,0 +1,23 @@
+<div class="form-group mt-2 float-right">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Add to Guidebook
+  </button>
+  <div id="guidebooksList" class="dropdown-menu">
+    <%= link_to "Create new Guidebook",
+        new_user_guidebook_path(user),
+        class: 'dropdown-item'
+    %>
+    <% if user.guidebooks.any? %>
+      <div class="dropdown-divider"></div>
+      <%user.guidebooks.each do |guidebook| %>
+        <%=
+          link_to guidebook.name,
+            add_photo_user_guidebook_path(user, guidebook, photo_id: photo.id),
+            class: 'dropdown-item',
+            remote: true,
+            method: :post
+        %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

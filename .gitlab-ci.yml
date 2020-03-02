@@ -9,15 +9,9 @@ variables:
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
-  DEPLOY_REGISTRY_DOMAIN: index.docker.io
-  CONTAINER_IMAGE: ivvanov1009/explorer #trekview/explorer
-  CONTAINER_CURRENT_IMAGE: $CONTAINER_IMAGE:$CI_COMMIT_REF_SLUG
-  CONTAINER_STAGING_IMAGE: $CONTAINER_IMAGE:staging
-  CONTAINER_PRODUCTION_IMAGE: $CONTAINER_IMAGE:production
 
 stages:
   - test
-  - build
   - deploy
 
 cache:
@@ -27,7 +21,6 @@ cache:
 
 test:
   stage: test
-
   script:
     - apt-get update -qy
     - apt-get install -y nodejs
@@ -39,22 +32,23 @@ test:
     - bundle exec rspec
     # - bundle exec cucumber
 
-build:
-  stage: build
-  image: docker:stable
-  services:
-    - docker:dind
+deploy:
+  stage: deploy
   before_script:
-    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
-    - echo $SECRET_KEY_BASE ${SECRET_KEY_BASE} $AWS_RDS_HOSTNAME
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
   script:
-    - docker pull $CONTAINER_IMAGE:staging || true
-    - docker build 
+    - ssh $(SSH_USER)@$(SSH_HOST) /bin/bash -s << EOT
+      cd /home/ivanov/explorer && git checkout staging && git pull origin staging
+      docker build 
         --cache-from $CONTAINER_IMAGE:staging 
         --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME 
         --build-arg SECRET_KEY_BASE=${SECRET_KEY_BASE} 
-        --build-arg DATABASE_URL="postgres://${AWS_RDS_USERNAME}:${AWS_RDS_PASSWORD}@${AWS_RDS_HOSTNAME}:${AWS_RDS_PORT}/${AWS_RDS_DB_NAME}" 
+        --build-arg DATABASE_URL='postgres://${AWS_RDS_USERNAME}:${AWS_RDS_PASSWORD}@${AWS_RDS_HOSTNAME}:${AWS_RDS_PORT}/${AWS_RDS_DB_NAME}' 
         --build-arg DATABASE_HOST=${AWS_RDS_HOSTNAME} 
         --build-arg DATABASE_NAME=${AWS_RDS_DB_NAME} 
         --build-arg DATABASE_USER_NAME=${AWS_RDS_USERNAME} 
@@ -83,42 +77,13 @@ build:
         --build-arg MAILGUN_SMTP_LOGIN=${MAILGUN_SMTP_LOGIN} 
         --build-arg MAILGUN_SMTP_PASSWORD=${MAILGUN_SMTP_PASSWORD} 
         --build-arg MAILGUN_SMTP_PORT=${MAILGUN_SMTP_PORT} 
-        --build-arg MAILGUN_SMTP_SERVER=${MAILGUN_SMTP_SERVER}
-        --build-arg MAILERLITE_API_KEY=${MAILERLITE_API_KEY}
-        --build-arg MAILERLITE_GROUP_ID=${MAILERLITE_GROUP_ID}
+        --build-arg MAILGUN_SMTP_SERVER=${MAILGUN_SMTP_SERVER} 
+        --build-arg MAILERLITE_API_KEY=${MAILERLITE_API_KEY} 
+        --build-arg MAILERLITE_GROUP_ID=${MAILERLITE_GROUP_ID} 
+        --build-arg MAPBOX_TOKEN=${MAPBOX_TOKEN} 
         .
-    - docker tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME $CONTAINER_CURRENT_IMAGE
-    - docker push $CONTAINER_CURRENT_IMAGE
+        ./deploy.sh
+      EOT
   only:
     - staging
-    - production
-
-deploy-latest-image:
-  stage: deploy
-  services:
-    - docker:dind
-  before_script:
-    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
-  script:
-    - docker pull $CONTAINER_CURRENT_IMAGE
-    - docker tag $CONTAINER_IMAGE:CI_COMMIT_REF_NAME $CONTAINER_STAGING_IMAGE
-    - docker push $CONTAINER_STAGING_IMAGE
-    # - curl -X POST $PORTAINER_HOOK_APP
-    # - curl -X POST $PORTAINER_HOOK_WORKER
-  only:
-    - staging
-
-deploy-stable-image:
-  stage: deploy
-  services:
-    - docker:dind
-  before_script:
-    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD $DEPLOY_REGISTRY_DOMAIN
-  script:
-    - docker pull $CONTAINER_CURRENT_IMAGE
-    - docker tag $CONTAINER_CURRENT_IMAGE $CONTAINER_PRODUCTION_IMAGE
-    - docker push $CONTAINER_PRODUCTION_IMAGE
-  only:
     - production

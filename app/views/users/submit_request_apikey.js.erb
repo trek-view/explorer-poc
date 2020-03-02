@@ -1,0 +1,6 @@
+var flashContainer = $('.flash-messages');
+flashContainer.html('');
+<% unless @user.errors.any? %>
+  alert('Submitted your requirement for API key usage, successfully. Please wait until admin will approve it.');
+  flashContainer.append("<%= escape_javascript render(partial: 'shared/flash_messages') %>");
+<% end %>

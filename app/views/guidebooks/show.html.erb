@@ -49,24 +49,21 @@
 
         <h3 class="card-title"><%= @guidebook.name %></h3>
 
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Description</label>
-          <div class="col-sm-10 mt-2">
+        <div class="row">
+          <label class="col-sm-2"><strong>Description</strong></label>
+          <div class="col-sm-10 mt-1">
             <p><%= @guidebook.description %></p>
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Category</label>
-          <div class="col-sm-10 mt-2">
+        <div class="row">
+          <label class="col-sm-2"><strong>Category</strong></label>
+          <div class="col-sm-10 mt-1">
             <p><%= @guidebook.category.name %></p>
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">Explorer Guidebook ID</label>
-          <div class="col-sm-10 mt-2">
-            <p><%= @guidebook.id %></p>
-          </div>
-        </div>
+        
+        <h3 class="card-title">Scenes</h3>
+         <%= render partial: 'guidebooks/scenes_navigation/view', locals: { guidebook: @guidebook, current_scene: @current_scene } %>
 
         <h3 class="card-title">Guidebook sponsors</h3>
         <div class="row"> 
@@ -75,28 +72,74 @@
           <% else %>
             <%= render 'sponsors/default_sponsors' %>
           <% end %>
-        </div>
-
-        <h4>Added Scenes</h4>
-        <% if @scenes.any? %>
-          <div class="sort-wrapper">
-            <%= render(
-                  SortComponent, collection_name: :scenes,
-                  value: @sort.try(:[], :scenes)
-                )
-            %>
-          </div>
-          <div class="row">
-            <%= render partial: 'scenes/scene', collection: @scenes %>
-          </div>
-        <% else %>
-          <p class="card-text">Nothing</p>
-        <% end %>
-      </div>
+        </div>        
     </div>
   </div>
 </div>
+</div>
+
 
 <div class="form-group">
   <%= link_to 'Back', @user.present? ? user_guidebooks_path(@user) : guidebooks_path(), class: 'btn btn-success' %>
 </div>
+
+<script>
+  $(function() {
+    console.log('==== gon: ', gon);
+    if (gon.pannellum_config === undefined) {
+      return false;
+    }
+    markers = [];
+    viewer = pannellum.viewer('panorama', gon.pannellum_config);
+    console.log('==== viewer: ', viewer);
+    initGuidebookMapBox(gon.scenes, gon.photos);
+
+    currentScene = viewer.getScene();
+    if (currentScene) {
+      currentMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
+      if (currentMarker) {
+        // currentMarker.setAnimation(google.maps.Animation.BOUNCE);
+        currentMarker.bounce({duration: 5000, height: 100});
+      }
+    }
+
+    viewer.on('scenechange', function () {
+      hotSpot = gon.pannellum_config.scenes[currentScene].hotSpots.find(obj => obj.sceneId == viewer.getScene());
+      photo = gon.photos.find(obj => obj.tourer_photo_id == viewer.getScene());
+      if (photo) {
+        const s3dom = document.getElementById('aws-s3-bucket-name').childNodes;
+        const s3name = s3dom[0].data;
+        iframe_url = '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' + 
+        'https://' + s3name + '/static/pannellum/pannellum.htm' + 
+        '#panorama=' + 
+          photo.image_path + 
+          '&amp;title=' + encodeURIComponent(gon.tour_name) + 
+          '&amp;author=' + encodeURIComponent(gon.author_name) + 
+          '&amp;autoLoad=true"></iframe><p><a href="' + 
+          gon.root_url + 'photos/' + photo.id + 
+          '" target="_blank">View on Trek View Explorer</a></p>';
+
+        $('.custom-tooltip').text(iframe_url);
+      }
+
+      if (hotSpot) {
+        viewer.setYaw(hotSpot.yaw);
+      }
+
+      prevMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
+
+      currentScene = viewer.getScene();
+
+      currentMarker = markers.find(obj => obj.tourer_photo_id == currentScene);
+
+      if (prevMarker) prevMarker.drop();
+      if (currentMarker) {
+        console.log('==== currentMarker: ', currentMarker);
+        // currentMarker.bounce({duration: 5000, height: 100});
+      }
+
+      // prevMarker.setAnimation(google.maps.Animation.DROP);
+      // currentMarker.setAnimation(google.maps.Animation.BOUNCE);
+    });
+  });
+</script>

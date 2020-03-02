@@ -26,19 +26,19 @@ end
 unless HomeCard.first
   HomeCard.create!(
     title: 'Tours', description: 'Journeys though our natural world',
-    priority: 1, avatar: '1.png', url: '/tours', icon: 'dribbble'
+    priority: 1, url: '/tours', icon: 'dribbble'
   )
   HomeCard.create!(
     title: 'Tourbooks', description: 'Groups of tours curated for you to explore',
-    priority: 2, avatar: '2.png', url: '/tourbooks', icon: 'creative-commons'
+    priority: 2, url: '/tourbooks', icon: 'creative-commons'
   )
   HomeCard.create!(
     title: 'Viewpoints', description: 'The photos fellow Explorers like the most',
-    priority: 3, avatar: '3.png', url: '/viewpoints', icon: 'map-marker'
+    priority: 3, url: '/viewpoints', icon: 'map-marker'
   )
   HomeCard.create!(
     title: 'Guidebooks', description: 'Travel around the world on educational adventures',
-    priority: 4, avatar: '4.png', url: '/guidebooks', icon: 'suitcase'
+    priority: 4, url: '/guidebooks', icon: 'suitcase'
   )
 end
 

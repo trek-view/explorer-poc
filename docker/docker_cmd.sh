@@ -34,6 +34,7 @@ docker build --cache-from ivvanov1009/explorer:staging \
 --build-arg MAILGUN_SMTP_SERVER=smtp.mailgun.org \
 --build-arg MAILERLITE_API_KEY=3ea2b1dae8091c50d600b41a062694a8 \
 --build-arg MAILERLITE_GROUP_ID=92901598 \
+--build-arg MAPBOX_TOKEN=pk.eyJ1IjoidHJla3ZpZXciLCJhIjoiY2s2MTExd2N2MGN0NzNrbG83eG1hZTA1cSJ9.7PfeRLPDgGjXF8XbSlEefg \
 --build-arg SECRETE_KEY_BASE=6028b6fd9127cc802a0941f67638d1ede77bdba340abcd88821eca93cfc0ad9c39d87dd8e358975ab5b76195b66262ba2a63f72e105727b1975bd42148a4adce \
 --build-arg SITE_URL=staging.explorer.trekview.org \
 .
@@ -74,6 +75,7 @@ docker build --cache-from ivvanov1009/explorer:staging \
 --build-arg MAILGUN_SMTP_SERVER=smtp.mailgun.org \
 --build-arg MAILERLITE_API_KEY=3ea2b1dae8091c50d600b41a062694a8 \
 --build-arg MAILERLITE_GROUP_ID=92901624 \
+--build-arg MAPBOX_TOKEN=pk.eyJ1IjoidHJla3ZpZXciLCJhIjoiY2s2d283cXZrMGRuejNubW9ld2FudTlqMCJ9.3HC2PSF5u4XQDRtIshlffw \
 --build-arg SECRETE_KEY_BASE=6028b6fd9127cc802a0941f67638d1ede77bdba340abcd88821eca93cfc0ad9c39d87dd8e358975ab5b76195b66262ba2a63f72e105727b1975bd42148a4adce \
 --build-arg SITE_URL=explorer.trekview.org \
 .

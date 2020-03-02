@@ -29,7 +29,9 @@ describe Api::V1::ToursController, :type => :controller do
                                           'tourer',
                                           'created_at',
                                           'updated_at',
-                                          'user_id')
+                                          'user_id',
+                                          'sponsors'
+                                        )
         end
       end
 

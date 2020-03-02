@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[show] do
     post 'generate_new_token', to: 'users#generate_new_token'
+    post 'submit_request_apikey', to: 'users#submit_request_apikey'
 
     resources :tours
 
@@ -43,13 +44,13 @@ Rails.application.routes.draw do
     get 'viewpoints', to: 'photos#viewpoints'
 
     resources :guidebooks do
-      member do
-        post 'add_item', to: 'guidebooks#add_item'
-        delete 'remove_item', to: 'guidebooks#remove_item'
-      end
       resources :scenes do
+        resources :photo, only: %i[show], to: 'photos#guidebook_scene_photo'
         get 'guidebook_scenes', to: 'scenes#guidebook_scenes'
-        get 'photo/:id', to: 'photos#show'
+        delete 'remove_photo', to: 'guidebooks#remove_photo'
+      end
+      member do
+        post 'add_photo', to: 'guidebooks#add_photo'
       end
     end
   end
@@ -71,7 +72,8 @@ Rails.application.routes.draw do
   get '/robots.txt' => 'robots_txts#show'
   get '/about', to: 'home#about'
   get '/upload', to: 'home#upload'
-  get '/select_scene_photo' => 'scenes#select_scene_photo', as: 'select_scene_photo'
+  get '/select_scene_photo', to: 'scenes#select_scene_photo', as: 'select_scene_photo'
+  post '/select_scene', to: 'guidebooks#select_scene', as: 'select_scene'
 
   root to: 'home#index'
 end

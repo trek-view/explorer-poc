@@ -9,22 +9,22 @@
     <meta property="og:title" content="<%= meta_title %> | Explorer" />
     <meta property="og:url" content="<%= request.original_url %>" />
     <meta property="og:description" content="<%= meta_description %>" />
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     <%= include_gon(:init => true) %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_link_tag    'pannellum', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= render 'layouts/google_analytics' %>
+    <%= stylesheet_link_tag    'https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.css', media: 'all', rel: 'stylesheet' %>
+    
     <%= render 'layouts/favicon' %>
-    <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_MAPS_API_KEY']}" %>
+    <%= render 'layouts/google_analytics' %>
+    <%= javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_MAPS_API_KEY']}" %>  
+    <%= javascript_include_tag 'https://api.mapbox.com/mapbox.js/v3.2.1/mapbox.js' %>
+
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'pannellum', 'data-turbolinks-track': 'reload' %>
     
-    <%
-=begin%>
- <%= javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js" %> 
-<%
-=end%>
     <%= yield(:head_tags) %>
   </head>
 

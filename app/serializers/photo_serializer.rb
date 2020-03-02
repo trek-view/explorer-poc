@@ -20,6 +20,8 @@ class PhotoSerializer < ActiveModel::Serializer
                  opentrailview
                  favoritable_score
                  favoritable_total
+                 image_path
+                 image_thumb_path
                  created_at
                  updated_at
                ]

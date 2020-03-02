@@ -39,7 +39,7 @@ class ScenesController < ApplicationController
   end
 
   def guidebook_scenes
-    @scenes = @guidebook.senes
+    @scenes = @guidebook.scenes
   end
 
   def select_scene_photo

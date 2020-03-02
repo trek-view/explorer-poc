@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 module PhotosHelper
-
   def view_point_class(photo, user)
     photo.favorited_by?(user) ? 'fa-heart' : 'fa-heart-o'
   end
@@ -54,7 +53,12 @@ module PhotosHelper
   end
 
   def photo_thumb_url(photo)
-    photo.image.thumb.url if photo.present?
+    # photo.image.thumb.url if photo.present?
+    photo.image_thumb_path if photo.present?
+  end
+
+  def photo_image_url(photo)
+    photo.image_path if photo.present?
   end
 
   def full_address(address)
@@ -69,8 +73,36 @@ module PhotosHelper
     buffer
   end
 
-  def pannellum_iframe(photo)
-    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.5/pannellum.htm#panorama=' + photo.image.url(:med) + '&amp;title=' + URI.encode(photo.tour.name) + '&amp;author=' + URI.encode(photo.tour.user.name) + '&amp;autoLoad=true"></iframe><p><a href="' + URI.encode(photo_url(photo)) + '" target="_blank">View on Trek View Explorer</a></p>'
+  def aws_s3_bucket_name
+    ENV['AWS_S3_BUCKET']
   end
 
+  def mapbox_token
+    ENV['MAPBOX_TOKEN']
+  end
+
+  def pannellum_iframe(photo)
+    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' +
+    'https://' + aws_s3_bucket_name() + '/static/pannellum/pannellum.htm' +
+    '#panorama=' +
+    photo.image_path +
+    '&amp;title=' + URI.encode(photo.tour.name) +
+    '&amp;author=' + URI.encode(photo.tour.user.name) +
+    '&amp;autoLoad=true"></iframe><p><a href="' +
+    URI.encode(photo_url(photo)) +
+    '" target="_blank">View on Trek View Explorer</a></p>'
+  end
+
+  def guidebook_pannellum_iframe(scene)
+    photo = scene.photo
+    '<iframe width="600" height="400" allowfullscreen style="border-style:none;" src="' +
+    'https://' + aws_s3_bucket_name + '/static/pannellum/pannellum.htm' +
+    '#panorama=' +
+    photo.image_path +
+    '&amp;title=' + URI.encode(scene.description) +
+    '&amp;author=' + URI.encode(scene.guidebook.user.name) +
+    '&amp;autoLoad=true"></iframe><p><a href="' +
+    URI.encode(photo_url(photo)) +
+    '" target="_blank">View on Trek View Explorer</a></p>'
+  end
 end

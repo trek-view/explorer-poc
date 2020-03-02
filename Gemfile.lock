@@ -1042,8 +1042,10 @@ GEM
       railties (>= 4.2.0)
     faker (2.10.2)
       i18n (>= 1.6, < 2)
-    faraday (1.0.0)
+    faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.14.0)
+      faraday (>= 0.7.4, < 1.0)
     ffi (1.12.2)
     file_validators (2.3.0)
       activemodel (>= 3.2)
@@ -1072,9 +1074,6 @@ GEM
     formtastic_i18n (0.6.0)
     friendly_id (5.2.5)
       activerecord (>= 4.0.0)
-    gibbon (3.3.3)
-      faraday (>= 0.16.0)
-      multi_json (>= 1.11.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     gon (6.3.2)
@@ -1087,6 +1086,7 @@ GEM
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
+    hashie (4.1.0)
     highcharts-rails (6.0.3)
       railties (>= 3.1)
     i18n (1.8.2)
@@ -1134,6 +1134,10 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    mailerlite (1.9.0)
+      faraday (~> 0.10)
+      faraday_middleware (~> 0.10)
+      hashie (>= 3.5.5)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     meta-tags (2.13.0)
@@ -1327,7 +1331,6 @@ DEPENDENCIES
   fog-aws
   font-awesome-rails
   friendly_id (~> 5.2.4)
-  gibbon
   gon
   groupdate
   highcharts-rails
@@ -1336,6 +1339,7 @@ DEPENDENCIES
   kaminari (~> 1.1, >= 1.1.1)
   letter_opener
   listen (>= 3.0.5, < 3.2)
+  mailerlite
   meta-tags
   mini_magick (~> 4.8)
   pg (>= 0.18, < 2.0)

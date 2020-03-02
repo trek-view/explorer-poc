@@ -27,11 +27,11 @@ class Guidebook < ApplicationRecord
   end
 
   def photos_ids
-    scenes.map { |s| s.photo.id }
+    scenes.map { |s| s.photo.id }.uniq
   end
 
   def photos
-    Photo.where(id: self.photos_ids)
+    Photo.where(id: photos_ids)
   end
 
   def sponsors_ids
@@ -42,5 +42,13 @@ class Guidebook < ApplicationRecord
 
   def sponsors
     Sponsor.where(id: sponsors_ids)
+  end
+
+  def last_position
+    scenes.maximum(:position) || 0
+  end
+
+  def have_photo(photo_id)
+    scenes.where(photo_id: 12).first ? true : false
   end
 end

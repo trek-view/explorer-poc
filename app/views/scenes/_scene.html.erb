@@ -1,8 +1,21 @@
 <div id="scene-<%= scene.id %>" class="col-xl-4 col-lg-4 col-md-6 mb-4 scene-item">
   <div class="card photo-card h-100">
+    <% if @user.present? && @guidebook.present? && policy(@guidebook).remove_photo? %>
+      <%= link_to user_guidebook_scene_remove_photo_path(@user, @guidebook, scene, photo_id: scene.photo.id),
+            class: 'close delete_from_book',
+            title: 'delete photo from guidebook',
+            data: {confirm: 'Are you sure?'},
+            method: :delete,
+            remote: true do
+      %>
+          <span aria-hidden="false" class="delete">&times;</span>
+      <% end %>
+    <% end %>
     <div class="card-body">
-      <%= link_to edit_user_guidebook_scene_path(@user, @guidebook, scene) do %>
-        <%= fa_icon('cog', class: 'scene-edit float-right') %>
+      <% if @user.present? %>
+        <%= link_to edit_user_guidebook_scene_path(@user, @guidebook, scene) do %>
+          <%= fa_icon('cog', class: 'scene-edit float-right') %>
+        <% end %>
       <% end %>
       <h4 class="card-text">
         <%= truncate(scene.description, length: 120, separator: ' ') %>
@@ -11,7 +24,14 @@
       <p class="card-text">Position: <%= scene.position %></p>
     </div>
 
-    <%= render partial: 'photos/photo', locals: { photo: scene.photo } %>
+    <%= render partial: 'photos/photo',
+        locals: {
+          photo: scene.photo,
+          photo_link: @user.present? ? 
+            user_guidebook_scene_photo_path(@user,  @guidebook, scene, id: scene.photo.id) :
+            photo_path(scene.photo)
+        }
+    %>
 
     <div class="card-footer">
       <small class="text-muted">

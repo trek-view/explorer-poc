@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_183117) do
+ActiveRecord::Schema.define(version: 2020_02_27_142245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2020_02_12_183117) do
     t.datetime "updated_at", null: false
     t.bigint "category_id"
     t.bigint "user_id"
+    t.boolean "app", default: false
     t.index ["category_id"], name: "index_guidebooks_on_category_id"
     t.index ["user_id"], name: "index_guidebooks_on_user_id"
   end
@@ -100,7 +101,6 @@ ActiveRecord::Schema.define(version: 2020_02_12_183117) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "priority"
-    t.string "avatar"
     t.string "url"
     t.string "icon", limit: 30
   end
@@ -128,6 +128,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_183117) do
     t.string "filename"
     t.hstore "opentrailview"
     t.text "tourer_connection_photos", default: [], array: true
+    t.string "image_path"
+    t.string "image_thumb_path"
     t.index ["streetview"], name: "index_photos_on_streetview", using: :gin
     t.index ["tour_id"], name: "index_photos_on_tour_id"
     t.index ["tourer"], name: "index_photos_on_tourer", using: :gin
@@ -194,3 +196,81 @@ ActiveRecord::Schema.define(version: 2020_02_12_183117) do
     t.index ["tourbook_id"], name: "index_tour_tourbooks_on_tourbook_id"
   end
 
+  create_table "tourbooks", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.integer "tours_count", default: 0, null: false
+    t.index ["slug"], name: "index_tourbooks_on_slug", unique: true
+    t.index ["user_id"], name: "index_tourbooks_on_user_id"
+  end
+
+  create_table "tours", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
+    t.integer "tour_type"
+    t.integer "transport_type"
+    t.string "tourer_version"
+    t.string "tourer_tour_id"
+    t.integer "tourbooks_count", default: 0, null: false
+    t.integer "photos_count", default: 0
+    t.index ["slug", "user_id"], name: "index_tours_on_slug_and_user_id", unique: true
+    t.index ["user_id", "name"], name: "index_tours_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_tours_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.string "api_token"
+    t.string "slug"
+    t.boolean "terms"
+    t.string "privilege", default: "user"
+    t.integer "tours_count", default: 0
+    t.integer "tourbooks_count", default: 0
+    t.text "favoritor_score"
+    t.text "favoritor_total"
+    t.boolean "enabled_apikey", default: false
+    t.index ["api_token"], name: "index_users_on_api_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["slug"], name: "index_users_on_slug", unique: true
+  end
+
+  add_foreign_key "guidebooks", "categories"
+  add_foreign_key "guidebooks", "users"
+  add_foreign_key "photos", "tours"
+  add_foreign_key "scenes", "guidebooks"
+  add_foreign_key "scenes", "photos"
+  add_foreign_key "sponsorships", "sponsors"
+  add_foreign_key "sponsorships", "tours"
+  add_foreign_key "subscriptions", "users"
+  add_foreign_key "taggings", "tags"
+  add_foreign_key "taggings", "tours"
+  add_foreign_key "tour_tourbooks", "tourbooks"
+  add_foreign_key "tour_tourbooks", "tours"
+  add_foreign_key "tourbooks", "users"
+  add_foreign_key "tours", "users"
+end

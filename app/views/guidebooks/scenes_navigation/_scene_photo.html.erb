@@ -1,0 +1,21 @@
+
+<div class="card">
+  <div class="card-header">
+    <%= render(ViewpointComponent, viewpoint: photo.favoritable_score.present? ? photo.favoritable_score[:favorite] : 0, photo_id: photo.id) %>
+    <%= render(EmbedComponent, code: guidebook_pannellum_iframe(scene)) %>
+    <div id="panorama"></div>
+
+    <div class="scenes-nav-button-group">
+      <%= render partial: 'guidebooks/scenes_navigation/nav_buttons', locals: { scene: scene} %>
+    </div>
+
+    <div id="mapbox" class="mb-3"></div>
+    <div id="mapbox-token" class="photo-additional-info"><%= mapbox_token() %></div>
+    <div id="aws-s3-bucket-name" class="photo-additional-info"><%= aws_s3_bucket_name() %></div>
+  </div>
+  <div class="card-body">
+    <div id="guidebook-scene-description">
+      <%= render partial: "guidebooks/scene_description", locals: {scene: scene} %>
+    </div>
+  </div>
+</div>

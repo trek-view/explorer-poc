@@ -1,7 +1,7 @@
 ActiveAdmin.register User do
   config.per_page = 50
 
-  permit_params :name, :email, :password, :password_confirmation
+  permit_params :name, :email, :password, :password_confirmation, :enabled_apikey
 
   before_action :only => [:show, :edit, :update, :destroy] do
     @user = User.find_by_slug(params[:id])
@@ -24,7 +24,9 @@ ActiveAdmin.register User do
     private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(
+        :name, :email, :password, :password_confirmation, :enabled_apikey
+      )
     end
   end
 
@@ -37,6 +39,7 @@ ActiveAdmin.register User do
     column :last_sign_in_at
     column :tours_count
     column :tourbooks_count
+    column :enabled_apikey
 
     actions defaults: false do |user|
       item "View", admin_user_path(user), class: 'member_link'
@@ -52,12 +55,13 @@ ActiveAdmin.register User do
       row :last_sign_in_at
       row :tours_count
       row :tourbooks_count
+      row :enabled_apikey
     end
   end
 
   form do |f|
     f.semantic_errors
-    inputs :email, :name, :password, :password_confirmation
+    inputs :email, :name, :password, :password_confirmation, :enabled_apikey
     f.actions
   end
 end

@@ -40,8 +40,10 @@ module Api::V1
 
       photo = @tour.photos.build(photo_params)
       photo.image = params[:image]
-
       if photo.save
+        photo.image_path = change_photo_url(photo.image.med.url)
+        photo.image_thumb_path = change_photo_url(photo.image.thumb.url)
+        photo.save
         render json: photo.reload, status: :created
       else
         render json: {
@@ -168,9 +170,16 @@ module Api::V1
 
           prms[:tourer][:connections].each do |c|
             prms[:tourer_connection_photos] << c.last[:photo_id]
-            connections_h[c.first] = c.last.slice(:photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters, :heading_degrees, :adjusted_heading_degrees).to_h
+            connections_h[c.first] = c.last.slice(
+              :photo_id,
+              :distance_meters,
+              :heading_degrees,
+              :pitch_degrees,
+              :elevation_meters,
+              :heading_degrees,
+              :adjusted_heading_degrees
+            ).to_h
           end
-
           prms[:tourer][:connections] = connections_h.to_json
         end
         prms
@@ -261,6 +270,10 @@ module Api::V1
         else
           tours.empty?
         end
+      end
+
+      def change_photo_url(photo_url)
+        photo_url.gsub("s3.#{ENV['FOG_REGION']}.amazonaws.com/", '')
       end
   end
 
