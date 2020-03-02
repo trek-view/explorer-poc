@@ -9,11 +9,6 @@ variables:
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
-  DEPLOY_REGISTRY_DOMAIN: index.docker.io
-  CONTAINER_IMAGE: ivvanov1009/explorer #trekview/explorer
-  CONTAINER_CURRENT_IMAGE: $CONTAINER_IMAGE:$CI_COMMIT_REF_SLUG
-  CONTAINER_STAGING_IMAGE: $CONTAINER_IMAGE:staging
-  CONTAINER_PRODUCTION_IMAGE: $CONTAINER_IMAGE:production
 
 stages:
   - test
