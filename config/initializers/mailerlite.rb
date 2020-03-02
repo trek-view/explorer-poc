@@ -1,6 +1,4 @@
-
-
-if ENV['MAILERLITE_API_KEY']
+if ENV['MAILERLITE_API_KEY'].present? && (Rails.env.production? || Rails.env.staging?)
   MailerLite.configure do |config|
     config.api_key = ENV['MAILERLITE_API_KEY']
   end
@@ -11,7 +9,7 @@ if ENV['MAILERLITE_API_KEY']
     type: 'regular',
     subject: 'Newsletter',
     from: ENV['MAILGUN_SMTP_LOGIN'],
-    from_name: ENV['MAILGUN_SMTP_LOGIN'],
+    from_name: ENV['MAILGUN_SMTP_LOGIN'] || 'Administrator',
     groups: [group.id],
     language: 'en'
   )
