@@ -35,14 +35,14 @@ class User < ApplicationRecord
   def subscribe_to_global
     if global_subscribe == '1'
       # Mailchimp::ListUpdater.new(self).call
-      if ENV['MAILERLITE_API_KEY']
+      if ENV['MAILERLITE_API_KEY'] && (Rails.env.production? || Rails.env.staging?)
         client = MailerLite::Client.new(api_key: ENV['MAILERLITE_API_KEY'])
         group = client.group(ENV['MAILERLITE_GROUP_ID'])
         campaign = client.create_campaign(
           type: 'regular',
           subject: 'Newsletter',
           from: ENV['MAILGUN_SMTP_LOGIN'],
-          from_name: ENV['MAILGUN_SMTP_LOGIN'],
+          from_name: ENV['MAILGUN_SMTP_LOGIN'] || 'Administrator',
           groups: [group.id],
           language: 'en'
         )
@@ -65,7 +65,7 @@ class User < ApplicationRecord
 
   def delete_from_global
     # Mailchimp::ListUpdater.new(self).delete
-    MailerLite::Client.delete_group_subscriber(ENV['MAILERLITE_GROUP_ID'], self.email) if ENV['MAILERLITE_GROUP_ID']
+    MailerLite::Client.delete_group_subscriber(ENV['MAILERLITE_GROUP_ID'], self.email) if ENV['MAILERLITE_GROUP_ID'] && (Rails.env.production? || Rails.env.staging?)
   end
 
   def photos_ids
