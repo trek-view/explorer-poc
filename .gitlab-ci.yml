@@ -44,6 +44,7 @@ deploy:
     - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
 
   script:
+    - echo ${SSH_USER}@${SSH_HOST}
     - ssh -i ~/.ssh/id_rsa ${SSH_USER}@${SSH_HOST} /bin/bash -s << EOT
       cd /home/ivanov/explorer && git checkout staging && git pull origin staging
       docker build 
