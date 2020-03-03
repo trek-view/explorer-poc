@@ -6,6 +6,6 @@ class UserMailer < ActionMailer::Base
     @user = params[:user]
     @admin = AdminUser.first
     @url = "https://#{ENV['SITE_URL']}/admin/users/#{@user.id}/edit"
-    mail(to: @user.email, subject: 'Require API key usage.')
+    mail(to: @admin.email, subject: 'Require API key usage.')
   end
 end
