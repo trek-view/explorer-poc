@@ -36,7 +36,7 @@ deploy:
   stage: deploy
   before_script:
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 700 ~/.ssh/id_rsa
     - ls ~/.ssh/id_rsa
     - cat ~/.ssh/id_rsa
