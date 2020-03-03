@@ -33,22 +33,20 @@ class User < ApplicationRecord
   before_destroy :delete_from_global
 
   def subscribe_to_global
-    if global_subscribe == '1'
-      # Mailchimp::ListUpdater.new(self).call
-      if ENV['MAILERLITE_API_KEY'] && (Rails.env.production? || Rails.env.staging?)
-        client = MailerLite::Client.new(api_key: ENV['MAILERLITE_API_KEY'])
-        group = client.group(ENV['MAILERLITE_GROUP_ID'])
-        campaign = client.create_campaign(
-          type: 'regular',
-          subject: 'Newsletter',
-          from: ENV['MAILGUN_SMTP_LOGIN'],
-          from_name: ENV['MAILGUN_SMTP_LOGIN'] || 'Administrator',
-          groups: [group.id],
-          language: 'en'
-        )
-        client.create_subscriber(email: self.email, name: self.name).call
-      end
-    end
+    return unless global_subscribe == '1'
+
+    # Mailchimp::ListUpdater.new(self).call
+    client = MailerLite::Client.new(api_key: ENV['MAILERLITE_API_KEY'])
+    group = client.group(ENV['MAILERLITE_GROUP_ID'])
+    campaign = client.create_campaign(
+      type: 'regular',
+      subject: 'Newsletter',
+      from: ENV['MAILGUN_SMTP_LOGIN'] || 'staging-explorer@mg.trekview.org',
+      from_name: ENV['MAILGUN_SMTP_LOGIN'] || 'Administrator',
+      groups: [group.id],
+      language: 'en'
+    )
+    client.create_subscriber(email: self.email, name: self.name).call
   end
 
   def should_generate_new_friendly_id?
