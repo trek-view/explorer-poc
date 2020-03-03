@@ -10,11 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_27_142245) do
+ActiveRecord::Schema.define(version: 2020_03_03_171124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -105,7 +107,7 @@ ActiveRecord::Schema.define(version: 2020_02_27_142245) do
     t.string "icon", limit: 30
   end
 
-  create_table "photos", force: :cascade do |t|
+  create_table "photos", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.bigint "tour_id"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
@@ -137,7 +139,7 @@ ActiveRecord::Schema.define(version: 2020_02_27_142245) do
   end
 
   create_table "scenes", force: :cascade do |t|
-    t.bigint "photo_id"
+    t.uuid "photo_id"
     t.bigint "guidebook_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
