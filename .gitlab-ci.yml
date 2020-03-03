@@ -46,7 +46,9 @@ deploy:
   script:
     - |
         ssh $SSH_USER_HOST /bin/bash -s << EOT
-          cd /home/ivanov/explorer && git checkout staging && git pull origin staging
+          cd /home/ivanov/explorer
+          git checkout staging
+          git pull origin staging
           docker build 
             --cache-from $CONTAINER_IMAGE:staging 
             --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME 
