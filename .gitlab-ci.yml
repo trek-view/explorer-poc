@@ -43,8 +43,8 @@ deploy:
     - echo -n "$SSH_KEY_BASE" | base64 --decode | ssh-add -
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - echo ${AWS_ACCESS_KEY_ID}
-    - echo ${AWS_RDS_HOSTNAME}
+    - echo $CI_ENVIRONMENT_NAME
+    - echo $CI_ENVIRONMENT_SLUG
   script:
     - |
         ssh $SSH_USER_HOST /bin/bash -s << EOT
@@ -91,8 +91,8 @@ deploy:
             .
           ./deploy.sh
         EOT
-  environment:
-    name: staging
+  # environment:
+  #   name: staging
   only:
     - staging
     - production
