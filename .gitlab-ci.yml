@@ -35,8 +35,6 @@ test:
 
 deploy:
   stage: deploy
-  environment:
-    name: staging
   before_script:
     - apt-get update -qq
     - apt-get install -qq git dos2unix
@@ -93,6 +91,8 @@ deploy:
             .
           ./deploy.sh
         EOT
+  environment:
+    name: staging
   only:
     - staging
     - production
