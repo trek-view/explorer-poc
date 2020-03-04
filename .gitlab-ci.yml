@@ -48,43 +48,43 @@ deploy:
           cd /home/ivanov/explorer
           git checkout staging
           git pull origin staging
-          docker build 
-            --cache-from $CONTAINER_IMAGE:staging 
-            --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME 
-            --build-arg SECRET_KEY_BASE=${SECRET_KEY_BASE} 
-            --build-arg DATABASE_URL="postgres://${AWS_RDS_USERNAME}:${AWS_RDS_PASSWORD}@${AWS_RDS_HOSTNAME}:${AWS_RDS_PORT}/${AWS_RDS_DB_NAME}" 
-            --build-arg DATABASE_HOST=${AWS_RDS_HOSTNAME} 
-            --build-arg DATABASE_NAME=${AWS_RDS_DB_NAME} 
-            --build-arg DATABASE_USER_NAME=${AWS_RDS_USERNAME} 
-            --build-arg DATABASE_PASSWORD=${AWS_RDS_PASSWORD} 
-            --build-arg DATABASE_PORT=${AWS_RDS_PORT} 
-            --build-arg ADMIN_EMAIL=${ADMIN_EMAIL} 
-            --build-arg ADMIN_PASSWORD=${ADMIN_PASSWORD} 
-            --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} 
-            --build-arg AWS_S3_BUCKET=${AWS_S3_BUCKET} 
-            --build-arg AWS_S3_BUCKET_REGION=${AWS_S3_BUCKET_REGION} 
-            --build-arg AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} 
-            --build-arg DEVISE_SENDER_EMAIL_ADDRESS=${DEVISE_SENDER_EMAIL_ADDRESS} 
-            --build-arg DEVISE_SENDER_NAME=${DEVISE_SENDER_NAME} 
-            --build-arg FOG_DIRECTORY=${FOG_DIRECTORY} 
-            --build-arg FOG_PROVIDER=${FOG_PROVIDER} 
-            --build-arg FOG_REGION=${FOG_REGION} 
-            --build-arg GOOGLE_ANALYTICS_KEY=${GOOGLE_ANALYTICS_KEY} 
-            --build-arg GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} 
-            --build-arg MAILCHIMP_AUDIENCE_ID=${MAILCHIMP_AUDIENCE_ID} 
-            --build-arg RACK_ENV=${RACK_ENV} 
-            --build-arg RAILS_ENV=${RAILS_ENV} 
-            --build-arg SITE_URL=${SITE_URL} 
-            --build-arg DISALLOW_ALL_WEB_CRAWLERS=${DISALLOW_ALL_WEB_CRAWLERS} 
-            --build-arg MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY} 
-            --build-arg MAILGUN_DOMAIN=${MAILGUN_DOMAIN} 
-            --build-arg MAILGUN_SMTP_LOGIN=${MAILGUN_SMTP_LOGIN} 
-            --build-arg MAILGUN_SMTP_PASSWORD=${MAILGUN_SMTP_PASSWORD} 
-            --build-arg MAILGUN_SMTP_PORT=${MAILGUN_SMTP_PORT} 
-            --build-arg MAILGUN_SMTP_SERVER=${MAILGUN_SMTP_SERVER} 
-            --build-arg MAILERLITE_API_KEY=${MAILERLITE_API_KEY} 
-            --build-arg MAILERLITE_GROUP_ID=${MAILERLITE_GROUP_ID} 
-            --build-arg MAPBOX_TOKEN=${MAPBOX_TOKEN} 
+          docker build \
+            --cache-from $CONTAINER_IMAGE:staging \
+            --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
+            --build-arg SECRET_KEY_BASE=${SECRET_KEY_BASE} \
+            --build-arg DATABASE_URL="postgres://${AWS_RDS_USERNAME}:${AWS_RDS_PASSWORD}@${AWS_RDS_HOSTNAME}:${AWS_RDS_PORT}/${AWS_RDS_DB_NAME}" \
+            --build-arg DATABASE_HOST=${AWS_RDS_HOSTNAME} \
+            --build-arg DATABASE_NAME=${AWS_RDS_DB_NAME} \
+            --build-arg DATABASE_USER_NAME=${AWS_RDS_USERNAME} \
+            --build-arg DATABASE_PASSWORD=${AWS_RDS_PASSWORD} \
+            --build-arg DATABASE_PORT=${AWS_RDS_PORT} \
+            --build-arg ADMIN_EMAIL=${ADMIN_EMAIL} \
+            --build-arg ADMIN_PASSWORD=${ADMIN_PASSWORD} \
+            --build-arg AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+            --build-arg AWS_S3_BUCKET=${AWS_S3_BUCKET} \
+            --build-arg AWS_S3_BUCKET_REGION=${AWS_S3_BUCKET_REGION} \
+            --build-arg AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+            --build-arg DEVISE_SENDER_EMAIL_ADDRESS=${DEVISE_SENDER_EMAIL_ADDRESS} \
+            --build-arg DEVISE_SENDER_NAME=${DEVISE_SENDER_NAME} \
+            --build-arg FOG_DIRECTORY=${FOG_DIRECTORY} \
+            --build-arg FOG_PROVIDER=${FOG_PROVIDER} \
+            --build-arg FOG_REGION=${FOG_REGION} \
+            --build-arg GOOGLE_ANALYTICS_KEY=${GOOGLE_ANALYTICS_KEY} \
+            --build-arg GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} \
+            --build-arg MAILCHIMP_AUDIENCE_ID=${MAILCHIMP_AUDIENCE_ID} \
+            --build-arg RACK_ENV=${RACK_ENV} \
+            --build-arg RAILS_ENV=${RAILS_ENV} \
+            --build-arg SITE_URL=${SITE_URL} \
+            --build-arg DISALLOW_ALL_WEB_CRAWLERS=${DISALLOW_ALL_WEB_CRAWLERS} \
+            --build-arg MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY} \
+            --build-arg MAILGUN_DOMAIN=${MAILGUN_DOMAIN} \
+            --build-arg MAILGUN_SMTP_LOGIN=${MAILGUN_SMTP_LOGIN} \
+            --build-arg MAILGUN_SMTP_PASSWORD=${MAILGUN_SMTP_PASSWORD} \
+            --build-arg MAILGUN_SMTP_PORT=${MAILGUN_SMTP_PORT} \
+            --build-arg MAILGUN_SMTP_SERVER=${MAILGUN_SMTP_SERVER} \
+            --build-arg MAILERLITE_API_KEY=${MAILERLITE_API_KEY} \
+            --build-arg MAILERLITE_GROUP_ID=${MAILERLITE_GROUP_ID} \
+            --build-arg MAPBOX_TOKEN=${MAPBOX_TOKEN} \
             .
           ./deploy.sh
         EOT
