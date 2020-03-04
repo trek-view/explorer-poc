@@ -37,12 +37,10 @@ deploy:
   before_script:
     - apt-get update -qq
     - apt-get install -qq git dos2unix
-    # Setup SSH deploy keys
     - 'which ssh-agent || ( apt-get install -qq openssh-client )'
     - eval $(ssh-agent -s)
-    - cat $SSH_PRIVATE_KEY
-    # - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
-    - echo -n "$DEPLOY_SSH_KEY" | dos2unix | ssh-add -
+    - echo $SSH_PRIVATE_KEY
+    - echo -n "$SSH_PRIVATE_KEY" | dos2unix | ssh-add -
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
