@@ -40,7 +40,9 @@ deploy:
     # Setup SSH deploy keys
     - 'which ssh-agent || ( apt-get install -qq openssh-client )'
     - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
+    - cat $SSH_PRIVATE_KEY
+    # - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 -d)
+    - echo -n "$DEPLOY_SSH_KEY" | dos2unix | ssh-add -
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
