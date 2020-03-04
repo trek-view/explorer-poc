@@ -39,8 +39,7 @@ deploy:
     - apt-get install -qq git dos2unix
     - 'which ssh-agent || ( apt-get install -qq openssh-client )'
     - eval $(ssh-agent -s)
-    - echo $DEPLOY_SSH_KEY
-    - echo -n "$DEPLOY_SSH_KEY" | base64 -d | ssh-add -
+    - echo -n "$SSH_KEY_BASE" | base64 -D | ssh-add -
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
