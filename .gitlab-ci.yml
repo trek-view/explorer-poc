@@ -9,6 +9,7 @@ variables:
   POSTGRES_DB: explorer_test
   POSTGRES_USER: runner
   POSTGRES_PASSWORD: ""
+  CONTAINER_IMAGE: explorer
 
 stages:
   - test
@@ -49,8 +50,8 @@ deploy:
           git checkout staging
           git pull origin staging
           docker build \
-            --cache-from $CONTAINER_IMAGE:staging \
-            --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME \
+            --cache-from ${CONTAINER_IMAGE}:staging \
+            --tag ${CONTAINER_IMAGE}:${CI_COMMIT_REF_NAME} \
             --build-arg SECRET_KEY_BASE=${SECRET_KEY_BASE} \
             --build-arg DATABASE_URL="postgres://${AWS_RDS_USERNAME}:${AWS_RDS_PASSWORD}@${AWS_RDS_HOSTNAME}:${AWS_RDS_PORT}/${AWS_RDS_DB_NAME}" \
             --build-arg DATABASE_HOST=${AWS_RDS_HOSTNAME} \
