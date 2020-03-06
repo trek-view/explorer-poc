@@ -17,9 +17,14 @@
           <%= fa_icon('cog', class: 'scene-edit float-right') %>
         <% end %>
       <% end %>
+
       <h4 class="card-text">
-        <%= truncate(scene.description, length: 120, separator: ' ') %>
+        <%= scene.title %>
       </h4>
+
+      <p class="card-text">
+        Description: <%= truncate(scene.description, length: 120, separator: ' ') %>
+      </p>
       
       <p class="card-text">Position: <%= scene.position %></p>
     </div>

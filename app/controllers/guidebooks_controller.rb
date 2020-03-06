@@ -33,6 +33,7 @@ class GuidebooksController < ApplicationController
     gon.scenes = @guidebook.scenes
     gon.photos = @guidebook.photos
     gon.tour_name = @tour.name
+    gon.scene_title = @current_scene.title
     gon.scene_id = @current_scene.id
     gon.scene_description = @current_scene.description
     gon.guidebook_name = @guidebook.name
@@ -128,6 +129,7 @@ class GuidebooksController < ApplicationController
     gon.photos = @guidebook.photos
     gon.scenes = @guidebook.scenes
     gon.tour_name = @tour.name
+    gon.scene_title = @current_scene.title
     gon.scene_id = @current_scene.id
     gon.scene_description = @current_scene.description
     gon.guidebook_name = @guidebook.name

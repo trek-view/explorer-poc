@@ -63,27 +63,6 @@
               <td><%= @photo.tourer_photo_id %></td>
             </tr>
             <tr><td></td><td></td></tr>
-
-            <% @guidebooks.each do |guidebook| %>
-              <tr>
-                <td><strong>Guidebook info</strong></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>Name</td>
-                <td><%= guidebook.name %></td>
-              </tr>
-              <tr>
-                <td>Description</td>
-                <td><%= guidebook.description %></td>
-              </tr>
-              <tr>
-                <td>Category</td>
-                <td><%= guidebook.category.name %></td>
-              </tr>
-              <tr><td></td><td></td></tr>
-            <% end %>
-
             <tr>
               <td><strong>Photo info</strong></td>
               <td></td>
@@ -151,6 +130,13 @@
       </div>
     </div>
   </div>
+  
+  <div class="col-lg-12">
+    <h2 class="py-2">Guidebooks</h2>
+    <div class="guidebooks-container">
+      <%= render partial: 'guidebooks/guidebooks_display', locals: {guidebooks: @guidebooks} %>
+    </div>
+  </div>
 </div>
 
 
@@ -185,7 +171,8 @@
       'https://' + s3name + '/static/pannellum/pannellum.htm' + 
       '#panorama=' + 
         photo.image_path + 
-        '&amp;title=' + encodeURIComponent(gon.tour_name) + 
+        '&amp;title=' + encodeURIComponent(gon.scene_title) + 
+        '&amp;description=' + encodeURIComponent(gon.scene_description) + 
         '&amp;author=' + encodeURIComponent(gon.author_name) + 
         '&amp;autoLoad=true"></iframe><p><a href="' + 
         gon.root_url + 'photos/' + photo.id + 

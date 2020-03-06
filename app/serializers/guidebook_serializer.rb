@@ -14,7 +14,7 @@ class GuidebookSerializer < ActiveModel::Serializer
   def scenes
     # New format with array
     scenes = ActiveModelSerializers::SerializableResource.new(
-      object.scenes.order('position ASC')
+      object.scenes.order(:position)
     ).as_json[:scenes]
     # Old format with json
     # scenes = {}
@@ -26,5 +26,4 @@ class GuidebookSerializer < ActiveModel::Serializer
     # end
     # scenes
   end
-
 end

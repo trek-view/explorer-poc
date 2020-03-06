@@ -99,7 +99,7 @@ module PhotosHelper
     'https://' + aws_s3_bucket_name + '/static/pannellum/pannellum.htm' +
     '#panorama=' +
     photo.image_path +
-    '&amp;title=' + URI.encode(scene.description) +
+    '&amp;title=' + URI.encode(scene.title || '') +
     '&amp;author=' + URI.encode(scene.guidebook.user.name) +
     '&amp;autoLoad=true"></iframe><p><a href="' +
     URI.encode(photo_url(photo)) +

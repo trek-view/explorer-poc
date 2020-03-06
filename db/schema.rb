@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_171124) do
+ActiveRecord::Schema.define(version: 2020_03_04_172433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_171124) do
     t.datetime "updated_at", null: false
     t.string "description"
     t.integer "position"
+    t.string "title", limit: 100
     t.index ["guidebook_id"], name: "index_scenes_on_guidebook_id"
     t.index ["photo_id"], name: "index_scenes_on_photo_id"
   end

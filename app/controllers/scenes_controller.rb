@@ -65,6 +65,6 @@ class ScenesController < ApplicationController
   end
 
   def permitted_params
-    %i[guidebook_id photo_id position description]
+    %i[guidebook_id photo_id title position description]
   end
 end
