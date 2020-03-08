@@ -15,7 +15,6 @@ function onSelectedScene(sceneId) {
 }
 
 function initGuidebookMapBox(scenes, photos) {
-  console.log('==== scenes, photos: ', scenes, photos);
   if (!scenes || !photos) return;
   // Get mapbox_token
   const mapboxTokenDom = document.getElementById('mapbox-token').childNodes;
