@@ -48,7 +48,7 @@ deploy:
   script:
     - |
         ssh $SSH_USER_HOST /bin/bash -s << EOT
-          cd /home/ivanov/explorer
+          cd ~/explorer
           git checkout staging
           git pull origin staging
           docker build \

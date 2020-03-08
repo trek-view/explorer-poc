@@ -11,13 +11,15 @@
 // about supported directives.
 //
 //= require jquery3
+//= require jquery_ujs
 //= require popper
-//= require bootstrap
+//= require tether
+//= require chosen
+//= require bootstrap-sprockets
 //= require chartkick
 //= require Chart.bundle
 //= require activestorage
 //= require turbolinks
 //= require highcharts
-
 //= require_tree ./components
 //= require_tree .

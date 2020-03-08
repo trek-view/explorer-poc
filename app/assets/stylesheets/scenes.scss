@@ -5,3 +5,18 @@
 .scene-edit {
   font-size: 22px!important;
 }
+.tag-container {
+  position: relative;
+  margin: 3px 5px 3px 0;
+  padding: 3px 7px 3px 7px;
+  border: 1px solid #ffc107;
+  max-width: 100%;
+  border-radius: 5px;
+  background-color: #ffc107;
+  cursor: default;
+  word-wrap: break-word;
+  display: inline-block;
+}
+.tag-text {
+  color: #333;
+}

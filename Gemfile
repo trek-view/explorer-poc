@@ -103,3 +103,7 @@ gem 'groupdate'
 gem 'highcharts-rails'
 gem 'gon'
 gem 'mailerlite'
+gem 'simple_form'
+gem 'rails-assets-tether', '>= 1.3.3' 
+# add the line below
+gem 'rails-assets-chosen'

@@ -5,7 +5,7 @@
         user_guidebook_scene_path
     %>
 
-    <%= form_with(model: @scene, url: form_url, local: true) do |f| %>
+    <%= simple_form_for @scene, url: form_url do |f| %>
 
       <%= form_errors_for @scene %>
       <div class="h-divider-empty"></div>
@@ -65,6 +65,9 @@
         %>
       </div>
 
+
+        <%= f.input :tag_ids, as: :select, collection: Tag.order(:name), label_method: :name, input_html: {multiple: true} %>
+        
     <% end %>
   </div>
 

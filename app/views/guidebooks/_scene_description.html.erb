@@ -11,6 +11,22 @@
   </div>
 </div>
 <div class="row">
+  <label class="col-sm-2"><strong>Tags</strong></label>
+  <div class="col-sm-10 mt-1">
+    <% if scene.tags.size > 0 %>
+      <% scene.tags.each do |tag| %>
+        <div class="tag-container">
+          <div class="tag-text">
+            <%= tag.name %> 
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <small class="nothing-text">nothing</small>
+    <% end %>
+  </div>
+</div>
+<div class="row">
   <label class="col-sm-2"><strong>Creator</strong></label>
   <div class="col-sm-10 mt-1">
     <p><%= scene.guidebook.user.name %></p>

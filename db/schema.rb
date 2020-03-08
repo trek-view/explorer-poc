@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_172433) do
+ActiveRecord::Schema.define(version: 2020_03_06_201706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -97,6 +97,15 @@ ActiveRecord::Schema.define(version: 2020_03_04_172433) do
     t.index ["user_id"], name: "index_guidebooks_on_user_id"
   end
 
+  create_table "guidebooks_tags", force: :cascade do |t|
+    t.bigint "guidebook_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["guidebook_id"], name: "index_guidebooks_tags_on_guidebook_id"
+    t.index ["tag_id"], name: "index_guidebooks_tags_on_tag_id"
+  end
+
   create_table "home_cards", force: :cascade do |t|
     t.string "title", limit: 20
     t.text "description"
@@ -148,6 +157,15 @@ ActiveRecord::Schema.define(version: 2020_03_04_172433) do
     t.string "title", limit: 100
     t.index ["guidebook_id"], name: "index_scenes_on_guidebook_id"
     t.index ["photo_id"], name: "index_scenes_on_photo_id"
+  end
+
+  create_table "scenes_tags", force: :cascade do |t|
+    t.bigint "scene_id"
+    t.bigint "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["scene_id"], name: "index_scenes_tags_on_scene_id"
+    t.index ["tag_id"], name: "index_scenes_tags_on_tag_id"
   end
 
   create_table "sponsors", force: :cascade do |t|
@@ -264,9 +282,13 @@ ActiveRecord::Schema.define(version: 2020_03_04_172433) do
 
   add_foreign_key "guidebooks", "categories"
   add_foreign_key "guidebooks", "users"
+  add_foreign_key "guidebooks_tags", "guidebooks"
+  add_foreign_key "guidebooks_tags", "tags"
   add_foreign_key "photos", "tours"
   add_foreign_key "scenes", "guidebooks"
   add_foreign_key "scenes", "photos"
+  add_foreign_key "scenes_tags", "scenes"
+  add_foreign_key "scenes_tags", "tags"
   add_foreign_key "sponsorships", "sponsors"
   add_foreign_key "sponsorships", "tours"
   add_foreign_key "subscriptions", "users"

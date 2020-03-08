@@ -27,6 +27,19 @@
       </p>
       
       <p class="card-text">Position: <%= scene.position %></p>
+      <p class="card-text">Tags: 
+        <% if scene.tags.size > 0 %>
+          <% scene.tags.each do |tag| %>
+            <div class="tag-container">
+              <div class="tag-text">
+                <%= tag.name %> 
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <small class="nothing-text">nothing</small>
+        <% end %>
+      </p>
     </div>
 
     <%= render partial: 'photos/photo',

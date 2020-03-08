@@ -3,28 +3,28 @@ require 'uri'
 class PhotoSerializer < ActiveModel::Serializer
 
   attributes %i[
-                 id
-                 tour_id
-                 image
-                 filename
-                 camera_make
-                 camera_model
-                 taken_at
-                 latitude
-                 longitude
-                 elevation_meters
-                 address
-                 google
-                 streetview
-                 tourer
-                 opentrailview
-                 favoritable_score
-                 favoritable_total
-                 image_path
-                 image_thumb_path
-                 created_at
-                 updated_at
-               ]
+    id
+    tour_id
+    image
+    filename
+    camera_make
+    camera_model
+    taken_at
+    latitude
+    longitude
+    elevation_meters
+    address
+    google
+    streetview
+    tourer
+    opentrailview
+    favoritable_score
+    favoritable_total
+    image_path
+    image_thumb_path
+    created_at
+    updated_at
+  ]
 
   def country
     object.country.present? ? object.country.name : ''
