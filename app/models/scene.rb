@@ -1,7 +1,7 @@
 class Scene < ApplicationRecord
   belongs_to :photo
   belongs_to :guidebook
-  # has_many :scenes_tags
+  has_many :scenes_tags, dependent: :delete_all
   has_and_belongs_to_many :tags
 
   def guidebook_scenes_ids
@@ -43,11 +43,16 @@ class Scene < ApplicationRecord
   end
 
   def tag_list
-    tags.map(&:name).join(', ')
+    tags.map(&:name)
+  end
+
+  def tag_list_string
+    tag_list.join(',')
   end
 
   def tag_list=(names)
-    self.tags = names.split(',').map do |n|
+    console.log('====== names: ', names)
+    self.tags = names.map do |n|
       Tag.where(name: n.strip).first_or_create!
     end
   end

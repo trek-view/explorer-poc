@@ -2,7 +2,7 @@ class Guidebook < ApplicationRecord
   include PgSearch::Model
   belongs_to :user
   belongs_to :category
-  has_many :scenes, -> { order(:position) }
+  has_many :scenes, -> { order(:position) }, dependent: :delete_all
   has_and_belongs_to_many :tags
   validates :name, presence: true, length: { maximum: 70 }
   validates :description, presence: true, length: { maximum: 240 }
@@ -15,7 +15,9 @@ class Guidebook < ApplicationRecord
         self.scene.build(
           photo_id: scene.photo_id,
           description: scene.description,
-          position: scene.position
+          position: scene.position,
+          title: scene.title,
+          tags: scene.tags
         )
         # self.tour_tourbooks.build(tour_id: tour.id) if tour
       end

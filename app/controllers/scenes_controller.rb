@@ -67,6 +67,9 @@ class ScenesController < ApplicationController
   end
 
   def permitted_params
-    [:guidebook_id, :photo_id, :title, :position, :description, :tag_list, :tag, :tag_ids, { tag_ids: [] }]
+    [
+      :guidebook_id, :photo_id, :title, :position, :description,
+      :tag_list, :tag, :tag_ids, { tag_ids: [] }
+    ]
   end
 end

@@ -75,9 +75,11 @@ class GuidebooksController < ApplicationController
   end
 
   def destroy
-    @guidebook.destroy
+    @guidebook.scenes.map { |s| s.scenes_tags.delete_all }
+    @guidebook.scenes.delete_all
+    @guidebook.delete
     flash[:success] = "Guidebook #{@guidebook.name} was destroyed"
-    redirect_to user_guidebook_path(@user)
+    redirect_to user_guidebooks_path(@user)
   end
 
   def add_photo
