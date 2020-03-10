@@ -1,32 +1,5 @@
 // 'use strict';
 
-function initMap(objects) {
-    var myCoords = new google.maps.LatLng(objects[0]['latitude'], objects[0]['longitude']);
-    var mapOptions = {
-        center: myCoords,
-        streetViewControl: false,
-        zoom: 15
-    };
-
-    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    for (var i=0; i < objects.length; i++){
-        var markerData = objects[i];
-        var latLng = new google.maps.LatLng(markerData.latitude, markerData.longitude);
-
-        var marker = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            animation: google.maps.Animation.DROP,
-            photo: objects[i]
-        });
-
-        google.maps.event.addListener(marker, 'click', function() {
-            showThumbModal(this.photo);
-        });
-    }
-}
-
 function initTourMapBox(photos) {
     if (!photos) return;
     // Get mapbox_token
@@ -44,7 +17,6 @@ function initTourMapBox(photos) {
       var markerData = {
         photo: photos[i]
       };
-      console.log('===== markerData: ', markerData);
       
       const markerColor = '#d6eff9';
       const markerHtmlStyles = `
