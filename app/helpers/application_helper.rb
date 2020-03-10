@@ -41,4 +41,8 @@ module ApplicationHelper
       raw msg
     end
   end
+
+  def owner?(id)
+    current_user.present? && (current_user.id == id)
+  end
 end
