@@ -29,7 +29,7 @@ class Photo < ApplicationRecord
   validates :heading, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }, allow_blank: true
   validates :pitch, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }, allow_blank: true
   validates :roll, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }, allow_blank: true
-  validates :photo_id, allow_blank: true, length: { maximum: 20 }
+  validates :photo_id, allow_blank: true, length: { maximum: 36 }
   validates :tourer_photo_id, allow_blank: true, length: { maximum: 10 }
   # validates :connections, presence: true
 

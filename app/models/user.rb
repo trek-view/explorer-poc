@@ -64,8 +64,9 @@ class User < ApplicationRecord
   def delete_from_global
     # return unless global_subscribe == '1'
     client = MailerLite.client
+    return unless Rails.env.production? || Rails.env.staging?
     return unless client.present?
-    return unless ENV['MAILERLITE_GROUP_ID'] #&& (Rails.env.production? || Rails.env.staging?)
+    return unless ENV['MAILERLITE_GROUP_ID']
 
     # Delete from group
     begin

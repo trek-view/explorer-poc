@@ -190,22 +190,31 @@ module Api::V1
       end
 
       def permitted_photo_params
-        [:image,
-         :taken_at,
-         :latitude,
-         :longitude,
-         :elevation_meters,
-         :camera_make,
-         :camera_model,
-         address: [:cafe, :road, :suburb, :county, :region, :state, :postal_code, :country, :country_code, :place_id, :plus_code],
-         streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [
-          :photo_id, :version, :heading_degrees, 
-          connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters, :heading_degrees, :adjusted_heading_degrees ]
-        ],
-         opentrailview: [:photo_id]
-        ],
-         mapillary: [:photo_id]
+        [
+          :image,
+          :taken_at,
+          :latitude,
+          :longitude,
+          :elevation_meters,
+          :camera_make,
+          :camera_model,
+          address: [
+            :cafe, :road, :suburb, :county, :region, :state, :postal_code,
+            :country, :country_code, :place_id, :plus_code
+          ],
+          streetview: [
+            :photo_id, :capture_time, :share_link, :download_url, :thumbnail_url,
+            :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections
+          ],
+          tourer: [
+            :photo_id, :version, :heading_degrees,
+            connections: [
+              :photo_id, :distance_meters, :heading_degrees, :pitch_degrees,
+              :elevation_meters, :heading_degrees, :adjusted_heading_degrees
+            ]
+          ],
+          opentrailview: [:photo_id],
+          mapillary: [:photo_id]
         ]
       end
 

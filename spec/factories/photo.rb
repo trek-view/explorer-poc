@@ -18,10 +18,9 @@ FactoryBot.define do
         country_code: Faker::Address.country_code,
         place_id: '',
         plus_code: ''
-
     }}
     streetview {{
-        photo_id: Faker::Lorem.characters(number:10),
+        photo_id: Faker::Config.random.bytes(16).unpack('H8H4H4H4H12').join('-'),
         capture_time: rand(1...10).day.ago,
         share_link: Faker::Internet.url,
         download_url: Faker::Internet.url,
@@ -39,10 +38,10 @@ FactoryBot.define do
         ]
     }}
     tourer {{
-        photo_id: Faker::Lorem.characters(number:10),
+        photo_id: Faker::Config.random.bytes(16).unpack('H8H4H4H4H12').join('-'),
         connections: (1..10).map do |n|
         {
-            photo_id: Faker::Lorem.characters(number:10),
+            photo_id: Faker::Config.random.bytes(16).unpack('H8H4H4H4H12').join('-'),
             distance_meters: rand(1...10),
             heading: rand(1...359),
             elevation_meters: rand(1...10),
@@ -51,8 +50,8 @@ FactoryBot.define do
       end
 
     }}
-    opentrailview {{ photo_id: Faker::Lorem.characters(number:20) }}
-    mapillary {{ photo_id: Faker::Lorem.characters }}
+    opentrailview {{ photo_id: Faker::Config.random.bytes(16).unpack('H8H4H4H4H12').join('-') }}
+    mapillary {{ photo_id: Faker::Config.random.bytes(16).unpack('H8H4H4H4H12').join('-') }}
     image { Rack::Test::UploadedFile.new(Rails.root.join(Rails.env.test? ? 'spec/support/images/sample.jpeg' : "spec/support/images/#{rand(5)}.jpg"), 'image/jpeg') }
     tourer_photo_id { Faker::Lorem.characters(number:10) }
     tourer_connection_photos { Faker::Lorem.characters(number:10) }

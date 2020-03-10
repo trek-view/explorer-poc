@@ -8,7 +8,7 @@ describe Api::V1::PhotosController, :type => :controller do
   let(:tour_id) { tour.id }
   let(:photo_id) { photos.first.id }
   let!(:vp_tours) { create_list(:tour, 1, :with_photos, user: user) }
-
+  
   let(:valid_attributes) {{
       taken_at: 1.day.ago,
       latitude: -20.516189,
@@ -16,10 +16,10 @@ describe Api::V1::PhotosController, :type => :controller do
       elevation_meters: 745,
       camera_make: "GoPro",
       camera_model: "Fusion",
-      google: {
-          plus_code_global_code: "849VCWC8+R9",
-          plus_code_compound_code: "CWC8+R9, Mountain View, CA, USA"
-      },
+      # google: {
+      #     plus_code_global_code: "849VCWC8+R9",
+      #     plus_code_compound_code: "CWC8+R9, Mountain View, CA, USA"
+      # },
       address: {
           country: "France",
           country_code: "FR"
@@ -52,7 +52,6 @@ describe Api::V1::PhotosController, :type => :controller do
                   elevation_meters: "4"
               },
               {
-
                   photo_id: "fkujChLJJK",
                   distance_meters: "4",
                   heading_degrees: "90",
@@ -63,16 +62,19 @@ describe Api::V1::PhotosController, :type => :controller do
       opentrailview: {
           photo_id: "tkKjChLHbE"
       },
+      mapillary: {
+        photo_id: "tkKjChLHbE"
+      },
       image: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg')
   }}
 
+  
 #  describe 'GET /api/v1/tours/:tour_id/photos' do
 #    context 'When photos exists' do
 #      before do
 #        header 'api-key', user.api_token
 #        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photos[0]}&sot_by=created_at"
 #      end
-
       # todo(fixme)
       #it 'should return photos', focus: true do
       #  expect(json).not_to be_empty
