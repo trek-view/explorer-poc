@@ -12,11 +12,15 @@
       </div>
 
       <div class="card-body">
-
-        <%= render partial: 'photos_display', locals: { photos: @photos } %>
-
-        <br/>
-        <%= paginate @photos %>
+        <% if @photos.size.positive? %>
+            <%= render partial: 'photos_display', locals: { photos: @photos } %>
+            <br/>
+            <%= paginate @photos %>
+          <% else %>
+            <p class="nothing-text">
+              No results matched your search criteria, try a different search instead.
+            </p>
+          <% end %>
       </div>
 
     </div>

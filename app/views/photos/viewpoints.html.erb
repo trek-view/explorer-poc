@@ -16,8 +16,14 @@
 
       <div class="col-lg-9">
         <div class="viewpoints-container">
-          <%= render partial: 'photos_display', locals: {photos: @photos, user: @user} %>
-          <%= paginate @photos %>
+          <% if @photos.size.positive? %>
+            <%= render partial: 'photos_display', locals: {photos: @photos, user: @user} %>
+            <%= paginate @photos %>
+          <% else %>
+            <p class="nothing-text">
+              No results matched your search criteria, try a different search instead.
+            </p>
+          <% end %>
         </div>
       </div>
     </div>
