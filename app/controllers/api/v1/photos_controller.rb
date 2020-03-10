@@ -121,7 +121,7 @@ module Api::V1
     def get_viewpoints
       query = search_viewpoint_params
 
-      photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
+      photos = Photo.where('cast(substring(favoritable_score from 15) as int) > 0')
       photos = photos.where(id: query[:photo_ids]) if query[:photo_ids].present?
 
       if query[:user_ids].present?
@@ -129,7 +129,7 @@ module Api::V1
         photos = photos.where(id: favorites)
       end
 
-      photos = photos.order('substring(favoritable_score from 15)::integer DESC')
+      photos = photos.order('cast(substring(favoritable_score from 15) as int) DESC')
 
       photos = photos.page(params[:page] ? params[:page].to_id : 1)
 

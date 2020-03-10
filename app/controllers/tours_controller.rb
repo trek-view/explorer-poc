@@ -30,7 +30,7 @@ class ToursController < ApplicationController
       @tourbooks = @tourbooks.order(name: :desc) if @sort[:tourbooks] == 'name'
       @tourbooks = @tourbooks.order('tourbooks.tours_count DESC') if @sort[:tourbooks] == 'tours_count'
     end
-    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
+    @photos = @photos.order('cast(substring(favoritable_score from 15) as int) DESC')
     @tourbooks = @tourbooks.order(created_at: :desc)
 
     @photos = @photos.page(params[:photo_pagina]).per(Constants::WEB_ITEMS_PER_PAGE[:tours])
