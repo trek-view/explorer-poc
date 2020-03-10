@@ -154,6 +154,19 @@ function milisecondsToDatetime(miliseconds) {
     return new Date(miliseconds).toLocaleTimeString()
 }
 
+function text_truncate(str, length, ending) {
+    if (length == null) {
+      length = 100;
+    }
+    if (ending == null) {
+      ending = '...';
+    }
+    if (str.length > length) {
+      return str.substring(0, length - ending.length) + ending;
+    } else {
+      return str;
+    }
+  };
 function showThumbModal(photo) {
     if (photo
         && photo.image
@@ -162,7 +175,7 @@ function showThumbModal(photo) {
     ) {
         favorite_score = photo.favoritable_score.favorite || 0
         $('#imageContainer').empty();
-        $('.modal-title').prepend(photo.filename);
+        $('.modal-title').prepend(text_truncate(photo.filename, 40));
         $('#imageContainer').prepend(
             '<span class="viewpoint" data-photo-id="' +
             photo.id + '"><i class="fa fa-star"></i><span>' +
