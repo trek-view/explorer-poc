@@ -2,7 +2,7 @@
 module ToursHelper
 
   def countries_for_select
-    Country.all.map {|country| [country.name, country.id]}
+    Country.all.order(:name).map {|country| [country.name, country.id]}
   end
 
   def tour_types_for_select
