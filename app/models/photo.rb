@@ -8,11 +8,11 @@ class Photo < ApplicationRecord
   belongs_to :country
   has_many :scenes
 
-  store_accessor :address, :cafe, :road, :suburb, :county, :region, :state, :postcode, :country_code
-  store_accessor :google, :plus_code_global_code, :plus_code_compound_code
-  store_accessor :streetview,  :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections
+  store_accessor :address, :cafe, :road, :suburb, :county, :region, :state, :postcode, :country_code, :place_id, :plus_code
+  store_accessor :streetview, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections
   store_accessor :tourer, :connections
   store_accessor :opentrailview, :photo_id
+  store_accessor :mapillary, :photo_id
 
   validates :image, file_size: { less_than: 50.megabytes }, presence: true
   validates :filename, presence: true
@@ -24,8 +24,6 @@ class Photo < ApplicationRecord
   validates :camera_model, length: { maximum: 255 }
   validates :country, presence: true
   validates :country_code, presence: true
-  validates :plus_code_global_code, length: { maximum: 255 }
-  validates :plus_code_compound_code, length: { maximum: 255 }
   validates :lat, numericality: { greater_than_or_equal_to:  -90, less_than_or_equal_to:  90 }, length: { maximum: 20 }, allow_blank: true
   validates :lon, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, length: { maximum: 20 }, allow_blank: true
   validates :heading, numericality: { greater_than_or_equal_to:  0, less_than_or_equal_to:  360 }, allow_blank: true
