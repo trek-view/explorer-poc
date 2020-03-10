@@ -125,16 +125,17 @@
               <td>View on Mapillary</td>
               <td>https://www.mapillary.com/app/?lat=<%= "#{@photo.latitude}" %>&lon=<%= @photo.longitude %>&z=10</td>
             </tr>
+            <tr>
+              <td>Guidebooks</td>
+              <td>
+                <div class="guidebooks-container">
+                  <%= render partial: 'photos/guidebooks/guidebooks_display', locals: {guidebooks: @guidebooks} %>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
-  
-  <div class="col-lg-12">
-    <h2 class="py-2">Guidebooks</h2>
-    <div class="guidebooks-container">
-      <%= render partial: 'guidebooks/guidebooks_display', locals: {guidebooks: @guidebooks} %>
     </div>
   </div>
 </div>

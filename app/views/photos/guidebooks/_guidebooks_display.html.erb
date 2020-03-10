@@ -1,0 +1,8 @@
+
+<div class="row">
+  <% guidebooks.each do |guidebook| %>
+    <div class="col-xl-6 col-lg-6 col-md-6 mb-3">
+      <%= render partial: 'guidebooks/guidebook', locals: { guidebook: guidebook } %>
+    </div>
+  <% end %>
+</div>
