@@ -6,10 +6,6 @@ FactoryBot.define do
     elevation_meters { rand(100...999) }
     camera_make { Faker::Lorem.characters(number:5) }
     camera_model { Faker::Lorem.characters(number:5) }
-    google {{
-        plus_code_global_code: Faker::Lorem.characters(number: 10),
-        plus_code_compound_code: Faker::Lorem.characters(number:30)
-    }}
     address {{
         cafe: '',
         road: '',
@@ -19,7 +15,10 @@ FactoryBot.define do
         state: '',
         postcode: '',
         country: Faker::Address.country,
-        country_code: Faker::Address.country_code
+        country_code: Faker::Address.country_code,
+        place_id: '',
+        plus_code: ''
+
     }}
     streetview {{
         photo_id: Faker::Lorem.characters(number:10),
@@ -46,12 +45,14 @@ FactoryBot.define do
             photo_id: Faker::Lorem.characters(number:10),
             distance_meters: rand(1...10),
             heading: rand(1...359),
-            elevation_meters: rand(1...10)
+            elevation_meters: rand(1...10),
+            adjusted_heading_degrees: rand(1...10)
         }
       end
 
     }}
     opentrailview {{ photo_id: Faker::Lorem.characters(number:20) }}
+    mapillary {{ photo_id: Faker::Lorem.characters }}
     image { Rack::Test::UploadedFile.new(Rails.root.join(Rails.env.test? ? 'spec/support/images/sample.jpeg' : "spec/support/images/#{rand(5)}.jpg"), 'image/jpeg') }
     tourer_photo_id { Faker::Lorem.characters(number:10) }
     tourer_connection_photos { Faker::Lorem.characters(number:10) }

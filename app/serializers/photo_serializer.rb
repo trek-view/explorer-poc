@@ -18,6 +18,7 @@ class PhotoSerializer < ActiveModel::Serializer
     streetview
     tourer
     opentrailview
+    mapillary
     favoritable_score
     favoritable_total
     image_path
@@ -32,10 +33,12 @@ class PhotoSerializer < ActiveModel::Serializer
 
   def address
     {
-        locality: object.address['locality'],
-        administrative_area_level_3: object.address['administrative_area_level_3'],
-        administrative_area_level_2: object.address['administrative_area_level_2'],
-        administrative_area_level_1: object.address['administrative_area_level_1'],
+        cafe: object.address['cafe'],
+        road: object.address['road'],
+        suburb: object.address['suburb'],
+        county: object.address['county'],
+        region: object.address['region'],
+        state: object.address['state'],
         postal_code: object.address['postal_code'],
         country: object.address['country'],
         country_code: object.address['country_code'],
@@ -82,6 +85,12 @@ class PhotoSerializer < ActiveModel::Serializer
   def opentrailview
     {
         photo_id: object.opentrailview && object.opentrailview['photo_id']
+    }
+  end
+
+  def mapillary
+    {
+        photo_id: object.mapillary && object.mapillary['photo_id']
     }
   end
 end
