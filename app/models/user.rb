@@ -35,18 +35,18 @@ class User < ApplicationRecord
   def subscribe_to_global
     return unless global_subscribe == '1'
 
-    # Mailchimp::ListUpdater.new(self).call
-    client = MailerLite::Client.new(api_key: ENV['MAILERLITE_API_KEY'])
-    group = client.group(ENV['MAILERLITE_GROUP_ID'])
-    campaign = client.create_campaign(
-      type: 'regular',
-      subject: 'Newsletter',
-      from: ENV['MAILGUN_SMTP_LOGIN'] || 'staging-explorer@mg.trekview.org',
-      from_name: ENV['MAILGUN_SMTP_LOGIN'] || 'Administrator',
-      groups: [group.id],
-      language: 'en'
-    )
-    client.create_subscriber(email: self.email, name: self.name).call
+    client = MailerLite.client
+    return unless client.present?
+
+    begin
+      client.create_subscriber(email: email, name: name).call
+      group = client.group(ENV['MAILERLITE_GROUP_ID'])
+      client.create_group_subscriber(
+        group.id, {email: email, fields: {name: name}}
+      )
+    rescue => exception
+      puts "=== exception: #{exception.inspect}"
+    end
   end
 
   def should_generate_new_friendly_id?
@@ -62,8 +62,28 @@ class User < ApplicationRecord
   end
 
   def delete_from_global
-    # Mailchimp::ListUpdater.new(self).delete
-    MailerLite::Client.delete_group_subscriber(ENV['MAILERLITE_GROUP_ID'], self.email) if ENV['MAILERLITE_GROUP_ID'] && (Rails.env.production? || Rails.env.staging?)
+    # return unless global_subscribe == '1'
+    client = MailerLite.client
+    return unless client.present?
+    return unless ENV['MAILERLITE_GROUP_ID'] #&& (Rails.env.production? || Rails.env.staging?)
+
+    # Delete from group
+    begin
+      group = client.group(ENV['MAILERLITE_GROUP_ID'])
+      client.delete_group_subscriber(group.id, email)
+    rescue => exception
+      puts "=== exception: #{exception.inspect}"
+    end
+
+    # Delete from subscribers
+    begin
+      options = {
+        type: :unsubscribed
+      }
+      client.update_subscriber(email, options)
+    rescue => exception
+      puts "=== exception: #{exception.inspect}"
+    end
   end
 
   def photos_ids
