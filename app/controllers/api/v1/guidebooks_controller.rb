@@ -144,9 +144,12 @@ module Api::V1
     end
 
     def guidebook_params
-      params.require(:guidebook).permit(
+      params.permit(
         :id, :name, :description, :category_id, :user_id,
-        scenes: [:id, :photo_id, :description, :position, :title, :tags, {tags: []}]
+        scenes: [
+          :id, :photo_id, :description, :position,
+          :title, :tags, { tags: [] }
+        ]
       )
     end
 
