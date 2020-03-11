@@ -13,7 +13,7 @@ module Api::V1
     # GET /api/v1/tours/:tour_id/photos
     def index
       find_photos
-      @photos = @photos.page(params[:page] ? params[:page].to_id : 1)
+      @photos = @photos.page(params[:page] ? params[:page].to_i : 1)
       photos_json = ActiveModelSerializers::SerializableResource.new(@photos).as_json
       photos_json[:photos] = photos_json[:photos].map do |photo|
         photo['user_id'] = @tour.user_id
