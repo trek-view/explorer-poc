@@ -151,7 +151,6 @@ module Api::V1
     end
 
     def seperate_guidebook_and_scenes_params
-      puts "========= guidebook_params: #{guidebook_params.inspect}"
       @guidebook_params = guidebook_params.except(:scenes)
       @scenes_params = guidebook_params.delete(:scenes)
     end
@@ -165,7 +164,8 @@ module Api::V1
     end
 
     def find_guidebooks
-      @guidebooks = @user ? @user.guidebooks : @guidebooks = Guidebook.all
+      @guidebooks = @user ? @user.guidebooks : Guidebook.all
+      set_guidebooks_search_params
       if @query.present?
         if @query[:sort_by].present?
           order_direction = @query[:sort_by] == 'name' ? 'ASC' : 'DESC'
@@ -173,6 +173,9 @@ module Api::V1
             "#{@query[:sort_by]} #{order_direction}"
           )
         end
+        @guidebooks = @guidebooks.where(id: @query[:ids]) if @query[:ids].present?
+        @guidebooks = @guidebooks.includes(:scenes).where('scenes.photo_id IN (?)', @query[:photo_ids]).references(:scenes) if @query[:photo_ids].present?
+        @guidebooks = @guidebooks.page(@query[:page].to_i) if @query[:page]
       end
       @guidebooks = @guidebooks.order(updated_at: :desc)
     end
@@ -182,7 +185,10 @@ module Api::V1
     end
 
     def guidebook_search_params
-      params.permit(:sort_by, scenes: [], ids: [], user_ids: [])
+      params.permit(
+        :sort_by, :page,
+        ids: [], photo_ids: [], user_ids: []
+      )
     end
 
     def pagination_meta(object)
