@@ -159,7 +159,7 @@ module Api::V1
     end
 
     def set_user
-      @user = User.find_by(id: params[:user_id])
+      @user = @api_user
     end
 
     def permitted_params
@@ -178,6 +178,7 @@ module Api::V1
         end
         @guidebooks = @guidebooks.where(id: @query[:ids]) if @query[:ids].present?
         @guidebooks = @guidebooks.includes(:scenes).where('scenes.photo_id IN (?)', @query[:photo_ids]).references(:scenes) if @query[:photo_ids].present?
+        @guidebooks = @guidebooks.where(user_id: @query[:user_ids]) if @query[:user_ids].present?
         @guidebooks = @guidebooks.page(@query[:page].to_i) if @query[:page]
       end
       @guidebooks = @guidebooks.order(updated_at: :desc)
