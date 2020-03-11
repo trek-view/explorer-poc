@@ -63,6 +63,9 @@
               <td><%= @photo.tourer_photo_id %></td>
             </tr>
             <tr><td></td><td></td></tr>
+          </tbody>
+
+          <tbody>
             <tr>
               <td><strong>Photo info</strong></td>
               <td></td>
@@ -125,8 +128,16 @@
               <td>View on Mapillary</td>
               <td>https://www.mapillary.com/app/?lat=<%= "#{@photo.latitude}" %>&lon=<%= @photo.longitude %>&z=10</td>
             </tr>
+            <tr><td></td><td></td></tr>
+          </tbody>
+
+          <tbody>
             <tr>
-              <td>Guidebooks</td>
+              <td><strong>Guidebook info</strong></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
               <td>
                 <div class="guidebooks-container">
                   <%= render partial: 'photos/guidebooks/guidebooks_display', locals: {guidebooks: @guidebooks} %>
