@@ -131,7 +131,7 @@ module Api::V1
 
       photos = photos.order('cast(substring(favoritable_score from 15) as int) DESC')
 
-      photos = photos.page(params[:page] ? params[:page].to_id : 1)
+      photos = photos.page(params[:page] ? params[:page].to_i : 1)
 
       viewpoints = []
       photos.each do |photo|

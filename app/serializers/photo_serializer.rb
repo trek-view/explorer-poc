@@ -14,7 +14,6 @@ class PhotoSerializer < ActiveModel::Serializer
     longitude
     elevation_meters
     address
-    google
     streetview
     tourer
     opentrailview
@@ -26,6 +25,21 @@ class PhotoSerializer < ActiveModel::Serializer
     created_at
     updated_at
   ]
+
+  def image
+    {
+      url: stripe_image_path(object.image.url),
+      thumb: {
+        url: stripe_image_path(object.image.thumb.url)
+      },
+      small: {
+        url: stripe_image_path(object.image.small.url)
+      },
+      med: {
+        url: stripe_image_path(object.image.med.url)
+      }
+    }
+  end
 
   def country
     object.country.present? ? object.country.name : ''
@@ -92,5 +106,9 @@ class PhotoSerializer < ActiveModel::Serializer
     {
         photo_id: object.mapillary && object.mapillary['photo_id']
     }
+  end
+
+  def stripe_image_path(image_path)
+    image_path.gsub("s3.#{ENV['FOG_REGION']}.amazonaws.com/", '')
   end
 end
