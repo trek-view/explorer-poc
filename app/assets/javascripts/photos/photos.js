@@ -1,38 +1,7 @@
-function initSceneMap(objects) {
-  var myCoords = new google.maps.LatLng(objects[0]['latitude'], objects[0]['longitude']);
-  var mapOptions = {
-    center: myCoords,
-    streetViewControl: false,
-    zoom: 15
-  };
-
-  var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-  for (var i=0; i < objects.length; i++){
-    var markerData = objects[i];
-    var latLng = new google.maps.LatLng(markerData.latitude, markerData.longitude);
-
-    var marker = new google.maps.Marker({
-      position: latLng,
-      map: map,
-      animation: google.maps.Animation.DROP,
-      photo: objects[i],
-      tourer_photo_id: objects[i].tourer_photo_id
-    });
-
-    markers.push(marker)
-
-    google.maps.event.addListener(marker, 'click', function() {
-      viewer.loadScene(this.photo.tourer_photo_id)
-    });
-  }
-}
-
 function initSceneMapBox(objects) {
   if (!objects) return;
   // Get mapbox_token
   const mapboxTokenDom = document.getElementById('mapbox-token').childNodes;
-  console.log('==== mapboxTokenDom: ', mapboxTokenDom[0].data);
   L.mapbox.accessToken = mapboxTokenDom[0].data;
   var latlng = L.latLng(
     parseFloat(objects[0]['latitude']),
@@ -42,10 +11,8 @@ function initSceneMapBox(objects) {
     .setView(latlng, 9)
     .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
 
-  console.log('====== map: ', map);
   for (var i=0; i < objects.length; i++) {
     var markerData = objects[i];
-    console.log('===== markerData: ', markerData);
     
     const markerColor = '#d6eff9';
     const markerHtmlStyles = `
