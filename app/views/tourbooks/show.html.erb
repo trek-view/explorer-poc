@@ -63,13 +63,11 @@
         <% end %>
 
         <h3 class="card-title">Tourbook sponsors</h3>
-        <div class="row"> 
-          <% if @tourbook.sponsors.size > 0 %>
-            <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @tourbook.sponsors } %>
-          <% else %>
-            <%= render 'sponsors/default_sponsors' %>
-          <% end %>
-        </div>
+        <% if @tourbook.sponsors.size > 0 %>
+          <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @tourbook.sponsors } %>
+        <% else %>
+          <%= render 'sponsors/default_sponsors' %>
+        <% end %>
 
         <% if @tours.any? %>
           <h4>Added Tours</h4>

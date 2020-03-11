@@ -31,7 +31,7 @@
         <% if scene.tags.size > 0 %>
           <% scene.tags.each_with_index do |tag, i| %>
             <% color = [:info, :danger, :warning, :success][i % 4] %>
-            <div class="tag-container badge-<%=color%>">
+            <div class="tag-container tag-badge-<%=color%>">
               <div class="tag-text">
                 <%= tag.name %> 
               </div>

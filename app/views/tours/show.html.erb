@@ -138,13 +138,11 @@
 
         <h3 class="card-title">Tour sponsors</h3>
 
-        <div class="row"> 
-          <% if @tour.sponsors.size > 0 %>
-            <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @tour.sponsors } %>
-          <% else %>
-            <%= render 'sponsors/default_sponsors' %>
-          <% end %>
-        </div>
+        <% if @tour.sponsors.size > 0 %>
+          <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @tour.sponsors } %>
+        <% else %>
+          <%= render 'sponsors/default_sponsors' %>
+        <% end %>
 
         <% if @photos.any? %>
 
