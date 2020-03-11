@@ -55,11 +55,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :photos, only: %i[index show] do
-    collection do
-      get 'viewpoints'
-    end
-  end
+  resources :photos, only: %i[show]
 
   resources :tours, only: %i[index show]
   resources :tourbooks, only: %i[index show]
