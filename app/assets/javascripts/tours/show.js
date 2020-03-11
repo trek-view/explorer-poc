@@ -146,6 +146,7 @@ function showThumbModal(photo) {
         && photo.streetview
     ) {
         favorite_score = photo.favoritable_score.favorite || 0
+        $('.modal-title').empty();
         $('#imageContainer').empty();
         $('.modal-title').prepend(text_truncate(photo.filename, 40));
         $('#imageContainer').prepend(
