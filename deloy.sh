@@ -25,9 +25,9 @@
 docker stop explorer-staging
 
 # Remove caches
-yes | docker container prune
+yes | docker system prune
 
 # Run docker
-docker run -d -p 3000:3000 --name explorer-staging ivvanov1009/explorer:staging
+docker run -d -p 3000:3000 --name explorer-staging explorer:staging
 
 echo "Deployed!"

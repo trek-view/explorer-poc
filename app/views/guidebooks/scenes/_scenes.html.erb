@@ -1,0 +1,18 @@
+
+<h4>Added Scenes</h4>
+<div class="h-divider"></div>
+
+<% if @scenes.any? %>
+  <div class="sort-wrapper">
+    <%= render(
+          SortComponent, collection_name: :scenes,
+          value: @sort.try(:[], :scenes)
+        )
+    %>
+  </div>
+  <div class="row">
+    <%= render partial: 'guidebooks/scenes/scene', collection: @scenes %>
+  </div>
+<% else %>
+  <p class="nothing-text">Nothing</p>
+<% end %> 

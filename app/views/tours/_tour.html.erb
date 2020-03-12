@@ -56,6 +56,11 @@
   <div class="card-footer">
     <small class="text-muted">
       uploaded by: 
-      <%= link_to tour.user.try(:name), @user.present? ? user_path(tour.user, tab: :tours) : tours_path() %></small>
+      <% if owner?(tour.user.id) %>
+        <%= link_to tour.user.try(:name), edit_user_registration_path(current_user) %>
+      <% else %>
+        <%= tour.user.try(:name) %>
+      <% end %>
+    </small>
   </div>
 </div>

@@ -15,7 +15,6 @@ function onSelectedScene(sceneId) {
 }
 
 function initGuidebookMapBox(scenes, photos) {
-  console.log('==== scenes, photos: ', scenes, photos);
   if (!scenes || !photos) return;
   // Get mapbox_token
   const mapboxTokenDom = document.getElementById('mapbox-token').childNodes;
@@ -61,7 +60,7 @@ function initGuidebookMapBox(scenes, photos) {
       {
         icon: markerIcon,
         data: markerData
-    }).bindPopup(`${markerData.photo.latitude}, ${markerData.photo.longitude}`).addTo(map);
+    }).bindPopup(markerData.scene.title).addTo(map);
     markers.push(marker);
 
     // var featureLayer = L.mapbox.featureLayer().addTo(map);

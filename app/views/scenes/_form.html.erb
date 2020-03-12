@@ -5,7 +5,7 @@
         user_guidebook_scene_path
     %>
 
-    <%= form_with(model: @scene, url: form_url, local: true) do |f| %>
+    <%= simple_form_for @scene, url: form_url do |f| %>
 
       <%= form_errors_for @scene %>
       <div class="h-divider-empty"></div>
@@ -17,7 +17,7 @@
 
       <h4><p><%= @scene.new_record? ? "New Scene" : "Scene" %></p></h4>
       <div class="h-divider"></div>
-
+     
       <div class="form-group">
         <%= f.label :guidebook_id %>
         <%= f.collection_select(
@@ -26,20 +26,15 @@
             )
         %>
       </div>
-
+      
       <div class="form-group">
-        <%= f.label :photo_id %>
-        <%= f.collection_select(
-              :photo_id, Photo.order(:id), :id, :id, 
-              { prompt: "Select a photo" },
-              {
-                class: "form-control",
-                onchange: "onChangePhotoId(this.value)"
-              }
+        <%= f.label :title %>
+        <%= f.text_field(
+              :title, value: @scene.title, class: 'form-control'
             )
         %>
       </div>
-      
+
       <div class="form-group">
         <%= f.label :position %>
         <%= f.number_field(
@@ -57,6 +52,9 @@
         %>
       </div>
 
+      <div class="form-group">
+        <%= f.input :tag_ids, label: 'Tags', as: :select, collection: Tag.order(:name), label_method: :name, input_html: {multiple: true} %>
+      </div>
     <% end %>
   </div>
 

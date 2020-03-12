@@ -48,7 +48,7 @@ deploy:
   script:
     - |
         ssh $SSH_USER_HOST /bin/bash -s << EOT
-          cd /home/ivanov/explorer
+          cd ~/explorer
           git checkout staging
           git pull origin staging
           docker build \
@@ -73,8 +73,6 @@ deploy:
             --build-arg FOG_PROVIDER=${FOG_PROVIDER} \
             --build-arg FOG_REGION=${FOG_REGION} \
             --build-arg GOOGLE_ANALYTICS_KEY=${GOOGLE_ANALYTICS_KEY} \
-            --build-arg GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY} \
-            --build-arg MAILCHIMP_AUDIENCE_ID=${MAILCHIMP_AUDIENCE_ID} \
             --build-arg RACK_ENV=${RACK_ENV} \
             --build-arg RAILS_ENV=${RAILS_ENV} \
             --build-arg SITE_URL=${SITE_URL} \

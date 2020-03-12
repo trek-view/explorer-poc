@@ -31,9 +31,19 @@ module Api::V1
       return response_unprocessable(@guidebook.errors) unless @guidebook.save
 
       # Create scenes
-      @scenes_params.each do |scene_params|
-        scene = @guidebook.scenes.build(scene_params)
+      @scenes_params.each do |scene_param|
+        scene_param_only = scene_param.except(:tags)
+        scene = @guidebook.scenes.build(scene_param_only)
+        tag_param = scene_param.delete(:tags)
         return response_unprocessable(scene.errors) unless scene.save
+
+        # if scene_param[:tags] && scene_param.tags.size.positive?
+        if tag_param && tag_param.size.positive?
+          # scene.tag_list = tag_param
+          scene.tags = tag_param.map do |n|
+            Tag.where(name: n.strip).first_or_create!
+          end
+        end
       end
       guidebook_json = ActiveModelSerializers::SerializableResource.new(
         @guidebook
@@ -49,11 +59,30 @@ module Api::V1
         @guidebook.update(@guidebook_params)
 
       if @scenes_params.size.positive?
-        @scenes_params.each do |scene_params|
-          scene = @guidebook.scenes.find(scene_params[:id])
-          return response_unprocessable(scene.errors) unless
-            scene.update(scene_params)
+        # Delete previous scenes
+        @guidebook.scenes.map { |s| s.scenes_tags.delete_all }
+        @guidebook.scenes.delete_all
+
+        # Create new scenes with scene params
+        @scenes_params.each do |scene_param|
+          scene_param_only = scene_param.except(:tags)
+          scene = @guidebook.scenes.build(scene_param_only)
+          tag_param = scene_param.delete(:tags)
+          return response_unprocessable(scene.errors) unless scene.save
+
+          # if scene_param[:tags] && scene_param.tags.size.positive?
+          if tag_param && tag_param.size.positive?
+            # scene.tag_list = tag_param
+            scene.tags = tag_param.map do |n|
+              Tag.where(name: n.strip).first_or_create!
+            end
+          end
         end
+        # @scenes_params.each do |scene_params|
+        #   scene = @guidebook.scenes.find(scene_params[:id])
+        #   return response_unprocessable(scene.errors) unless
+        #     scene.update(scene_params)
+        # end
       end
       render json: @guidebook, status: :created
     end
@@ -63,6 +92,8 @@ module Api::V1
       return response_unauthorized('You cannot delete this Guidebook.') unless
         user_guidebook?
 
+      @guidebook.scenes.map { |s| s.scenes_tags.delete_all }
+      @guidebook.scenes.delete_all
       @guidebook.destroy
       return response_unprocessable(@guidebook.errors) if @guidebook.errors.any?
 
@@ -113,9 +144,12 @@ module Api::V1
     end
 
     def guidebook_params
-      params.require(:guidebook).permit(
+      params.permit(
         :id, :name, :description, :category_id, :user_id,
-        scenes: %i[id photo_id description position]
+        scenes: [
+          :id, :photo_id, :description, :position,
+          :title, :tags, { tags: [] }
+        ]
       )
     end
 
@@ -125,7 +159,7 @@ module Api::V1
     end
 
     def set_user
-      @user = User.find_by(id: params[:user_id])
+      @user = @api_user
     end
 
     def permitted_params
@@ -133,7 +167,8 @@ module Api::V1
     end
 
     def find_guidebooks
-      @guidebooks = @user ? @user.guidebooks : @guidebooks = Guidebook.all
+      @guidebooks = @user ? @user.guidebooks : Guidebook.all
+      set_guidebooks_search_params
       if @query.present?
         if @query[:sort_by].present?
           order_direction = @query[:sort_by] == 'name' ? 'ASC' : 'DESC'
@@ -141,6 +176,10 @@ module Api::V1
             "#{@query[:sort_by]} #{order_direction}"
           )
         end
+        @guidebooks = @guidebooks.where(id: @query[:ids]) if @query[:ids].present?
+        @guidebooks = @guidebooks.includes(:scenes).where('scenes.photo_id IN (?)', @query[:photo_ids]).references(:scenes) if @query[:photo_ids].present?
+        @guidebooks = @guidebooks.where(user_id: @query[:user_ids]) if @query[:user_ids].present?
+        @guidebooks = @guidebooks.page(@query[:page].to_i) if @query[:page]
       end
       @guidebooks = @guidebooks.order(updated_at: :desc)
     end
@@ -150,7 +189,10 @@ module Api::V1
     end
 
     def guidebook_search_params
-      params.permit(:sort_by, scenes: [], ids: [], user_ids: [])
+      params.permit(
+        :sort_by, :page,
+        ids: [], photo_ids: [], user_ids: []
+      )
     end
 
     def pagination_meta(object)

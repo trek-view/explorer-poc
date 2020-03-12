@@ -22,8 +22,14 @@
 
       <div class="col-lg-9 tours_list">
         <div class="tours-container">
-          <%= render partial: 'tours_display', locals: {tours: @tours} %>
-          <%= paginate @tours %>
+          <% if @tours.size.positive? %>
+            <%= render partial: 'tours_display', locals: {tours: @tours} %>
+            <%= paginate @tours %>
+          <% else %>
+            <p class="nothing-text">
+              No results matched your search criteria, try a different search instead.
+            </p>
+          <% end %>
         </div>
       </div>
     </div>

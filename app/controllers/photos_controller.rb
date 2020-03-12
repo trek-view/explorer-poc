@@ -48,7 +48,7 @@ class PhotosController < ApplicationController
       @photos = @photos.order(filename: :asc) if @sort[:photos] == 'filename'
     end
 
-    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
+    @photos = @photos.order("cast(substring(favoritable_score from 15) as int) DESC")
   end
 
   def find_viewpoints
@@ -56,7 +56,7 @@ class PhotosController < ApplicationController
     if @user.present?
       @photos = @user.photos
     else
-      @photos = Photo.all #Photo.where('substring(favoritable_score from 15)::integer > 0')
+      @photos = Photo.where("cast(substring(favoritable_score from 15) as int) > 0")
     end
 
     search_viewpoints
@@ -66,7 +66,7 @@ class PhotosController < ApplicationController
       @photos = @photos.order(filename: :desc) if @sort[:photos] == 'filename'
     end
 
-    @photos = @photos.order('substring(favoritable_score from 15)::integer ASC')
+    @photos = @photos.order('cast(substring(favoritable_score from 15) as int) DESC')
   end
 
   def guidebook_scene_photo

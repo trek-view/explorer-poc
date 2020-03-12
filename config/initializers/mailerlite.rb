@@ -8,7 +8,7 @@ if ENV['MAILERLITE_API_KEY'].present? && (Rails.env.production? || Rails.env.sta
   campaign = client.create_campaign(
     type: 'regular',
     subject: 'Newsletter',
-    from: ENV['MAILGUN_SMTP_LOGIN'],
+    from: ENV['MAILGUN_SMTP_LOGIN'] || 'staging-explorer@mg.trekview.org',
     from_name: ENV['MAILGUN_SMTP_LOGIN'] || 'Administrator',
     groups: [group.id],
     language: 'en'

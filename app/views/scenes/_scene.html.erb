@@ -17,11 +17,30 @@
           <%= fa_icon('cog', class: 'scene-edit float-right') %>
         <% end %>
       <% end %>
+
       <h4 class="card-text">
-        <%= truncate(scene.description, length: 120, separator: ' ') %>
+        <%= scene.title %>
       </h4>
+
+      <p class="card-text">
+        Description: <%= truncate(scene.description, length: 120, separator: ' ') %>
+      </p>
       
       <p class="card-text">Position: <%= scene.position %></p>
+      <p class="card-text">Tags: 
+        <% if scene.tags.size > 0 %>
+          <% scene.tags.each_with_index do |tag, i| %>
+            <% color = [:info, :danger, :warning, :success][i % 4] %>
+            <div class="tag-container tag-badge-<%=color%>">
+              <div class="tag-text">
+                <%= tag.name %> 
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <small class="nothing-text">nothing</small>
+        <% end %>
+      </p>
     </div>
 
     <%= render partial: 'photos/photo',

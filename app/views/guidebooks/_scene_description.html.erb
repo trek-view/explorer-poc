@@ -1,7 +1,30 @@
 <div class="row">
+  <label class="col-sm-2"><strong>Title</strong></label>
+  <div class="col-sm-10 mt-1">
+    <p><%= scene.title %></p>
+  </div>
+</div>
+<div class="row">
   <label class="col-sm-2"><strong>Description</strong></label>
   <div class="col-sm-10 mt-1">
     <p><%= scene.description %></p>
+  </div>
+</div>
+<div class="row">
+  <label class="col-sm-2"><strong>Tags</strong></label>
+  <div class="col-sm-10 mt-1">
+    <% if scene.tags.size > 0 %>
+      <% scene.tags.each_with_index do |tag, i| %>
+        <% color = [:info, :danger, :warning, :success][i % 4] %>
+        <div class="tag-badge-<%=color%> tag-container">
+          <div class="tag-text">
+            <%= tag.name %> 
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <small class="nothing-text">nothing</small>
+    <% end %>
   </div>
 </div>
 <div class="row">

@@ -5,7 +5,7 @@
     <div class="search_country mt-3">
       <%= select_tag 'query[country_id]',
           options_from_collection_for_select(
-            Country.all, 'id', 'name',
+            Country.all.order(:name), 'id', 'name',
             @query.try(:[], :country_id)
           ),
           class: 'select-country form-control',

@@ -63,27 +63,9 @@
               <td><%= @photo.tourer_photo_id %></td>
             </tr>
             <tr><td></td><td></td></tr>
+          </tbody>
 
-            <% @guidebooks.each do |guidebook| %>
-              <tr>
-                <td><strong>Guidebook info</strong></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>Name</td>
-                <td><%= guidebook.name %></td>
-              </tr>
-              <tr>
-                <td>Description</td>
-                <td><%= guidebook.description %></td>
-              </tr>
-              <tr>
-                <td>Category</td>
-                <td><%= guidebook.category.name %></td>
-              </tr>
-              <tr><td></td><td></td></tr>
-            <% end %>
-
+          <tbody>
             <tr>
               <td><strong>Photo info</strong></td>
               <td></td>
@@ -146,6 +128,22 @@
               <td>View on Mapillary</td>
               <td>https://www.mapillary.com/app/?lat=<%= "#{@photo.latitude}" %>&lon=<%= @photo.longitude %>&z=10</td>
             </tr>
+            <tr><td></td><td></td></tr>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <td><strong>Guidebook info</strong></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <div class="guidebooks-container">
+                  <%= render partial: 'photos/guidebooks/guidebooks_display', locals: {guidebooks: @guidebooks} %>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -164,7 +162,6 @@
     viewer = pannellum.viewer('panorama', gon.pannellum_config);
     console.log('==== viewer: ', viewer);
 
-    // initSceneMap(gon.photos); // removed Google Map
     initSceneMapBox(gon.photos);
 
     currentScene = viewer.getScene();
@@ -185,7 +182,8 @@
       'https://' + s3name + '/static/pannellum/pannellum.htm' + 
       '#panorama=' + 
         photo.image_path + 
-        '&amp;title=' + encodeURIComponent(gon.tour_name) + 
+        '&amp;title=' + encodeURIComponent(gon.scene_title) + 
+        '&amp;description=' + encodeURIComponent(gon.scene_description) + 
         '&amp;author=' + encodeURIComponent(gon.author_name) + 
         '&amp;autoLoad=true"></iframe><p><a href="' + 
         gon.root_url + 'photos/' + photo.id + 

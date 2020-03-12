@@ -9,3 +9,10 @@ function onChangePhotoId(photoId) {
     url: '/select_scene_photo?photo_id=' + photoId
   });
 }
+
+$(document).on('ready turbolinks:load', function () {
+  $('#scene_tag_ids').chosen({
+    allow_single_deselect: true,
+    width: '100%'
+  })
+});

@@ -24,6 +24,8 @@ class ScenesController < ApplicationController
   def edit; end
 
   def update
+    puts("===== scene_params: #{params}")
+    puts("===== scene_params: #{scene_params}")
     if @scene.update(scene_params)
       flash[:success] = 'Your scene was updated!'
       redirect_to user_guidebook_path(@user, @guidebook)
@@ -65,6 +67,9 @@ class ScenesController < ApplicationController
   end
 
   def permitted_params
-    %i[guidebook_id photo_id position description]
+    [
+      :guidebook_id, :photo_id, :title, :position, :description,
+      :tag_list, :tag, :tag_ids, { tag_ids: [] }
+    ]
   end
 end

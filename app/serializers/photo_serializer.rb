@@ -3,28 +3,41 @@ require 'uri'
 class PhotoSerializer < ActiveModel::Serializer
 
   attributes %i[
-                 id
-                 tour_id
-                 image
-                 filename
-                 camera_make
-                 camera_model
-                 taken_at
-                 latitude
-                 longitude
-                 elevation_meters
-                 address
-                 google
-                 streetview
-                 tourer
-                 opentrailview
-                 favoritable_score
-                 favoritable_total
-                 image_path
-                 image_thumb_path
-                 created_at
-                 updated_at
-               ]
+    id
+    tour_id
+    image
+    filename
+    camera_make
+    camera_model
+    taken_at
+    latitude
+    longitude
+    elevation_meters
+    address
+    streetview
+    tourer
+    opentrailview
+    mapillary
+    favoritable_score
+    favoritable_total
+    created_at
+    updated_at
+  ]
+
+  def image
+    {
+      url: stripe_image_path(object.image.url),
+      thumb: {
+        url: stripe_image_path(object.image.thumb.url)
+      },
+      small: {
+        url: stripe_image_path(object.image.small.url)
+      },
+      med: {
+        url: stripe_image_path(object.image.med.url)
+      }
+    }
+  end
 
   def country
     object.country.present? ? object.country.name : ''
@@ -32,10 +45,12 @@ class PhotoSerializer < ActiveModel::Serializer
 
   def address
     {
-        locality: object.address['locality'],
-        administrative_area_level_3: object.address['administrative_area_level_3'],
-        administrative_area_level_2: object.address['administrative_area_level_2'],
-        administrative_area_level_1: object.address['administrative_area_level_1'],
+        cafe: object.address['cafe'],
+        road: object.address['road'],
+        suburb: object.address['suburb'],
+        county: object.address['county'],
+        region: object.address['region'],
+        state: object.address['state'],
         postal_code: object.address['postal_code'],
         country: object.address['country'],
         country_code: object.address['country_code'],
@@ -83,5 +98,15 @@ class PhotoSerializer < ActiveModel::Serializer
     {
         photo_id: object.opentrailview && object.opentrailview['photo_id']
     }
+  end
+
+  def mapillary
+    {
+        photo_id: object.mapillary && object.mapillary['photo_id']
+    }
+  end
+
+  def stripe_image_path(image_path)
+    image_path.gsub("s3.#{ENV['FOG_REGION']}.amazonaws.com/", '')
   end
 end

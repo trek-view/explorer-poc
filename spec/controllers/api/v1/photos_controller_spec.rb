@@ -8,21 +8,26 @@ describe Api::V1::PhotosController, :type => :controller do
   let(:tour_id) { tour.id }
   let(:photo_id) { photos.first.id }
   let!(:vp_tours) { create_list(:tour, 1, :with_photos, user: user) }
-
+  
   let(:valid_attributes) {{
       taken_at: 1.day.ago,
-      latitude: -20.516189,
-      longitude: 44.533069,
+      latitude: 37.422,
+      longitude: -122.084,
       elevation_meters: 745,
       camera_make: "GoPro",
       camera_model: "Fusion",
-      google: {
-          plus_code_global_code: "849VCWC8+R9",
-          plus_code_compound_code: "CWC8+R9, Mountain View, CA, USA"
-      },
       address: {
-          country: "France",
-          country_code: "FR"
+          cafe: "Google",
+          road: "1 Amp Way",
+          suburb: "Mountain View",
+          county: "Mountain View",
+          region: "California",
+          state: "California",
+          postal_code: "94043",
+          country: "The United States of America",
+          country_code: "US",
+          place_id: "ChIJtYuu0V25j4ARwu5e4wwRYgE",
+          plus_code: "849VCWC8+R9"
       },
       streetview: {
           photo_id: "738475838",
@@ -30,8 +35,8 @@ describe Api::V1::PhotosController, :type => :controller do
           share_link: "https://www.google.co.uk/maps/@-22.516189,45.5330688",
           download_url: "https://www.google.co.uk/maps/@-22.516189,45.5330688",
           thumbnail_url: "https://www.google.co.uk/maps/@-22.516189,45.5330688",
-          lat: "-20.516189",
-          lon: "44.533069",
+          lat: "37.422",
+          lon: "-122.084",
           altitude: "745",
           heading: "90",
           pitch: "90",
@@ -49,30 +54,34 @@ describe Api::V1::PhotosController, :type => :controller do
                   photo_id: "fkujChLJJJ",
                   distance_meters: "4",
                   heading_degrees: "90",
-                  elevation_meters: "4"
+                  elevation_meters: "4",
+                  adjusted_heading_degrees: "10"
               },
               {
-
                   photo_id: "fkujChLJJK",
                   distance_meters: "4",
                   heading_degrees: "90",
-                  elevation_meters: "4"
+                  elevation_meters: "4",
+                  adjusted_heading_degrees: "10"
               }
           ]
       },
       opentrailview: {
           photo_id: "tkKjChLHbE"
       },
+      mapillary: {
+          photo_id: "PhPQ0v0Jo98qLTMTT0aTTu"
+      },
       image: Rack::Test::UploadedFile.new(Rails.root.join('spec/support/images/sample.jpeg'), 'image/jpeg')
   }}
 
+  
 #  describe 'GET /api/v1/tours/:tour_id/photos' do
 #    context 'When photos exists' do
 #      before do
 #        header 'api-key', user.api_token
 #        get "/api/v1/tours/#{tour_id}/photos?ids[]=#{photos.first.id}&countries[]=#{photos.first.country.code}&streetview_connections=#{photos.first.streetview['connections']}&tourer_connection_photos[]=#{photos.first.tourer_connection_photos[0]}&sot_by=created_at"
 #      end
-
       # todo(fixme)
       #it 'should return photos', focus: true do
       #  expect(json).not_to be_empty

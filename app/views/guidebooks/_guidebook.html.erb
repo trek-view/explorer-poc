@@ -19,8 +19,8 @@
   <div class="card-footer">
     <small class="text-muted">
       created by: 
-      <% if @user.present? %>
-        <%= link_to guidebook.user.try(:name), user_path(@user) %>
+      <% if owner?( guidebook.user.id) %>
+        <%= link_to guidebook.user.try(:name), edit_user_registration_path(@user) %>
       <% else %>
         <%= guidebook.user.try(:name) %>
       <% end %>

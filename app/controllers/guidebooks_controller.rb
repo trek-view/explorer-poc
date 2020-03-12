@@ -33,6 +33,7 @@ class GuidebooksController < ApplicationController
     gon.scenes = @guidebook.scenes
     gon.photos = @guidebook.photos
     gon.tour_name = @tour.name
+    gon.scene_title = @current_scene.title
     gon.scene_id = @current_scene.id
     gon.scene_description = @current_scene.description
     gon.guidebook_name = @guidebook.name
@@ -74,9 +75,11 @@ class GuidebooksController < ApplicationController
   end
 
   def destroy
-    @guidebook.destroy
+    @guidebook.scenes.map { |s| s.scenes_tags.delete_all }
+    @guidebook.scenes.delete_all
+    @guidebook.delete
     flash[:success] = "Guidebook #{@guidebook.name} was destroyed"
-    redirect_to user_guidebook_path(@user)
+    redirect_to user_guidebooks_path(@user)
   end
 
   def add_photo
@@ -128,6 +131,7 @@ class GuidebooksController < ApplicationController
     gon.photos = @guidebook.photos
     gon.scenes = @guidebook.scenes
     gon.tour_name = @tour.name
+    gon.scene_title = @current_scene.title
     gon.scene_id = @current_scene.id
     gon.scene_description = @current_scene.description
     gon.guidebook_name = @guidebook.name

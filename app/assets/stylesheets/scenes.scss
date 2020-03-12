@@ -5,3 +5,170 @@
 .scene-edit {
   font-size: 22px!important;
 }
+.tag-container {
+  position: relative;
+  margin: 3px 5px 3px 0;
+  padding: 3px 7px 3px 7px;
+  max-width: 100%;
+  border-radius: 5px;
+  cursor: default;
+  word-wrap: break-word;
+  display: inline-block;
+}
+.tag-text {
+//   color: #333;
+}
+
+.btn .tag-badge
+{
+    position: relative;
+    top: -1px;
+}
+
+.tag-badge-pill
+{
+    padding-right: .65em;
+    padding-left: .65em;
+
+    border-radius: 10rem;
+}
+
+.tag-badge-primary
+{
+    color: #2e016a;
+    background-color: #ac77f3;
+}
+.tag-badge-primary[href]:hover,
+.tag-badge-primary[href]:focus
+{
+    text-decoration: none;
+
+    color: #2e0268;
+    background-color: #8230ed;
+}
+
+.tag-badge-secondary
+{
+    color: #b4c5f7;
+    background-color: white;
+}
+.tag-badge-secondary[href]:hover,
+.tag-badge-secondary[href]:focus
+{
+    text-decoration: none;
+
+    color: #b5c6f6;
+    background-color: #d9d9d9;
+}
+
+.tag-badge-success
+{
+    color: #155724;
+    background-color: #d4edda;
+}
+.tag-badge-success[href]:hover,
+.tag-badge-success[href]:focus
+{
+    text-decoration: none;
+
+    color: #19c035;
+    background-color: #a0ebad;
+}
+
+.tag-badge-info
+{
+    color: #0c5460;
+    background-color: #d1ecf1;
+}
+.tag-badge-info[href]:hover,
+.tag-badge-info[href]:focus
+{
+    text-decoration: none;
+
+    color: #0090d2;
+    background-color: #88d8fc;
+}
+
+.tag-badge-warning
+{
+    color: #856404;
+    background-color: #fff3cd;
+}
+.tag-badge-warning[href]:hover,
+.tag-badge-warning[href]:focus
+{
+    text-decoration: none;
+
+    color: #b36800;
+    background-color: #ffbf66;
+}
+
+.tag-badge-danger
+{
+    color: #721c24;
+    background-color: #f8d7da;
+}
+.tag-badge-danger[href]:hover,
+.tag-badge-danger[href]:focus
+{
+    text-decoration: none;
+
+    color: #e30c00;
+    background-color: #ff9c96;
+}
+
+.tag-badge-light
+{
+    color: #96aec5;
+    background-color: white;
+}
+.tag-badge-light[href]:hover,
+.tag-badge-light[href]:focus
+{
+    text-decoration: none;
+
+    color: #99aec3;
+    background-color: #d9d9d9;
+}
+
+.tag-badge-dark
+{
+    color: black;
+    background-color: #186eca;
+}
+.tag-badge-dark[href]:hover,
+.tag-badge-dark[href]:focus
+{
+    text-decoration: none;
+
+    color: black;
+    background-color: #104985;
+}
+
+.tag-badge-white
+{
+    color: #ded3d3;
+    background-color: white;
+}
+.tag-badge-white[href]:hover,
+.tag-badge-white[href]:focus
+{
+    text-decoration: none;
+
+    color: #ddd4d4;
+    background-color: #d9d9d9;
+}
+
+.tag-badge-darker
+{
+    color: black;
+    background-color: #1562b3;
+}
+.tag-badge-darker[href]:hover,
+.tag-badge-darker[href]:focus
+{
+    text-decoration: none;
+
+    color: black;
+    background-color: #0d3c6e;
+}

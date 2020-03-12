@@ -66,13 +66,13 @@
          <%= render partial: 'guidebooks/scenes_navigation/view', locals: { guidebook: @guidebook, current_scene: @current_scene } %>
 
         <h3 class="card-title">Guidebook sponsors</h3>
-        <div class="row"> 
-          <% if @guidebook.sponsors.size > 0 %>
-            <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @guidebook.sponsors } %>
-          <% else %>
-            <%= render 'sponsors/default_sponsors' %>
-          <% end %>
-        </div>        
+
+        <% if @guidebook.sponsors.size.positive? %>
+          <%= render partial: 'sponsors/sponsors_display', locals: { sponsors: @guidebook.sponsors } %>
+        <% else %>
+          <%= render 'sponsors/default_sponsors' %>
+        <% end %>
+
     </div>
   </div>
 </div>
@@ -113,7 +113,7 @@
         'https://' + s3name + '/static/pannellum/pannellum.htm' + 
         '#panorama=' + 
           photo.image_path + 
-          '&amp;title=' + encodeURIComponent(gon.tour_name) + 
+          '&amp;title=' + encodeURIComponent(gon.scene_title) + 
           '&amp;author=' + encodeURIComponent(gon.author_name) + 
           '&amp;autoLoad=true"></iframe><p><a href="' + 
           gon.root_url + 'photos/' + photo.id + 

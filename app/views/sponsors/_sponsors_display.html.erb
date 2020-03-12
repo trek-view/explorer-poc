@@ -1,7 +1,8 @@
 <div class="row">
-  <% sponsors.each do |sponsor| %>
+  <% sponsors.each_with_index do |sponsor, i| %>
+    <% color = [:success, :warning, :danger, :info][i % 4] %>
     <div class="col-lg-4 col-md-6 mb-4 sponsor-container">
-      <%= render partial: 'sponsors/sponsor', locals: { sponsor: sponsor } %>
+      <%= render partial: 'sponsors/sponsor', locals: { sponsor: sponsor, color:  "badge-#{color}"} %>
     </div>
   <% end %>
 </div>

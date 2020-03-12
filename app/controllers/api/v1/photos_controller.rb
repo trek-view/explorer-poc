@@ -13,7 +13,7 @@ module Api::V1
     # GET /api/v1/tours/:tour_id/photos
     def index
       find_photos
-      @photos = @photos.page(params[:page] ? params[:page].to_id : 1)
+      @photos = @photos.page(params[:page] ? params[:page].to_i : 1)
       photos_json = ActiveModelSerializers::SerializableResource.new(@photos).as_json
       photos_json[:photos] = photos_json[:photos].map do |photo|
         photo['user_id'] = @tour.user_id
@@ -121,7 +121,7 @@ module Api::V1
     def get_viewpoints
       query = search_viewpoint_params
 
-      photos = Photo.where('substring(favoritable_score from 15)::integer > 0')
+      photos = Photo.where('cast(substring(favoritable_score from 15) as int) > 0')
       photos = photos.where(id: query[:photo_ids]) if query[:photo_ids].present?
 
       if query[:user_ids].present?
@@ -129,9 +129,9 @@ module Api::V1
         photos = photos.where(id: favorites)
       end
 
-      photos = photos.order('substring(favoritable_score from 15)::integer DESC')
+      photos = photos.order('cast(substring(favoritable_score from 15) as int) DESC')
 
-      photos = photos.page(params[:page] ? params[:page].to_id : 1)
+      photos = photos.page(params[:page] ? params[:page].to_i : 1)
 
       viewpoints = []
       photos.each do |photo|
@@ -190,20 +190,31 @@ module Api::V1
       end
 
       def permitted_photo_params
-        [:image,
-         :taken_at,
-         :latitude,
-         :longitude,
-         :elevation_meters,
-         :camera_make,
-         :camera_model,
-         address: [:locality, :administrative_area_level_3, :administrative_area_level_2, :administrative_area_level_1, :postal_code, :country, :country_code, :place_id, :plus_code],
-         streetview: [:photo_id, :capture_time, :share_link, :download_url, :thumbnail_url, :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections],
-         tourer: [
-          :photo_id, :version, :heading_degrees, 
-          connections: [ :photo_id, :distance_meters, :heading_degrees, :pitch_degrees, :elevation_meters, :heading_degrees, :adjusted_heading_degrees ]
-        ],
-         opentrailview: [:photo_id]
+        [
+          :image,
+          :taken_at,
+          :latitude,
+          :longitude,
+          :elevation_meters,
+          :camera_make,
+          :camera_model,
+          address: [
+            :cafe, :road, :suburb, :county, :region, :state, :postal_code,
+            :country, :country_code, :place_id, :plus_code
+          ],
+          streetview: [
+            :photo_id, :capture_time, :share_link, :download_url, :thumbnail_url,
+            :lat, :lon, :altitude, :heading, :pitch, :roll, :level, :connections
+          ],
+          tourer: [
+            :photo_id, :version, :heading_degrees,
+            connections: [
+              :photo_id, :distance_meters, :heading_degrees, :pitch_degrees,
+              :elevation_meters, :heading_degrees, :adjusted_heading_degrees
+            ]
+          ],
+          opentrailview: [:photo_id],
+          mapillary: [:photo_id]
         ]
       end
 
