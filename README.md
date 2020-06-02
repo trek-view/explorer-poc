@@ -1,4 +1,8 @@
-# Explorer
+# Explorer POC (DEPRECATED)
+
+This is a proof of concept for an open-source "Google Street View" for adventurous / outdoor 360 imagery.
+
+It is now deprecated with a completely rewritten version here: https://github.com/trek-view
 
 ## Application setup steps
 
@@ -14,4 +18,4 @@
 
 ## User Documentation
 
-Developer documentation for this project is hosted on the GitLab wiki page for this project at: https://gitlab.com/trekview/explorer/-/wikis/home
+Developer documentation for this project is hosted on the GitHub wiki page for this project at: https://github.com/trek-view/explorer-poc/wiki
