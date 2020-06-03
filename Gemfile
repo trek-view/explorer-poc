@@ -73,7 +73,7 @@ gem 'friendly_id', '~> 5.2.4'
 
 gem 'bootstrap', '~> 4.3.1'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.5'
-gem 'kaminari', '~> 1.1', '>= 1.1.1'
+gem 'kaminari', '~> 1.2'
 gem 'api-pagination'
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'pundit', '~> 2.0', '>= 2.0.1'
